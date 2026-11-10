@@ -1,6 +1,6 @@
 """Bosch WP-Schnellauslegung (Streamlit) – gleicher Rechenweg wie index.html.
 
-Start:  streamlit run wp_auslegung/app.py
+Start:  streamlit run app.py
 """
 from __future__ import annotations
 

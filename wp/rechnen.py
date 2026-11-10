@@ -1,6 +1,6 @@
 """Rechenkern der Wärmepumpen-Schnellauslegung.
 
-Gleicher Rechenweg wie der Block <script id="rechenkern"> in wp_auslegung/index.html – Änderungen in beiden
+Gleicher Rechenweg wie der Block <script id="rechenkern"> in index.html – Änderungen in beiden
 nachziehen (tests/test_rechnen.py vergleicht beide Versionen über node).
 
 Ablauf

@@ -1,0 +1,10 @@
+# Bosch WP-Schnellauslegung auf dem eigenen Server hinter nginx (wp.sommer-nt.de).
+# Die App lauscht nur lokal auf 127.0.0.1:${APP_PORT:-8506}; nginx leitet wp.sommer-nt.de dorthin.
+# Start:  cd deploy && docker compose -p wp up -d --build
+services:
+  app:
+    build: ..
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "127.0.0.1:${APP_PORT:-8506}:8501"

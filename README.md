@@ -6,11 +6,12 @@ Schnellauslegung von Luft/Wasser-Wärmepumpen für den Außendienst – auch fü
 als Kaskade), die der Heat Pump Advisor nicht abdeckt. Ersetzt das interne Excel-Werkzeug „WP-Auslegung_S“ für die
 Weitergabe; das Zubehör plant weiterhin die Systemkonfiguration (SysCon).
 
-Zwei Versionen mit **identischem Rechenweg** (Test vergleicht beide):
+Eigenes Projekt neben Bosch Flow (Netzrechner) und Bosch Speicher. Zwei Versionen mit **identischem Rechenweg**
+(Test vergleicht beide):
 
 | | `index.html` | Python / Streamlit (`app.py`, `wp/`) |
 |---|---|---|
-| Start | Datei im Browser öffnen, läuft offline | `streamlit run wp_auslegung/app.py` |
+| Start | Datei im Browser öffnen, läuft offline | `pip install -r requirements.txt` und `streamlit run app.py` |
 | Ausdruck | „Drucken / PDF“ (A4, 3 Seiten) | „Auslegung als PDF“ (fpdf2, gleicher Aufbau) |
 | Projektdatei | `.json` | dasselbe `.json`, in beide Richtungen austauschbar |
 
@@ -58,7 +59,7 @@ Lastprofil/Nachheizzeit, Kaltwassertemperatur, Sperrzeit, Betriebsweise, Spreizu
 `wp/schema.py` und `schemaSvg()` in `index.html` erzeugen dasselbe SVG (Test vergleicht beide); das PDF bettet es als
 Vektorgrafik ein, Streamlit zeigt es direkt. Piktogramme im SysCon-Stil (Verteilerbalken, FBH mit Wärmewellen,
 Heizkörper, Dusche, Außeneinheit mit Ventilator, Speicher mit Heizwendel, nummerierte Abschnitte 1–4).
-`node wp_auslegung/tools/schema_pruefen.js wp_auslegung/index.html` prüft alle Varianten auf Überschneidungen
+`node tools/schema_pruefen.js index.html` prüft alle Varianten auf Überschneidungen
 (Text über Rohr, Text über Text) – läuft auch in `pytest`.
 
 Die Kurven sind maximale Heizleistungen; bei A-7/W35 stimmen sie auf ±6 % mit „Max. Heizleistung“ im Katalog überein
@@ -72,7 +73,7 @@ Die Kurven sind maximale Heizleistungen; bei A-7/W35 stimmen sie auf ±6 % mit �
   Inneneinheiten mit E-Heizer, Sole/Wasser (Compress 7800i LW, Supraeco T).
 
 - `daten/bilder/*.jpg` – Produktbilder aus dem Gesamtkatalog (CS3800 O-S aus dem Heat-Pump-Advisor-Ausdruck), erzeugt mit
-  `python wp_auslegung/tools/bilder_import.py KATALOG.pdf [HPA.pdf]` (braucht `pdfimages` aus poppler-utils).
+  `python tools/bilder_import.py KATALOG.pdf [HPA.pdf]` (braucht `pdfimages` aus poppler-utils).
 
 Der Rechenkern stammt aus den Zellformeln des Excel-Werkzeugs; die VBA-Makros enthalten nur Navigation, Druck und
 Eingabeprüfung.
@@ -80,10 +81,10 @@ Eingabeprüfung.
 Neue Excel-Version übernehmen (die Excel-Datei wird nicht eingecheckt):
 
 ```bash
-python wp_auslegung/tools/excel_import.py PFAD/WP-Auslegung_S.xlsm
+python tools/excel_import.py PFAD/WP-Auslegung_S.xlsm
 ```
 
-Nach Änderungen an `katalog.json`: `python wp_auslegung/tools/excel_import.py --nur-einbetten` (bettet alle Daten in
+Nach Änderungen an `katalog.json`: `python tools/excel_import.py --nur-einbetten` (bettet alle Daten in
 `index.html` ein). Tests: `python -m pytest -q` (vergleicht Python und HTML über `node`).
 
 ## Offen
@@ -91,4 +92,8 @@ Nach Änderungen an `katalog.json`: `python wp_auslegung/tools/excel_import.py -
 - CS3800iAW 10/13 O-T: Kurven aus dem Excel, Katalogdaten (SCOP, Schall) noch offen.
 - CS5001AW 30 und CS5000 AW 22/38: keine Leistungsdaten im Excel. CS7000i/CS7400i nur als Kurven (Katalog: Pakete).
 - Sole/Wasser bei 55 °C: Nennwärmeleistung (ErP) statt max. Leistung angesetzt; Kaskaden bei Sole noch nicht freigegeben.
-- Eigener Container/Subdomain wie flow.sommer-nt.de, falls gewünscht.
+
+## Betrieb
+
+Docker-Container hinter nginx auf dem eigenen Server (wp.sommer-nt.de, Port 8506), Schritt für Schritt in
+[deploy/ANLEITUNG.md](deploy/ANLEITUNG.md). Optionales Passwort über `APP_PASSWORT` in `deploy/.env`.

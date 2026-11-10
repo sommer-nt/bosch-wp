@@ -1,10 +1,10 @@
 """Produktbilder aus dem Gesamtkatalog (PDF) übernehmen.
 
-    python wp_auslegung/tools/bilder_import.py  KATALOG.pdf  [HPA.pdf]
+    python tools/bilder_import.py  KATALOG.pdf  [HPA.pdf]
 
 Holt die unten zugeordneten Bilder mit `pdfimages` (poppler-utils) aus dem Katalog, schneidet weiße Ränder ab,
-verkleinert sie (max. 420 px) und speichert sie als JPEG in wp_auslegung/daten/bilder/. Danach
-`python wp_auslegung/tools/excel_import.py --nur-einbetten`, damit index.html die Bilder enthält.
+verkleinert sie (max. 420 px) und speichert sie als JPEG in daten/bilder/. Danach
+`python tools/excel_import.py --nur-einbetten`, damit index.html die Bilder enthält.
 Der Katalog selbst wird nicht eingecheckt.
 """
 from __future__ import annotations

@@ -1,5 +1,5 @@
 // Prüft alle Schema-Varianten in index.html: kein Text über einer Rohrleitung, kein Text über Text, nichts außerhalb.
-// Aufruf: node wp_auslegung/tools/schema_pruefen.js wp_auslegung/index.html
+// Aufruf: node tools/schema_pruefen.js index.html
 const {chromium}=require('playwright');
 const FALL=[
  ['EFH Luft Speicher', {}],

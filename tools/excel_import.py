@@ -1,9 +1,9 @@
 """Übernimmt Leistungskurven und Klimadaten aus dem Excel-Werkzeug „WP-Auslegung_S“ (Stand 2.8.3).
 
-    python wp_auslegung/tools/excel_import.py  PFAD/WP-Auslegung_S_2.8.3.xlsm
+    python tools/excel_import.py  PFAD/WP-Auslegung_S_2.8.3.xlsm
 
-Schreibt wp_auslegung/daten/geraete.json und wp_auslegung/daten/klima.json und bettet beide (zusammen mit
-dem von Hand gepflegten daten/katalog.json) in wp_auslegung/index.html ein (Block zwischen /*DATEN-START*/ und /*DATEN-ENDE*/). Die Excel-Datei selbst
+Schreibt daten/geraete.json und daten/klima.json und bettet beide (zusammen mit
+dem von Hand gepflegten daten/katalog.json) in index.html ein (Block zwischen /*DATEN-START*/ und /*DATEN-ENDE*/). Die Excel-Datei selbst
 wird nicht eingecheckt.
 
 Je Gerät und Vorlauftemperatur werden die maximale (und, wo vorhanden, minimale) Heizleistung über der
