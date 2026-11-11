@@ -1537,7 +1537,7 @@ function auslKurz(L) {
   const a = L.auslegung;
   return `${L.id} · ${L.gebaeude === 'neubau' ? 'Neubau' : 'Bestand'} · ${L.we || '–'} WE · ${(L.n > 1 ? L.n + ' × ' : '') + esc(L.geraet)} · QGES ${f(a.qges, 1)} kW · Vorlauf ${f(a.vl, 0)} °C${a.vl_angenommen ? ' (angenommen)' : ''} · ${{hybrid: 'GEG-Hybrid (0,3 · Q)', monoenergetisch: 'monoenergetisch', monovalent: 'monovalent'}[a.auslegung] || '–'} · PLZ ${esc(a.plz)} (θe ${fT(a.nat)} °C)`;
 }
-const STUFE_ZEICHEN = {passt: '✓', vorlage: '◐', prinzip: '✗'};
+const STUFE_ZEICHEN = {passt: '✓', vorlage: '●', prinzip: '✗'};
 const stufeHtml = x => `<span class="stufe ${x.stufe}">${STUFE_ZEICHEN[x.stufe]} ${HYD.STUFE_TEXT[x.stufe]}</span>`;
 const anpHtml = x => x.anpassen.length ? `<ul class="anp">${x.anpassen.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : '';
 function hydHtml(r) {
@@ -1547,7 +1547,7 @@ function hydHtml(r) {
   let h = `<p class="hint" style="margin-top:0">Maschine: <b>${g.n > 1 ? g.n + ' × ' : ''}${esc(g.geraet)}</b> · ${esc(HYD.WW_TEXT[HYD.wwArt(E, r)])} · ${HYD.systemArt(E, lib) === 'hybrid' ? 'Hybrid (mit zweitem Wärmeerzeuger)' : 'monoenergetisch/monovalent'}.
     ${passend.length ? `${passend.length} passende Hydraulik${passend.length > 1 ? 'en' : ''} aus den Musterlösungen.` : ''}</p>`
     + HYD.hinweise(E, r, lib).map(t => `<div class="hydhinw">${esc(t)}</div>`).join('')
-    + `<p class="hint">Ampel: <span class="stufe passt">✓ passt direkt</span> = Schema 1 : 1 verwendbar · <span class="stufe vorlage">◐ Vorlage</span> = gleiche Baureihe, die genannten Punkte ergänzen · <span class="stufe prinzip">✗ Prinzip</span> = andere Baureihe, nur zur Orientierung.</p>`;
+    + `<p class="hint">Ampel: <span class="stufe passt">✓ passt direkt</span> = Schema 1 : 1 verwendbar · <span class="stufe vorlage">● Vorlage</span> = gleiche Baureihe, die genannten Punkte ergänzen · <span class="stufe prinzip">✗ Prinzip</span> = andere Baureihe, nur zur Orientierung.</p>`;
   if (gew) {
     h += `<div class="hydgew"><div class="kopf">${gew.manuell ? 'Ausgewählt' : 'Vorgeschlagen'}: <b>${esc(gew.titel)}</b> ${stufeHtml(gew)}</div>
       ${gew.anpassen.length ? '<div class="hint"><b>Anpassen:</b></div>' + anpHtml(gew) : ''}
