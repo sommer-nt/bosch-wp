@@ -2,7 +2,7 @@
 
 Raster: oben Legende und Heizkreise mit Verteilerbalken, darunter ein Korridor für die Speicherladung, unten die
 Geräte. Unter den Geräten liegt nur das Beschriftungsband – dort verlaufen keine Rohre, Texte überdecken keine Linien.
-Piktogramme im Stil der Systemkonfiguration (SysCon): Fußbodenheizung mit Wärmewellen, Heizkörper, Dusche,
+Piktogramme im Bosch-Planungsstil: Fußbodenheizung mit Wärmewellen, Heizkörper, Dusche,
 Außeneinheit mit Ventilator.
 """
 from __future__ import annotations

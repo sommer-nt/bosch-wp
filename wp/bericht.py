@@ -366,48 +366,22 @@ def schema(pdf: Ausdruck, e: dict, r: dict, ie: dict | None, x: float, y: float,
 
 # ------------------------------------------------------------------------------------------------ Bericht
 def mfh_seite(pdf: Ausdruck, e: dict, r: dict, v: dict, preise: bool) -> None:
-    """MFH-Bestellvorschlag (Musterlösung) wie mfhHtml(r, preise, druck) in index.html."""
+    """MFH-Musterlösung wie mfhHtml(r, preise, druck) in index.html."""
     MD = D.mfh()
     a_ = MD["annahmen"][v["tabelle"]]
     pdf.add_page()
-    pdf.titel("MFH-Bestellvorschlag (Musterlösung)")
+    pdf.titel("MFH-Musterlösung")
     pdf.schrift_(7.6, False, GRAU)
     pdf.multi_cell(184, 3.8, pdf.t(f"{'Neubau' if v['tabelle'] == 'neubau' else 'Bestand'} · {MD['systeme'][v['system']]} · "
                                    f"{M.WW_TEXT[v['ww']]} · {v['we']} WE · Heizlast QH {T.f(v['qh'], 1)} kW · Musterannahmen: "
                                    f"{a_['flaeche_we']} m² und {T.f(a_['personen_we'], 1)} Personen je WE, {a_['spez_w_m2']} W/m²"),
                    new_x="LMARGIN", new_y="NEXT")
     if not v["zellen"]:
-        pdf.multi_cell(184, 3.8, pdf.t("Für diese Kombination gibt es noch keine Musterlösung – Anlage im SysCon planen."),
-                       new_x="LMARGIN", new_y="NEXT")
+        pdf.multi_cell(184, 3.8, pdf.t("Für diese Kombination gibt es noch keine Musterlösung."), new_x="LMARGIN", new_y="NEXT")
         return
     if v["ausserhalb"]:
         pdf.multi_cell(184, 3.8, pdf.t("Heizlast bzw. Wohneinheiten liegen über den Musterlösungen – größte Musterlösung angezeigt, "
-                                       "Anlage individuell planen (SysCon)."), new_x="LMARGIN", new_y="NEXT")
-
-    def kurz(txt: str, breite: float) -> str:
-        txt = pdf.t(txt)
-        if pdf.get_string_width(txt) <= breite - 1.5:
-            return txt
-        while txt and pdf.get_string_width(txt + "...") > breite - 1.5:
-            txt = txt[:-1]
-        return txt.rstrip() + "..."
-
-    d = M.dokumentation(e, r, MD, D.hydraulik(), T.inneneinheit(e, r, D.katalog()))
-    if d:
-        pdf.h2("Dokumentation zum Bestellvorschlag – " + ("vollständig und valide" if d["valide"] else "unvollständig, Hinweise beachten"))
-        farben = {"ok": (24, 160, 88), "warn": (178, 106, 0), "bad": ROT, "": HELL}
-        for x in d["pruefungen"]:
-            yy = pdf.get_y()
-            pdf.set_fill_color(*farben[x["status"]])
-            pdf.ellipse(14, yy + 1.4, 1.8, 1.8, style="F")
-            pdf.schrift_(7.6)
-            pdf.set_xy(18, yy)
-            pdf.multi_cell(179, 3.9, pdf.t(x["text"]), new_x="LMARGIN", new_y="NEXT")
-        if d["schema"]:
-            pdf.schrift_(6.8, False, GRAU)
-            pdf.multi_cell(184, 3.5, pdf.t(f"Hydraulikschema {d['schema']['nr']}: {HY.link(D.hydraulik(), d['schema']['nr'], 'pdf')} "
-                                           "(vollständig mit Verdrahtungsplan in der Projektmappe bzw. im PDF „Auslegung + Hydraulikschema“)."),
-                           new_x="LMARGIN", new_y="NEXT")
+                                       "Anlage individuell planen."), new_x="LMARGIN", new_y="NEXT")
     for a in v["auswahl"]:
         z = a["zelle"]
         pdf.h2(f"{z.get('erzeuger') or 'Monoenergetisch'} · {z['we']} WE / {z['kw']} kW" + (f" · {z['variante']}" if z.get("variante") else ""))
@@ -418,27 +392,6 @@ def mfh_seite(pdf: Ausdruck, e: dict, r: dict, v: dict, preise: bool) -> None:
         pdf.multi_cell(184, 3.5, pdf.t(f"Muster-Heizlast {z['we']} WE · {a_['flaeche_we']} m² · {a_['spez_w_m2']} W/m² = "
                                        f"{T.f(a['muster_qh'], 1)} kW · Prüfung mit Ihren Eingaben: {M.pruef_text(a, r)}"),
                        new_x="LMARGIN", new_y="NEXT")
-        vo = MD["vorlagen"].get(z.get("vorlage") or "")
-        if not vo:
-            pdf.multi_cell(184, 3.5, pdf.t("Für diese Musterlösung liegt noch kein GAEB-Bestellvorschlag vor – Zubehör im SysCon ergänzen."),
-                           new_x="LMARGIN", new_y="NEXT")
-            continue
-        pos = M.positionen(vo, MD["langtexte"], v["we"])
-        pdf.multi_cell(184, 3.5, pdf.t(f"Bestellvorschlag {vo['nr']} ({vo['titel']}, {vo['datum']})"), new_x="LMARGIN", new_y="NEXT")
-        kopf = ["Pos.", "Menge", "Bestell-Nr.", "Bezeichnung", "Art"] + (["EP", "GP"] if preise else [])
-        breiten = [9, 13, 19, 90 if preise else 116, 19 if preise else 27] + ([17, 17] if preise else [])
-        pdf.schrift_(7.6)
-        zeilen = [[f"{int(p_['oz'][:2])}.{int(p_['oz'][2:])}", f"{T.f(p_['menge'], 0)} {p_['einheit']}", p_["artnr"] or "–",
-                   kurz(p_["text"], breiten[3]), kurz(M.art_text(p_).replace("Grundposition", "Grund").replace("Alternative", "Altern."), breiten[4])]
-                  + ([T.euro2(p_["ep"]), T.euro2(p_["gp"])] if preise else []) for p_ in pos]
-        pdf.tabelle(kopf, zeilen, breiten, rechts=(1, 5, 6))
-        if preise:
-            pdf.schrift_(8, True)
-            pdf.cell(184, 5, pdf.t(f"Summe Grund- und Normalpositionen: {T.euro2(M.summe(pos))} (ohne Alternativen und Bedarfspositionen)"),
-                     new_x="LMARGIN", new_y="NEXT")
-    pdf.schrift_(6.8, False, HELL)
-    pdf.multi_cell(184, 3.4, pdf.t("Alternativen ersetzen die Grundposition darüber; Bedarfspositionen nur bei Bedarf. Musterlösungen ersetzen "
-                                   "keine Fachplanung; Hydraulik, Speicher und Sicherheitstechnik im SysCon prüfen."), new_x="LMARGIN", new_y="NEXT")
     pdf.add_page()
 
 
@@ -645,13 +598,22 @@ def pdf_bytes(e: dict, r: dict, daten: dict, katalog: dict) -> bytes:
 
     # ---- Seite 3
     pdf.add_page()
-    pdf.titel("Anlagenschema und Jahresbilanz")
-    if g:
+    pdf.titel("Hydraulik und Jahresbilanz")
+    hg = HY.gewaehlt(e, r, D.hydraulik()) if g else None
+    if hg and D.hydraulik_bild(hg["id"]).exists():
+        pdf.schrift_(8.4, True)
+        pdf.multi_cell(184, 4.2, pdf.t(f"Hydraulik: {hg['titel']} ({'ausgewählt' if hg['manuell'] else 'vorgeschlagen'}"
+                                       f"{'' if hg['passend'] else ', weicht ab'} · Musterlösungen {', '.join(hg['loesungen'])})"),
+                       new_x="LMARGIN", new_y="NEXT")
+        y = pdf.get_y() + 1
+        pdf.image(str(D.hydraulik_bild(hg["id"])), x=13, y=y, w=184)
+        pdf.set_y(y + 184 * 910 / 1287 + 2)
+    elif g:
         y = schema(pdf, e, r, ie, 13, pdf.get_y(), 184)
         pdf.set_y(y)
-    pdf.schrift_(7, False, HELL)
-    pdf.multi_cell(184, 3.8, pdf.t("Prinzipdarstellung – Zubehör, Speicher, Sicherheitstechnik und hydraulischer Abgleich sind in "
-                                   "der Systemkonfiguration (SysCon) zu planen."), new_x="LMARGIN", new_y="NEXT")
+        pdf.schrift_(7, False, HELL)
+        pdf.multi_cell(184, 3.8, pdf.t("Prinzipdarstellung der Auslegung – keine Hydraulik der Musterlösungen ausgewählt."),
+                       new_x="LMARGIN", new_y="NEXT")
     vb = r.get("vdi_bivalenz")
     if g:
         pdf.h2("Deckungsanteil nach Bivalenzpunkt (DIN V 4701-10 / VDI 4650)")
@@ -689,7 +651,7 @@ def pdf_bytes(e: dict, r: dict, daten: dict, katalog: dict) -> bytes:
         pdf.h2("Passende Systempakete (BOPA)")
         if g["n"] > 1:
             pdf.schrift_(7.4, False, GRAU)
-            pdf.cell(0, 4.5, pdf.t("Für Kaskaden gibt es keine Komplettpakete – Zubehör und Speicher im SysCon planen."), new_x="LMARGIN", new_y="NEXT")
+            pdf.cell(0, 4.5, pdf.t("Für Kaskaden gibt es keine Komplettpakete – Zubehör und Speicher in der Planung festlegen."), new_x="LMARGIN", new_y="NEXT")
         elif not pl:
             pdf.schrift_(7.4, False, GRAU)
             pdf.cell(0, 4.5, pdf.t(f"Für {g['geraet']} sind im Produktkatalog keine Systempakete aufgeführt."), new_x="LMARGIN", new_y="NEXT")

@@ -9,10 +9,9 @@ VERSION = 1
 
 STANDARD: dict = {
     "experte": False,
-    "projekt": {"name": "", "kunde": "", "strasse": "", "hausnr": "", "plz": "", "ort": "", "kundennr": "", "crm_id": "",
-                "bearbeiter": "", "datum": "", "notiz": ""},
+    "projekt": {"name": "", "kunde": "", "strasse": "", "hausnr": "", "plz": "", "ort": "", "bearbeiter": "", "datum": "", "notiz": ""},
     "gebaeude": {"typ": "sanierung"},
-    "mfh": {"art": "efh", "we": 8, "ww": "friwa", "zelle": ""},
+    "mfh": {"art": "efh", "we": 8, "ww": "friwa", "zelle": "", "system": ""},
     "klima": {"nat": -12.0, "heizgrenze": 15.0, "innen": 20.0},
     "heizlast": {
         "methode": "vorgabe", "vorgabe_kw": 0.0,
@@ -33,6 +32,7 @@ STANDARD: dict = {
     "vl": 55.0,
     "serien": [],
     "auswahl": {"geraet": "", "anzahl": 1, "inneneinheit": ""},
+    "hydraulik": {"schema": "", "loesung": ""},
     "preise_drucken": False,
 }
 

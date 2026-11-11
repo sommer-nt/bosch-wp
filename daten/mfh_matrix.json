@@ -1,5 +1,5 @@
 {
- "quelle": "Kostenübersicht MFH-Musterbestellvorschläge (Bestand/Neubau), Stand 20.08.2026 – Nettopreise",
+ "quelle": "Kostenübersicht MFH-Musterlösungen (Bestand/Neubau), Stand 20.08.2026 – Nettopreise",
  "stand": "20.08.2026",
  "annahmen": {
   "bestand": {
@@ -42,8 +42,7 @@
    "summe": 34700,
    "geraet": "CS8800iAW 13 O-T",
    "n": 1,
-   "id": "B-mono-friwa-4",
-   "hydraulik": "6721896891"
+   "id": "B-mono-friwa-4"
   },
   {
    "tabelle": "bestand",
@@ -290,9 +289,7 @@
    "summe": 22500,
    "geraet": "CS8800iAW 13 O-T",
    "n": 1,
-   "vorlage": "4000191953",
-   "id": "B-mono-dle-4",
-   "hydraulik": "6721896965"
+   "id": "B-mono-dle-4"
   },
   {
    "tabelle": "bestand",
@@ -357,8 +354,7 @@
    "summe": 60500,
    "geraet": "CS8800iAW 13 O-T",
    "n": 3,
-   "id": "B-mono-dle-12",
-   "hydraulik": "6721897001"
+   "id": "B-mono-dle-12"
   },
   {
    "tabelle": "bestand",
@@ -404,7 +400,6 @@
    "summe": 28600,
    "geraet": "CS8800iAW 13 O-T",
    "n": 1,
-   "vorlage": "4000191910",
    "id": "B-mono-speicher-4"
   },
   {
@@ -674,10 +669,8 @@
    "summe": 27700,
    "geraet": "CS5800/6800iAW 10 OR-T",
    "n": 1,
-   "vorlage": "4000162196",
    "erzeuger": "Hybrid MH200",
-   "id": "B-hybrid-dle-6",
-   "hydraulik": "6721896658"
+   "id": "B-hybrid-dle-6"
   },
   {
    "tabelle": "bestand",
@@ -693,10 +686,8 @@
    "summe": 27700,
    "geraet": "CS5800/6800iAW 10 OR-T",
    "n": 1,
-   "vorlage": "4000162204",
    "erzeuger": "Hybrid MH200",
-   "id": "B-hybrid-dle-8",
-   "hydraulik": "6721896658"
+   "id": "B-hybrid-dle-8"
   },
   {
    "tabelle": "bestand",
@@ -1027,7 +1018,6 @@
    "summe": 19700,
    "geraet": "CS5800/6800iAW 7 OR-S",
    "n": 1,
-   "vorlage": "4000168226",
    "id": "N-mono-dle-4"
   },
   {
@@ -1058,9 +1048,7 @@
    "summe": 28900,
    "geraet": "CS8800iAW 15 O-T",
    "n": 1,
-   "vorlage": "4000179621",
-   "id": "N-mono-dle-8",
-   "hydraulik": "6721896965"
+   "id": "N-mono-dle-8"
   },
   {
    "tabelle": "neubau",
@@ -1077,7 +1065,6 @@
    "summe": 47700,
    "geraet": "CS8800iAW 11 O-T",
    "n": 2,
-   "vorlage": "4000194338",
    "id": "N-mono-dle-10"
   },
   {
@@ -1093,7 +1080,6 @@
    "summe": 44900,
    "geraet": "CS5001 AW22",
    "n": 1,
-   "vorlage": "4000168127",
    "id": "N-mono-dle-12"
   },
   {
@@ -1111,7 +1097,6 @@
    "summe": 54700,
    "geraet": "CS8800iAW 15 O-T",
    "n": 2,
-   "vorlage": "4000194353",
    "id": "N-mono-dle-14"
   },
   {
@@ -1129,9 +1114,7 @@
    "summe": 55700,
    "geraet": "CS8800iAW 15 O-T",
    "n": 2,
-   "vorlage": "4000194358",
    "id": "N-mono-dle-16"
   }
- ],
- "hinweis_hydraulik": "„hydraulik“: Hydraulikschema aus den Unterlagen der Musterlösung (Techn. Doku); sonst passendes Schema aus der Hydraulikdatenbank."
+ ]
 }

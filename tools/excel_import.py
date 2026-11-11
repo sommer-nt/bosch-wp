@@ -217,12 +217,13 @@ def einbetten(daten: dict, klima: dict) -> None:
              ";\nconst BILDER_DATEN = " + json.dumps(_bilder(), separators=(",", ":")) +
              ";\nconst PAKETE_DATEN = " + json.dumps(_pakete(), ensure_ascii=False, separators=(",", ":")) +
              ";\nconst MFH_DATEN = " + json.dumps(_mfh(), ensure_ascii=False, separators=(",", ":")) +
-             ";\nconst HYDRAULIK_DATEN = " + json.dumps(_hydraulik(), ensure_ascii=False, separators=(",", ":")) + ";\n")
+             ";\nconst HYDRAULIK_DATEN = " + json.dumps(_hydraulik(), ensure_ascii=False, separators=(",", ":")) +
+             ";\nconst HYDRAULIK_BILDER = " + json.dumps(_hydraulik_bilder(), separators=(",", ":")) + ";\n")
     html.write_text(text[:i] + block + text[j:], encoding="utf-8")
 
 
 def _mfh() -> dict:
-    """MFH-Musterbestellvorschläge (daten/mfh_matrix.json + verwendete Vorlagen aus daten/mfh_vorlagen.json)."""
+    """MFH-Musterlösungen (daten/mfh_matrix.json)."""
     sys.path.insert(0, str(HIER))
     from wp import daten as wd
     wd.mfh.cache_clear()
@@ -230,9 +231,16 @@ def _mfh() -> dict:
 
 
 def _hydraulik() -> dict:
-    """Index der Bosch-Hydraulikdatenbank (daten/hydraulik.json, tools/hdb_import.py)."""
-    datei = DATEN / "hydraulik.json"
-    return json.loads(datei.read_text(encoding="utf-8")) if datei.exists() else {"basis": "", "schemata": []}
+    """Hydraulik-Bibliothek aus den Musterlösungen (daten/hydrauliken.json, tools/hydraulik_import.py)."""
+    datei = DATEN / "hydrauliken.json"
+    return json.loads(datei.read_text(encoding="utf-8")) if datei.exists() else {"schemata": [], "loesungen": []}
+
+
+def _hydraulik_bilder() -> dict:
+    """Schemabilder als data-URI (daten/hydrauliken/*.jpg)."""
+    import base64
+    return {b.stem: "data:image/jpeg;base64," + base64.b64encode(b.read_bytes()).decode()
+            for b in sorted((DATEN / "hydrauliken").glob("*.jpg"))}
 
 
 def _katalog() -> dict:

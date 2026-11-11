@@ -1,4 +1,4 @@
-// MFH-Musterbestellvorschläge aus index.html (mfhkern) für test_mfh.py ausführen.
+// MFH-Musterlösungen aus index.html (mfhkern) für test_mfh.py ausführen.
 // Aufruf: node mfh_html.js index.html faelle.json  -> JSON auf stdout
 const fs = require('fs'), vm = require('vm');
 const html = fs.readFileSync(process.argv[2], 'utf8');
@@ -17,10 +17,5 @@ const out = {
   }),
   rechne: f.eingaben.map(e => { const r = ctx.MFK.rechneMitMuster(e, ctx.GERAETE_DATEN, ctx.KATALOG_DATEN, M); return {g: r.gewaehlt && [r.gewaehlt.geraet, r.gewaehlt.n], wp: r.mfh_wp}; }),
   folgen: f.folgen.map(([e, k]) => { ctx.MFK.eingabenFolgen(e, k); return e; }),
-  positionen: f.vorlagen.map(([nr, we]) => ctx.MFK.positionen(M.vorlagen[nr], M.langtexte, we)),
-  d83: f.vorlagen.map(([nr, we]) => ctx.MFK.d83Text(M.vorlagen[nr], M.langtexte, we)),
-  cp850: f.vorlagen.map(([nr, we]) => Buffer.from(ctx.MFK.cp850(ctx.MFK.d83Text(M.vorlagen[nr], M.langtexte, we))).toString('base64')),
-  rapida: f.vorlagen.map(([nr, we]) => Buffer.from(ctx.MFK.cp1252(ctx.MFK.rapidaCsv(M.vorlagen[nr], M.langtexte, we, f.projekt, 'Hinweis äöü – Test'))).toString('base64')),
-  csv: f.vorlagen.map(([nr, we]) => ctx.MFK.csvText(ctx.MFK.positionen(M.vorlagen[nr], M.langtexte, we))),
 };
 process.stdout.write(JSON.stringify(out));

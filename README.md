@@ -4,7 +4,7 @@ Entwickelt von Daniel Sommer · HC/SDE3-PSD
 
 Schnellauslegung von Luft/Wasser-Wärmepumpen für den Außendienst – auch für Großanlagen (Compress 5000 AW / CS5001AW
 als Kaskade), die der Heat Pump Advisor nicht abdeckt. Ersetzt das interne Excel-Werkzeug „WP-Auslegung_S“ für die
-Weitergabe; das Zubehör plant weiterhin die Systemkonfiguration (SysCon).
+Weitergabe.
 
 Eigenes Projekt neben Bosch Flow (Netzrechner) und Bosch Speicher. Zwei Versionen mit **identischem Rechenweg**
 (Test vergleicht beide):
@@ -29,15 +29,8 @@ Eigenes Projekt neben Bosch Flow (Netzrechner) und Bosch Speicher. Zwei Versione
 
 **Start, Zurücksetzen, Export:** Das Tool startet leer (keine vorbelegte Wärmepumpe); „Letztes Projekt“ holt die
 zuletzt im Browser bearbeitete Auslegung zurück, „Zurücksetzen“ leert alle Eingaben. Menü „Export“: Projektdatei
-(.json, auch in Streamlit zu öffnen), PDF (Drucken), Bestellvorschlag als GAEB (.d83) und CSV sowie die
-**Projektmappe (.zip)** mit Projektdatei, Kurzbericht (Klartext + Links der Hydraulikschemata) und Bestellvorschlag –
-in Streamlit zusätzlich mit dem PDF (`wp/export.py`).
-
-**Bestellweg:** Hauptweg ist der **Rapida-Import (CSV)** – gleiche Spalten wie der Mercura-Export (Bauvorhaben, Straße,
-PLZ, Ort, Kundennummer, CRM-ID, Kapitel, LV-Referenz, Positionstyp Normal/Alternativ/Hinweis, Anzahl, TTN-Nr., Text;
-Semikolon, Windows-1252). Rapida erzeugt daraus den offiziellen Bestellvorschlag (PDF für den Kunden, GAEB D83 für den
-Großhandel, XLS). Zusätzlich direkt: GAEB (.d83) und Positionsliste (CSV). Grund-/Normalpositionen → Normal,
-Alternativ- und Bedarfspositionen → Alternativ, Positionen ohne TTN-Nr. → Hinweis.
+(.json, auch in Streamlit zu öffnen), PDF (Drucken) und die **Projektmappe (.zip)** mit Projektdatei, Kurzbericht und
+Bild der gewählten Hydraulik – in Streamlit zusätzlich mit dem PDF (`wp/export.py`).
 
 **Ergebnis in Reitern:** Überblick (Klartext „Auf einen Blick“, Kennzahlen, gewählte Wärmepumpe, Leistungsdiagramm) ·
 Leistung & Heizkurve · Geräteauswahl · Hydraulik & Warmwasser · Bestellvorschlag (MFH) bzw. Systempakete · Rechenweg
@@ -82,30 +75,33 @@ Preise (auch nicht im Ausdruck), ohne Expertenmodus, ohne VDI-Vergleichstabelle 
 
 ## MFH-Bestellvorschläge (Musterlösungen)
 
-Beim Mehrfamilienhaus wählt das Tool aus der Kostenübersicht „MFH-Musterbestellvorschläge“ (Bestand 45 W/m², Neubau
+Beim Mehrfamilienhaus wählt das Tool aus der Kostenübersicht der MFH-Musterlösungen (Bestand 45 W/m², Neubau
 30 W/m², je WE 80 m² und 3,5 Personen; Stand 20.08.2026, 62 Lösungen in `daten/mfh_matrix.json`) die passende Musterlösung:
-Gebäudetyp → Tabelle, Betriebsweise (GEG-Hybrid → Hybrid MH200 bzw. bivalent CC8000, sonst monoenergetisch),
-Warmwasserbereitung → Zeile, dann die kleinste Lösung mit mindestens so vielen WE, deren Muster-Heizlast die berechnete
-Heizlast QH abdeckt (von Hand umschaltbar). Die Wärmepumpe der Musterlösung wird mit dem Rechenkern gegen die eigene
-Anlage geprüft und bei „Beste Lösung“ übernommen. Wo ein GAEB-Bestellvorschlag vorliegt (10 Lösungen), zeigt das Tool
-alle Positionen (Grund-, Alternativ-, Bedarfspositionen, Bestell-Nr., EP/GP) und exportiert ihn als **GAEB-Datei
-(.d83, byte-identisch zum Original)** oder CSV; Durchlauferhitzer je Wohnung werden auf die eingegebenen WE angepasst.
-Übernahme: `python tools/mfh_import.py ORDNER…` (liest alle *.D83, die Dateien selbst werden nicht eingecheckt),
-danach `python tools/excel_import.py --nur-einbetten`.
+Gebäudetyp → Tabelle, Anlagenart (Hybrid MH200 bzw. bivalent CC8000, sonst monoenergetisch), Warmwasserbereitung → Zeile,
+dann die kleinste Lösung mit mindestens so vielen WE, deren Muster-Heizlast die berechnete Heizlast QH abdeckt (von Hand
+umschaltbar). Die Wärmepumpe der Musterlösung wird mit dem Rechenkern gegen die eigene Anlage geprüft und bei „Beste
+Lösung“ übernommen.
 
 Kaskaden: CS8800 mit Kaskadenregler HPC800i C bis 3 Geräte (wie Musterlösungen), CS5001 mit HPC 301 C bis 14.
 Im Schema hängt die Frischwasserstation an einem eigenen FriWa-Puffer, nicht am Trennpuffer der Heizung;
 Wohnungsstationen (HIU) hängen über das 2-Leiter-Netz am Puffer, bei DLE zeigt das Schema die Durchlauferhitzer je
 Wohnung, bei GEG-Hybrid den Gas-Brennwertkessel als zweiten Wärmeerzeuger am Puffer.
 
-## Bosch-Hydraulikschemata
+## Hydraulik-Auswahl (Musterlösungen)
 
-Im Reiter „Hydraulik & Warmwasser“ zeigt das Tool die passenden Schemata aus der Bosch-Hydraulikdatenbank
-(bosch-de-de.boschhc-documents.com/hdb) – ausgewählt nach Baureihe, Kaskade (Anzahl), Warmwasser (Speicher,
-Frischwasserstation, Wohnungsstationen/HIU, ohne), Hybrid und Inneneinheit, mit Vorschaubild, PDF, DWG und Link in
-die Datenbank (online). Der Index (330 Wärmepumpen-Schemata) steht in `daten/hydraulik.json`; aktualisieren mit
-`python tools/hdb_import.py`, danach `python tools/excel_import.py --nur-einbetten`. Logik in `wp/hydraulik.py` und
-`<script id="hdbkern">` (Test vergleicht beide).
+Im Reiter „Hydraulik & Warmwasser“ wählt man zur ausgelegten Maschine die passende Hydraulik aus den Musterlösungen
+(Techn. Doku der Musterlösungs-Ordner aus den ZIP-Daten): 12 Hydraulikschemata (Bosch-Schemata 6721… und
+Planungszeichnungen „…_1ug“) zu 42 Musterlösungen, davon 40 mit Excel-WP-Auslegung. Bewertet werden Baureihe, Anzahl
+(Kaskade), Warmwasser (FriWa, HIU, ohne/DLE, Speicher) und Anlagenart; vorgeschlagen wird die passende Hydraulik, deren
+Musterlösung in WE und Gerät am nächsten liegt – jede andere lässt sich von Hand wählen. „Auslegung übernehmen“ setzt die
+Eingaben der Excel-Auslegung einer Musterlösung (PLZ, θe, Heizgrenze, W/m² und Fläche, Personen, Lastprofil, Sperrzeit,
+Vorlauf, Kriterium, Wärmepumpe); der Rechenkern prüft die Musterlösung nach (Test: QGES und Mindestleistung wie Excel).
+Hinweis: Die Excel-Auslegungen der Musterlösungen nutzen das GEG-Hybrid-Kriterium (0,3 · Q) und 35 °C (Neubau) bzw.
+55 °C (Bestand) Vorlauf. Die gewählte Hydraulik steht in Ausdruck, PDF und Projektmappe.
+
+Übernahme der Daten: `python tools/hydraulik_import.py ORDNER…` (entpackte ZIP-Ordner; erzeugt `daten/hydrauliken.json`
+und `daten/hydrauliken/*.jpg`), danach `python tools/excel_import.py --nur-einbetten`. Logik in `wp/hydraulik.py` und
+`<script id="hydkern">` (Test vergleicht beide). Fernwärme-Ordner (ohne Wärmepumpe) werden nicht übernommen.
 
 ## Heizkurve
 
@@ -126,7 +122,7 @@ CS8800, CS7000, CS7400 und CS7800i LW; für CS5001, Supraeco T und Kaskaden gibt
 ## Anlagenschema
 
 `wp/schema.py` und `schemaSvg()` in `index.html` erzeugen dasselbe SVG (Test vergleicht beide); das PDF bettet es als
-Vektorgrafik ein, Streamlit zeigt es direkt. Piktogramme im SysCon-Stil (Verteilerbalken, FBH mit Wärmewellen,
+Vektorgrafik ein, Streamlit zeigt es direkt. Piktogramme im Bosch-Planungsstil (Verteilerbalken, FBH mit Wärmewellen,
 Heizkörper, Dusche, Außeneinheit mit Ventilator, Speicher mit Heizwendel, nummerierte Abschnitte 1–4).
 `node tools/schema_pruefen.js index.html` prüft alle Varianten auf Überschneidungen
 (Text über Rohr, Text über Text) – läuft auch in `pytest`.

@@ -1,7 +1,6 @@
-"""MFH-Musterbestellvorschläge: Daten, Auswahl, GAEB-Export und Gleichheit Python ↔ HTML (node)."""
+"""MFH-Musterlösungen: Daten, Auswahl und Gleichheit Python ↔ HTML (node)."""
 from __future__ import annotations
 
-import base64
 import copy
 import json
 import shutil
@@ -56,38 +55,22 @@ def vorschlag(e):
     return M.vorschlag(e, r, MD, D.geraete(), D.katalog())
 
 
-def test_matrix_und_vorlagen_vollstaendig():
+
+def test_matrix_vollstaendig():
     ids = [z["id"] for z in MD["zellen"]]
     assert len(ids) == len(set(ids)) == 62
     geraete = {g["id"] for g in D.geraete()["geraete"]}
     for z in MD["zellen"]:
         assert z["geraet"] in geraete, z
-        if z.get("vorlage"):
-            v = MD["vorlagen"][z["vorlage"]]
-            assert M.muster_we(v) == z["we"], (z["id"], v["nr"])
-            texte = " ".join(" ".join(p["kurz"]) for g in v["gruppen"] for p in g["elemente"] if "oz" in p)
-            artnr = {p["artnr"] for g in v["gruppen"] for p in g["elemente"] if "oz" in p}
-            assert D.katalog()["geraete"][z["geraet"]]["artnr"] in artnr, (z["id"], "Außeneinheit fehlt im Bestellvorschlag")
-            assert texte
+        assert "vorlage" not in z and "hydraulik" not in z
 
-
-def test_summe_wie_kostenuebersicht():
-    """Grund- und Normalpositionen des GAEB-Bestellvorschlags ≈ Summe netto der Kostenübersicht.
-
-    Neubau-Muster (2026-03 bis 08) auf ±3 %; die älteren Bestand-Muster (Hybrid, 4 WE DLE) weichen bis ca. 12 % ab
-    (Kostenübersicht ohne einzelne Positionen) – angezeigt wird immer die Summe aus dem Bestellvorschlag."""
-    for z in MD["zellen"]:
-        if z.get("vorlage"):
-            s = M.summe(M.positionen(MD["vorlagen"][z["vorlage"]], MD["langtexte"]))
-            tol = 0.03 if z["tabelle"] == "neubau" or z["ww"] == "speicher" else 0.12
-            assert abs(s - z["summe"]) <= tol * z["summe"], (z["id"], s, z["summe"])
 
 
 def test_auswahl():
     v = vorschlag(mfh_eingabe("neubau", 10, "dle"))
     assert [a["zelle"]["id"] for a in v["auswahl"]] == ["N-mono-dle-10"]
     a = v["auswahl"][0]
-    assert a["positionen"] and a["pruefung"]["ok"]
+    assert a["pruefung"]["ok"]
     # 12 WE Bestand zentral: zwei Varianten (CS5001-Kaskade, CS8800-Kaskade)
     v = vorschlag(mfh_eingabe("sanierung", 12, "friwa"))
     assert {a["zelle"]["id"] for a in v["auswahl"]} == {"B-mono-friwa-12-a", "B-mono-friwa-12-b"}
@@ -109,23 +92,6 @@ def test_eingaben_folgen():
     assert e["tww"]["aktiv"] is True and e["tww"]["system"] == "friwa"
 
 
-def test_dle_menge_je_wohneinheit():
-    v = MD["vorlagen"]["4000194338"]
-    pos = M.positionen(v, MD["langtexte"], 12)
-    dle = [p for p in pos if "TR5001" in p["text"]]
-    assert dle and all(p["menge"] == 12 and p["menge_muster"] == 10 for p in dle)
-    zeilen = M.d83_text(v, MD["langtexte"], 12).split("\r\n")
-    assert all(len(z) == 80 for z in zeilen)
-
-
-def test_d83_satzaufbau():
-    for v in MD["vorlagen"].values():
-        t = M.d83_text(v, MD["langtexte"])
-        zeilen = t.split("\r\n")
-        assert all(len(z) == 80 for z in zeilen)
-        assert [int(z[-6:]) for z in zeilen] == list(range(1, len(zeilen) + 1))
-        assert zeilen[0].startswith("00") and zeilen[-1].startswith("99")
-        assert M.d83_bytes(v, MD["langtexte"]).decode("cp850") == t
 
 
 @pytest.mark.skipif(shutil.which("node") is None, reason="node nicht installiert")
@@ -136,10 +102,8 @@ def test_mfh_python_gleich_html(tmp_path):
         e = P.neu()
         e["mfh"].update(art="mfh", we=7, ww="dle")
         folgen.append([e, k])
-    vorlagen = [[nr, we] for nr in MD["vorlagen"] for we in (None, 9)]
     datei = tmp_path / "faelle.json"
-    projekt = {"name": "BV Müller; Haus", "strasse": "Hauptstraße", "hausnr": "1a", "plz": "88521", "ort": "Ertingen", "kundennr": "4711", "crm_id": "30341506"}
-    datei.write_text(json.dumps({"eingaben": ein, "folgen": folgen, "vorlagen": vorlagen, "projekt": projekt}, ensure_ascii=False), encoding="utf-8")
+    datei.write_text(json.dumps({"eingaben": ein, "folgen": folgen}, ensure_ascii=False), encoding="utf-8")
     js = json.loads(subprocess.run(["node", str(HIER / "mfh_html.js"), str(ROOT / "index.html"), str(datei)],
                                    capture_output=True, text=True, check=True).stdout)
     from test_rechnen import gleich
@@ -153,14 +117,7 @@ def test_mfh_python_gleich_html(tmp_path):
         e = copy.deepcopy(e)
         M.eingaben_folgen(e, k)
         gleich(e, j)
-    for (nr, we), r_js in zip(vorlagen, js["rapida"]):
-        assert M.rapida_bytes(MD["vorlagen"][nr], MD["langtexte"], we, projekt, "Hinweis äöü – Test") == base64.b64decode(r_js)
-    for (nr, we), p_js, d_js, b_js, c_js in zip(vorlagen, js["positionen"], js["d83"], js["cp850"], js["csv"]):
-        v = MD["vorlagen"][nr]
-        gleich(M.positionen(v, MD["langtexte"], we), p_js)
-        assert M.d83_text(v, MD["langtexte"], we) == d_js
-        assert M.d83_bytes(v, MD["langtexte"], we) == base64.b64decode(b_js)
-        assert M.csv_text(M.positionen(v, MD["langtexte"], we)) == c_js
+
 
 
 def test_auto_waehlt_muster_wp():

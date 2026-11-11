@@ -1,0 +1,1719 @@
+{
+ "quelle": "Musterlösungen MFH (Bosch Home Comfort, Techn. Doku der Musterlösungs-Ordner)",
+ "schemata": [
+  {
+   "id": "10WE_2CS8800_BP500-7EM",
+   "datei": "10WE_2CS8800_BP500-7EM.pdf",
+   "titel": "10WE 2CS8800 BP500-7EM",
+   "loesungen": [
+    "2.1.3.4"
+   ],
+   "serien": [
+    "CS8800"
+   ],
+   "anzahl": [
+    2
+   ],
+   "ww": [
+    "dle"
+   ],
+   "system": [
+    "mono"
+   ],
+   "gebaeude": [
+    "neubau"
+   ]
+  },
+  {
+   "id": "12WE_29KW_CS5001_BP500_1ug",
+   "datei": "12WE_29KW_CS5001_BP500_1ug.pdf",
+   "titel": "12WE 29KW CS5001 BP500",
+   "loesungen": [
+    "2.1.3.5"
+   ],
+   "serien": [
+    "CS5001"
+   ],
+   "anzahl": [
+    1
+   ],
+   "ww": [
+    "dle"
+   ],
+   "system": [
+    "mono"
+   ],
+   "gebaeude": [
+    "neubau"
+   ]
+  },
+  {
+   "id": "14WE_2CS8800_BP500-7EM",
+   "datei": "14WE_2CS8800_BP500-7EM.pdf",
+   "titel": "14WE 2CS8800 BP500-7EM",
+   "loesungen": [
+    "2.1.3.6"
+   ],
+   "serien": [
+    "CS8800"
+   ],
+   "anzahl": [
+    2
+   ],
+   "ww": [
+    "dle"
+   ],
+   "system": [
+    "mono"
+   ],
+   "gebaeude": [
+    "neubau"
+   ]
+  },
+  {
+   "id": "16WE_2CS8800_BP500-7EM",
+   "datei": "16WE_2CS8800_BP500-7EM.pdf",
+   "titel": "16WE 2CS8800 BP500-7EM",
+   "loesungen": [
+    "2.1.3.7"
+   ],
+   "serien": [
+    "CS8800"
+   ],
+   "anzahl": [
+    2
+   ],
+   "ww": [
+    "dle"
+   ],
+   "system": [
+    "mono"
+   ],
+   "gebaeude": [
+    "neubau"
+   ]
+  },
+  {
+   "id": "16WE_58KW_CS5001_42__BP1000_1ug",
+   "datei": "16WE_58KW_CS5001(42)_BP1000_1ug.pdf",
+   "titel": "16WE 58KW CS5001(42) BP1000",
+   "loesungen": [
+    "1.1.3.7"
+   ],
+   "serien": [
+    "CS5001"
+   ],
+   "anzahl": [
+    1
+   ],
+   "ww": [
+    "dle"
+   ],
+   "system": [
+    "mono"
+   ],
+   "gebaeude": [
+    "bestand"
+   ]
+  },
+  {
+   "id": "4WE_10kW_CS5800_AWMB_1ug_FBH",
+   "datei": "4WE_10kW_CS5800_AWMB_1ug FBH.pdf",
+   "titel": "4WE 10kW CS5800 AWMB",
+   "loesungen": [
+    "2.1.3.1"
+   ],
+   "serien": [
+    "CS5800"
+   ],
+   "anzahl": [
+    1
+   ],
+   "ww": [
+    "dle"
+   ],
+   "system": [
+    "mono"
+   ],
+   "gebaeude": [
+    "neubau"
+   ]
+  },
+  {
+   "id": "6721896658",
+   "datei": "6721896658.pdf",
+   "titel": "Condens GC9800/7800/5800iW...P Hybridsystem",
+   "loesungen": [
+    "1.3.3.1",
+    "1.3.3.2"
+   ],
+   "serien": [
+    "CS5800"
+   ],
+   "anzahl": [
+    1
+   ],
+   "ww": [
+    "dle"
+   ],
+   "system": [
+    "hybrid"
+   ],
+   "gebaeude": [
+    "bestand"
+   ]
+  },
+  {
+   "id": "6721896891",
+   "datei": "6721896891.pdf",
+   "titel": "Compress CS8800iAW AWEi D",
+   "loesungen": [
+    "1.1.1.1"
+   ],
+   "serien": [
+    "CS8800"
+   ],
+   "anzahl": [
+    1
+   ],
+   "ww": [
+    "friwa"
+   ],
+   "system": [
+    "mono"
+   ],
+   "gebaeude": [
+    "bestand"
+   ]
+  },
+  {
+   "id": "6721896965",
+   "datei": "6721896965.pdf",
+   "titel": "Compress CS8800iAW AWEi D",
+   "loesungen": [
+    "1.1.3.1",
+    "2.1.3.3"
+   ],
+   "serien": [
+    "CS8800"
+   ],
+   "anzahl": [
+    1
+   ],
+   "ww": [
+    "dle"
+   ],
+   "system": [
+    "mono"
+   ],
+   "gebaeude": [
+    "bestand",
+    "neubau"
+   ]
+  },
+  {
+   "id": "6721897001",
+   "datei": "6721897001.pdf",
+   "titel": "3x Compress 8800iAW (Kaskade)",
+   "loesungen": [
+    "1.1.3.2",
+    "1.1.3.5"
+   ],
+   "serien": [
+    "CS8800"
+   ],
+   "anzahl": [
+    2,
+    3
+   ],
+   "ww": [
+    "dle"
+   ],
+   "system": [
+    "mono"
+   ],
+   "gebaeude": [
+    "bestand"
+   ]
+  },
+  {
+   "id": "8WE_30kW_CS5000_22__BP500_1ug",
+   "datei": "8WE_30kW_CS5000(22)_BP500_1ug.pdf",
+   "titel": "8WE 30kW CS5000(22) BP500",
+   "loesungen": [
+    "1.1.3.3"
+   ],
+   "serien": [
+    "CS5001"
+   ],
+   "anzahl": [
+    1
+   ],
+   "ww": [
+    "dle"
+   ],
+   "system": [
+    "mono"
+   ],
+   "gebaeude": [
+    "bestand"
+   ]
+  },
+  {
+   "id": "CS8800_AWMB_WPS_1ug",
+   "datei": "CS8800_AWMB_WPS_1ug.pdf",
+   "titel": "CS8800 AWMB WPS",
+   "loesungen": [
+    "1.1.4.1"
+   ],
+   "serien": [
+    "CS8800"
+   ],
+   "anzahl": [
+    1
+   ],
+   "ww": [
+    "speicher"
+   ],
+   "system": [
+    "mono"
+   ],
+   "gebaeude": [
+    "bestand"
+   ]
+  }
+ ],
+ "loesungen": [
+  {
+   "id": "1.1.1.1",
+   "ordner": "1.1.1.1_4WE_15kW_CS8800AW13",
+   "gebaeude": "bestand",
+   "system": "mono",
+   "ww": "friwa",
+   "we": 4,
+   "kw": 15.0,
+   "geraet": "CS8800iAW 13 O-T",
+   "n": 1,
+   "schemata": [
+    "6721896891"
+   ],
+   "auslegung": {
+    "datei": "WP-Auslegung_S_2.7.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 0.0,
+    "spez_w_m2": 45.0,
+    "flaeche_m2": 320.0,
+    "heizgrenze": 15.0,
+    "innen": 20.0,
+    "personen": 14.0,
+    "kw_person": 0.1,
+    "sperrzeit_h": 0.0,
+    "qges": 15.8,
+    "mindest_kw": 4.74,
+    "auslegung": "hybrid",
+    "diagramm": "CS8800iAW - W55°C CS 7000i",
+    "vl": 55.0
+   },
+   "tww": [],
+   "hiu": []
+  },
+  {
+   "id": "1.1.1.3",
+   "ordner": "1.1.1.3_8WE_29kW_CS5001 22",
+   "gebaeude": "bestand",
+   "system": "mono",
+   "ww": "friwa",
+   "we": 8,
+   "kw": 29.0,
+   "geraet": "CS5001 AW22",
+   "n": 1,
+   "schemata": [],
+   "auslegung": {
+    "datei": "WP-Auslegung_S_2.7.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 0.0,
+    "spez_w_m2": 45.0,
+    "flaeche_m2": 640.0,
+    "heizgrenze": 15.0,
+    "innen": 20.0,
+    "personen": 24.0,
+    "kw_person": 0.1,
+    "sperrzeit_h": 0.0,
+    "qges": 31.2,
+    "mindest_kw": 9.36,
+    "auslegung": "hybrid",
+    "diagramm": "CS5001 AW22 CS5001 AW22",
+    "vl": 55.0,
+    "vl_angenommen": true
+   },
+   "tww": [],
+   "hiu": []
+  },
+  {
+   "id": "1.1.1.5",
+   "ordner": "1.1.1.5_12WE_43kW_2xCS5001 22",
+   "gebaeude": "bestand",
+   "system": "mono",
+   "ww": "friwa",
+   "we": 12,
+   "kw": 43.0,
+   "geraet": "CS5001 AW22",
+   "n": 2,
+   "schemata": [],
+   "auslegung": {
+    "datei": "WP-Auslegung_S_2.7.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 0.0,
+    "spez_w_m2": 45.0,
+    "flaeche_m2": 960.0,
+    "heizgrenze": 15.0,
+    "innen": 20.0,
+    "personen": 42.0,
+    "kw_person": 0.1,
+    "sperrzeit_h": 0.0,
+    "qges": 47.4,
+    "mindest_kw": 14.22,
+    "auslegung": "hybrid",
+    "diagramm": "2er Kaskade CS5001 AW22",
+    "vl": 55.0,
+    "vl_angenommen": true
+   },
+   "tww": [
+    "Auslegung TWW.pdf"
+   ],
+   "hiu": []
+  },
+  {
+   "id": "1.1.1.7",
+   "ordner": "1.1.1.7_14WE_50kW_CS5001 42",
+   "gebaeude": "bestand",
+   "system": "mono",
+   "ww": "friwa",
+   "we": 14,
+   "kw": 50.0,
+   "geraet": "CS5001 AW42",
+   "n": 1,
+   "schemata": [],
+   "auslegung": {
+    "datei": "WP-Auslegung_S_2.7.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 0.0,
+    "spez_w_m2": 45.0,
+    "flaeche_m2": 1120.0,
+    "heizgrenze": 15.0,
+    "innen": 20.0,
+    "personen": 49.0,
+    "kw_person": 0.1,
+    "sperrzeit_h": 0.0,
+    "qges": 55.3,
+    "mindest_kw": 16.59,
+    "auslegung": "hybrid",
+    "diagramm": "CS5001 AW42 60,0",
+    "vl": 55.0,
+    "vl_angenommen": true
+   },
+   "tww": [],
+   "hiu": []
+  },
+  {
+   "id": "1.1.3.1",
+   "ordner": "1.1.3.1_4WE_15kW_CS8800AW13",
+   "gebaeude": "bestand",
+   "system": "mono",
+   "ww": "dle",
+   "we": 4,
+   "kw": 15.0,
+   "geraet": "CS8800iAW 13 O-T",
+   "n": 1,
+   "schemata": [
+    "6721896965"
+   ],
+   "auslegung": {
+    "datei": "WP-Auslegung_S_2.6.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 0.0,
+    "spez_w_m2": 45.0,
+    "flaeche_m2": 320.0,
+    "heizgrenze": 15.0,
+    "innen": 20.0,
+    "personen": 0.0,
+    "kw_person": 0.1,
+    "sperrzeit_h": 0.0,
+    "qges": 14.4,
+    "mindest_kw": 4.32,
+    "auslegung": "hybrid",
+    "diagramm": "CS8800iAW - W55°C CS 7000i",
+    "vl": 55.0
+   },
+   "tww": [],
+   "hiu": []
+  },
+  {
+   "id": "1.1.3.2",
+   "ordner": "1.1.3.2_6WE_22kW_HPC800iC_2xCS8800AW11",
+   "gebaeude": "bestand",
+   "system": "mono",
+   "ww": "dle",
+   "we": 6,
+   "kw": 22.0,
+   "geraet": "CS8800iAW 11 O-T",
+   "n": 2,
+   "schemata": [
+    "6721897001"
+   ],
+   "auslegung": {
+    "datei": "WP-Auslegung_S_2.7.3.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 0.0,
+    "spez_w_m2": 45.0,
+    "flaeche_m2": 480.0,
+    "heizgrenze": 15.0,
+    "innen": 20.0,
+    "personen": 0.0,
+    "kw_person": 0.1,
+    "sperrzeit_h": 0.0,
+    "qges": 21.6,
+    "mindest_kw": 6.48,
+    "auslegung": "hybrid",
+    "diagramm": "2er Kaskade CS8800 55°C",
+    "vl": 55.0
+   },
+   "tww": [],
+   "hiu": []
+  },
+  {
+   "id": "1.1.3.3",
+   "ordner": "1.1.3.3_8WE_30kW_CS5001AW22",
+   "gebaeude": "bestand",
+   "system": "mono",
+   "ww": "dle",
+   "we": 8,
+   "kw": 30.0,
+   "geraet": "CS5001 AW22",
+   "n": 1,
+   "schemata": [
+    "8WE_30kW_CS5000_22__BP500_1ug"
+   ],
+   "auslegung": {
+    "datei": "WP-Auslegung_S_2.7_3.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 0.0,
+    "spez_w_m2": 45.0,
+    "flaeche_m2": 640.0,
+    "heizgrenze": 15.0,
+    "innen": 20.0,
+    "personen": 0.0,
+    "kw_person": 0.1,
+    "sperrzeit_h": 0.0,
+    "qges": 28.8,
+    "mindest_kw": 8.64,
+    "auslegung": "hybrid",
+    "diagramm": "CS5001 AW22 CS5001 AW22",
+    "vl": 55.0,
+    "vl_angenommen": true
+   },
+   "tww": [],
+   "hiu": []
+  },
+  {
+   "id": "1.1.3.4",
+   "ordner": "1.1.3.4_10WE_36kW_HPC800iC_2xCS8800AW15",
+   "gebaeude": "bestand",
+   "system": "mono",
+   "ww": "dle",
+   "we": 10,
+   "kw": 36.0,
+   "geraet": "CS8800iAW 15 O-T",
+   "n": 2,
+   "schemata": [],
+   "auslegung": {
+    "datei": "WP-Auslegung_S_2.7.3.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 0.0,
+    "spez_w_m2": 45.0,
+    "flaeche_m2": 800.0,
+    "heizgrenze": 15.0,
+    "innen": 20.0,
+    "personen": 0.0,
+    "kw_person": 0.1,
+    "sperrzeit_h": 0.0,
+    "qges": 36.0,
+    "mindest_kw": 10.8,
+    "auslegung": "hybrid",
+    "diagramm": "2er Kaskade CS8800 55°C",
+    "vl": 55.0
+   },
+   "tww": [],
+   "hiu": []
+  },
+  {
+   "id": "1.1.3.5",
+   "ordner": "1.1.3.5_12WE_44kW_HPC800iC_3xCS8800AW13",
+   "gebaeude": "bestand",
+   "system": "mono",
+   "ww": "dle",
+   "we": 12,
+   "kw": 44.0,
+   "geraet": "CS8800iAW 13 O-T",
+   "n": 3,
+   "schemata": [
+    "6721897001"
+   ],
+   "auslegung": {
+    "datei": "WP-Auslegung_S_2.7.3.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 0.0,
+    "spez_w_m2": 45.0,
+    "flaeche_m2": 960.0,
+    "heizgrenze": 15.0,
+    "innen": 20.0,
+    "personen": 0.0,
+    "kw_person": 0.1,
+    "sperrzeit_h": 0.0,
+    "qges": 43.2,
+    "mindest_kw": 12.96,
+    "auslegung": "hybrid",
+    "diagramm": "3er Kaskade CS8800 55°C",
+    "vl": 55.0
+   },
+   "tww": [],
+   "hiu": []
+  },
+  {
+   "id": "1.1.3.6",
+   "ordner": "1.1.3.6_14WE_50kW_2xCS5001AW22",
+   "gebaeude": "bestand",
+   "system": "mono",
+   "ww": "dle",
+   "we": 14,
+   "kw": 50.0,
+   "geraet": "CS5001 AW22",
+   "n": 2,
+   "schemata": [],
+   "auslegung": {
+    "datei": "WP-Auslegung_S_2.7_3.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 0.0,
+    "spez_w_m2": 45.0,
+    "flaeche_m2": 1120.0,
+    "heizgrenze": 15.0,
+    "innen": 20.0,
+    "personen": 0.0,
+    "kw_person": 0.1,
+    "sperrzeit_h": 0.0,
+    "qges": 50.4,
+    "mindest_kw": 15.12,
+    "auslegung": "hybrid",
+    "diagramm": "2er Kaskade CS5001 AW22",
+    "vl": 55.0,
+    "vl_angenommen": true
+   },
+   "tww": [],
+   "hiu": []
+  },
+  {
+   "id": "1.1.3.7",
+   "ordner": "1.1.3.7_16WE_58kW_CS5001AW42",
+   "gebaeude": "bestand",
+   "system": "mono",
+   "ww": "dle",
+   "we": 16,
+   "kw": 58.0,
+   "geraet": "CS5001 AW42",
+   "n": 1,
+   "schemata": [
+    "16WE_58KW_CS5001_42__BP1000_1ug"
+   ],
+   "auslegung": {
+    "datei": "WP-Auslegung_S_2.7.2.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 0.0,
+    "spez_w_m2": 45.0,
+    "flaeche_m2": 1280.0,
+    "heizgrenze": 15.0,
+    "innen": 20.0,
+    "personen": 0.0,
+    "kw_person": 0.1,
+    "sperrzeit_h": 0.0,
+    "qges": 57.6,
+    "mindest_kw": 17.28,
+    "auslegung": "hybrid",
+    "diagramm": "CS5001 AW42 60,0",
+    "vl": 55.0,
+    "vl_angenommen": true
+   },
+   "tww": [],
+   "hiu": []
+  },
+  {
+   "id": "1.1.4.1",
+   "ordner": "1.1.4.1_4WE_15kW_CS8800AW13",
+   "gebaeude": "bestand",
+   "system": "mono",
+   "ww": "speicher",
+   "we": 4,
+   "kw": 15.0,
+   "geraet": "CS8800iAW 13 O-T",
+   "n": 1,
+   "schemata": [
+    "CS8800_AWMB_WPS_1ug"
+   ],
+   "auslegung": {
+    "datei": "WP-Auslegung_S_2.7.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 0.0,
+    "spez_w_m2": 45.0,
+    "flaeche_m2": 320.0,
+    "heizgrenze": 15.0,
+    "innen": 20.0,
+    "personen": 14.0,
+    "kw_person": 0.1,
+    "sperrzeit_h": 0.0,
+    "qges": 15.8,
+    "mindest_kw": 4.74,
+    "auslegung": "hybrid",
+    "diagramm": "CS8800iAW - W55°C CS 7000i",
+    "vl": 55.0
+   },
+   "tww": [],
+   "hiu": []
+  },
+  {
+   "id": "1.2.1.1",
+   "ordner": "1.2.1.1_14WE_50 kW_GC7000F75",
+   "gebaeude": "bestand",
+   "system": "bivalent",
+   "ww": "friwa",
+   "we": 14,
+   "kw": 50.0,
+   "geraet": "CS5001 AW22",
+   "n": 1,
+   "schemata": [],
+   "auslegung": null,
+   "tww": [
+    "Auslegung TWW.pdf"
+   ],
+   "hiu": []
+  },
+  {
+   "id": "1.2.1.2",
+   "ordner": "1.2.1.2_14WE_50 kW_GC7000WP70",
+   "gebaeude": "bestand",
+   "system": "bivalent",
+   "ww": "friwa",
+   "we": 14,
+   "kw": 50.0,
+   "geraet": "CS5001 AW22",
+   "n": 1,
+   "schemata": [],
+   "auslegung": null,
+   "tww": [
+    "Auslegung TWW.pdf"
+   ],
+   "hiu": []
+  },
+  {
+   "id": "1.2.1.3",
+   "ordner": "1.2.1.3_16WE_58 kW_GC7000F75",
+   "gebaeude": "bestand",
+   "system": "bivalent",
+   "ww": "friwa",
+   "we": 16,
+   "kw": 58.0,
+   "geraet": "CS5001 AW22",
+   "n": 1,
+   "schemata": [],
+   "auslegung": {
+    "datei": "WP-Auslegung.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 0.0,
+    "spez_w_m2": 45.0,
+    "flaeche_m2": 1280.0,
+    "heizgrenze": 15.0,
+    "innen": 20.0,
+    "personen": 0.0,
+    "kw_person": 0.1,
+    "sperrzeit_h": 0.0,
+    "qges": 57.6,
+    "mindest_kw": 17.28,
+    "auslegung": "hybrid",
+    "diagramm": "CS5001 AW22 CS5001 AW22",
+    "vl": 55.0,
+    "vl_angenommen": true
+   },
+   "tww": [
+    "Auslegung TWW.pdf"
+   ],
+   "hiu": []
+  },
+  {
+   "id": "1.2.1.4",
+   "ordner": "1.2.1.4_16WE_58 kW_GC7000WP70",
+   "gebaeude": "bestand",
+   "system": "bivalent",
+   "ww": "friwa",
+   "we": 16,
+   "kw": 58.0,
+   "geraet": "CS5001 AW22",
+   "n": 1,
+   "schemata": [],
+   "auslegung": {
+    "datei": "WP-Auslegung.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 0.0,
+    "spez_w_m2": 45.0,
+    "flaeche_m2": 1280.0,
+    "heizgrenze": 15.0,
+    "innen": 20.0,
+    "personen": 0.0,
+    "kw_person": 0.1,
+    "sperrzeit_h": 0.0,
+    "qges": 57.6,
+    "mindest_kw": 17.28,
+    "auslegung": "hybrid",
+    "diagramm": "CS5001 AW22 CS5001 AW22",
+    "vl": 55.0,
+    "vl_angenommen": true
+   },
+   "tww": [
+    "Auslegung TWW.pdf"
+   ],
+   "hiu": []
+  },
+  {
+   "id": "1.2.1.5",
+   "ordner": "1.2.1.5_18WE_65KW_GC7000F75",
+   "gebaeude": "bestand",
+   "system": "bivalent",
+   "ww": "friwa",
+   "we": 18,
+   "kw": 65.0,
+   "geraet": "CS5001 AW22",
+   "n": 1,
+   "schemata": [],
+   "auslegung": {
+    "datei": "WP-Auslegung.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 0.0,
+    "spez_w_m2": 45.0,
+    "flaeche_m2": 1440.0,
+    "heizgrenze": 15.0,
+    "innen": 20.0,
+    "personen": 0.0,
+    "kw_person": 0.1,
+    "sperrzeit_h": 0.0,
+    "qges": 64.8,
+    "mindest_kw": 19.44,
+    "auslegung": "hybrid",
+    "diagramm": "CS5001 AW22 CS5001 AW22",
+    "vl": 55.0,
+    "vl_angenommen": true
+   },
+   "tww": [
+    "Auslegung TWW.pdf"
+   ],
+   "hiu": []
+  },
+  {
+   "id": "1.2.3.1",
+   "ordner": "1.2.3.1_12WE_44kW_GC9800iWH",
+   "gebaeude": "bestand",
+   "system": "bivalent",
+   "ww": "dle",
+   "we": 12,
+   "kw": 44.0,
+   "geraet": "CS5001 AW22",
+   "n": 1,
+   "schemata": [],
+   "auslegung": {
+    "datei": "Auslegung WP_2.7.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 0.0,
+    "spez_w_m2": 45.0,
+    "flaeche_m2": 960.0,
+    "heizgrenze": 15.0,
+    "innen": 20.0,
+    "personen": 0.0,
+    "kw_person": 0.1,
+    "sperrzeit_h": 0.0,
+    "qges": 43.2,
+    "mindest_kw": 12.96,
+    "auslegung": "hybrid",
+    "diagramm": "CS5001 AW22 CS5001 AW22",
+    "vl": 55.0,
+    "vl_angenommen": true
+   },
+   "tww": [],
+   "hiu": []
+  },
+  {
+   "id": "1.2.3.2",
+   "ordner": "1.2.3.2_14_WE_50kW_GC9800iWH",
+   "gebaeude": "bestand",
+   "system": "bivalent",
+   "ww": "dle",
+   "we": 14,
+   "kw": 50.0,
+   "geraet": "CS5001 AW22",
+   "n": 1,
+   "schemata": [],
+   "auslegung": {
+    "datei": "Auslegung WP_2.7.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 0.0,
+    "spez_w_m2": 45.0,
+    "flaeche_m2": 1120.0,
+    "heizgrenze": 15.0,
+    "innen": 20.0,
+    "personen": 0.0,
+    "kw_person": 0.1,
+    "sperrzeit_h": 0.0,
+    "qges": 50.4,
+    "mindest_kw": 15.12,
+    "auslegung": "hybrid",
+    "diagramm": "CS5001 AW22 CS5001 AW22",
+    "vl": 55.0,
+    "vl_angenommen": true
+   },
+   "tww": [],
+   "hiu": []
+  },
+  {
+   "id": "1.2.3.3",
+   "ordner": "1.2.3.3_16WE_58kW_GC7000F",
+   "gebaeude": "bestand",
+   "system": "bivalent",
+   "ww": "dle",
+   "we": 16,
+   "kw": 58.0,
+   "geraet": "CS5001 AW22",
+   "n": 1,
+   "schemata": [],
+   "auslegung": {
+    "datei": "WP-Auslegung_S_2.7.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 0.0,
+    "spez_w_m2": 45.0,
+    "flaeche_m2": 1280.0,
+    "heizgrenze": 15.0,
+    "innen": 20.0,
+    "personen": 0.0,
+    "kw_person": 0.1,
+    "sperrzeit_h": 0.0,
+    "qges": 57.6,
+    "mindest_kw": 17.28,
+    "auslegung": "hybrid",
+    "diagramm": "CS5001 AW22 CS5001 AW22",
+    "vl": 55.0,
+    "vl_angenommen": true
+   },
+   "tww": [],
+   "hiu": []
+  },
+  {
+   "id": "1.2.3.4",
+   "ordner": "1.2.3.4_16WE_58kW_GC7000WP",
+   "gebaeude": "bestand",
+   "system": "bivalent",
+   "ww": "dle",
+   "we": 16,
+   "kw": 58.0,
+   "geraet": "CS5001 AW22",
+   "n": 1,
+   "schemata": [],
+   "auslegung": {
+    "datei": "WP-Auslegung_S_2.7.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 0.0,
+    "spez_w_m2": 45.0,
+    "flaeche_m2": 1280.0,
+    "heizgrenze": 15.0,
+    "innen": 20.0,
+    "personen": 0.0,
+    "kw_person": 0.1,
+    "sperrzeit_h": 0.0,
+    "qges": 57.6,
+    "mindest_kw": 17.28,
+    "auslegung": "hybrid",
+    "diagramm": "CS5001 AW22 CS5001 AW22",
+    "vl": 55.0,
+    "vl_angenommen": true
+   },
+   "tww": [],
+   "hiu": []
+  },
+  {
+   "id": "1.3.1.1",
+   "ordner": "1.3.1.1_6WE_22KW_GC9800iW_MH200_CS6800",
+   "gebaeude": "bestand",
+   "system": "hybrid",
+   "ww": "friwa",
+   "we": 6,
+   "kw": 22.0,
+   "geraet": "CS5800/6800iAW 10 OR-T",
+   "n": 1,
+   "schemata": [],
+   "auslegung": {
+    "datei": "WP-Auslegung_S_2.7.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 0.0,
+    "spez_w_m2": 45.0,
+    "flaeche_m2": 480.0,
+    "heizgrenze": 15.0,
+    "innen": 20.0,
+    "personen": 21.0,
+    "kw_person": 0.1,
+    "sperrzeit_h": 0.0,
+    "qges": 23.7,
+    "mindest_kw": 6.48,
+    "auslegung": "hybrid",
+    "diagramm": "CS5800/6800iAW - W55°C CS5800/6800iAW",
+    "vl": 55.0
+   },
+   "tww": [
+    "Auslegung TWW.pdf"
+   ],
+   "hiu": []
+  },
+  {
+   "id": "1.3.1.2",
+   "ordner": "1.3.1.2_8WE_29KW_GC9800iW_MH200_CS6800",
+   "gebaeude": "bestand",
+   "system": "hybrid",
+   "ww": "friwa",
+   "we": 8,
+   "kw": 29.0,
+   "geraet": "CS5800/6800iAW 12 OR-T",
+   "n": 1,
+   "schemata": [],
+   "auslegung": {
+    "datei": "WP-Auslegung_S_2.7.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 0.0,
+    "spez_w_m2": 45.0,
+    "flaeche_m2": 640.0,
+    "heizgrenze": 15.0,
+    "innen": 20.0,
+    "personen": 28.0,
+    "kw_person": 0.1,
+    "sperrzeit_h": 0.0,
+    "qges": 31.6,
+    "mindest_kw": 8.64,
+    "auslegung": "hybrid",
+    "diagramm": "CS5800/6800iAW - W55°C CS5800/6800iAW",
+    "vl": 55.0
+   },
+   "tww": [
+    "Auslegung TWW.pdf"
+   ],
+   "hiu": []
+  },
+  {
+   "id": "1.3.2.1",
+   "ordner": "1.3.2.1_6WE_25 kW_GC9800iWA",
+   "gebaeude": "bestand",
+   "system": "hybrid",
+   "ww": "hiu",
+   "we": 6,
+   "kw": 25.0,
+   "geraet": "CS5800/6800iAW 10 OR-T",
+   "n": 1,
+   "schemata": [],
+   "auslegung": {
+    "datei": "Auslegung WP 2.7.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 25.0,
+    "spez_w_m2": 0.0,
+    "flaeche_m2": 0.0,
+    "heizgrenze": 15.0,
+    "innen": 20.0,
+    "personen": 0.0,
+    "kw_person": 0.2,
+    "sperrzeit_h": 0.0,
+    "qges": 25.0,
+    "mindest_kw": 7.5,
+    "auslegung": "hybrid",
+    "diagramm": "CS5800/6800iAW - W55°C CS",
+    "vl": 55.0
+   },
+   "tww": [],
+   "hiu": [
+    "HIU_Auslegung 6WE.pdf"
+   ]
+  },
+  {
+   "id": "1.3.2.2",
+   "ordner": "1.3.2.2_8WE_32 kW_GC9800iWA",
+   "gebaeude": "bestand",
+   "system": "hybrid",
+   "ww": "hiu",
+   "we": 8,
+   "kw": 32.0,
+   "geraet": "CS5800/6800iAW 12 OR-T",
+   "n": 1,
+   "schemata": [],
+   "auslegung": {
+    "datei": "Auslegung WP 2.7.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 32.0,
+    "spez_w_m2": 0.0,
+    "flaeche_m2": 0.0,
+    "heizgrenze": 15.0,
+    "innen": 20.0,
+    "personen": 0.0,
+    "kw_person": 0.1,
+    "sperrzeit_h": 0.0,
+    "qges": 32.0,
+    "mindest_kw": 9.6,
+    "auslegung": "hybrid",
+    "diagramm": "CS5800/6800iAW - W55°C CS5800/6800iAW",
+    "vl": 55.0
+   },
+   "tww": [],
+   "hiu": [
+    "HIU_Auslegung 8WE.pdf"
+   ]
+  },
+  {
+   "id": "1.3.3.1",
+   "ordner": "1.3.3.1_6WE_22 kW_GC9800iWH",
+   "gebaeude": "bestand",
+   "system": "hybrid",
+   "ww": "dle",
+   "we": 6,
+   "kw": 22.0,
+   "geraet": "CS5800/6800iAW 10 OR-T",
+   "n": 1,
+   "schemata": [
+    "6721896658"
+   ],
+   "auslegung": {
+    "datei": "Auslegung WP 6 WE_22 kW.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 21.6,
+    "spez_w_m2": 0.0,
+    "flaeche_m2": 0.0,
+    "heizgrenze": 15.0,
+    "innen": 20.0,
+    "personen": 0.0,
+    "kw_person": 0.2,
+    "sperrzeit_h": 0.0,
+    "qges": 21.6,
+    "mindest_kw": 6.48,
+    "auslegung": "hybrid",
+    "diagramm": "CS5800/6800iAW - W55°C CS",
+    "vl": 55.0
+   },
+   "tww": [],
+   "hiu": []
+  },
+  {
+   "id": "1.3.3.2",
+   "ordner": "1.3.3.2_8WE_29 kW_GC9800iWH",
+   "gebaeude": "bestand",
+   "system": "hybrid",
+   "ww": "dle",
+   "we": 8,
+   "kw": 29.0,
+   "geraet": "CS5800/6800iAW 10 OR-T",
+   "n": 1,
+   "schemata": [
+    "6721896658"
+   ],
+   "auslegung": {
+    "datei": "Auslegung WP_8WE_29 kW.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 28.8,
+    "spez_w_m2": 0.0,
+    "flaeche_m2": 0.0,
+    "heizgrenze": 15.0,
+    "innen": 20.0,
+    "personen": 0.0,
+    "kw_person": 0.2,
+    "sperrzeit_h": 0.0,
+    "qges": 28.8,
+    "mindest_kw": 8.64,
+    "auslegung": "hybrid",
+    "diagramm": "CS5800/6800iAW - W55°C CS",
+    "vl": 55.0
+   },
+   "tww": [],
+   "hiu": []
+  },
+  {
+   "id": "2.1.1.1",
+   "ordner": "2.1.1.1_4WE_15kW_CS5800AW 10ORT",
+   "gebaeude": "neubau",
+   "system": "mono",
+   "ww": "friwa",
+   "we": 4,
+   "kw": 15.0,
+   "geraet": "CS5800/6800iAW 10 OR-T",
+   "n": 1,
+   "schemata": [],
+   "auslegung": {
+    "datei": "Auslegung WP.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 0.0,
+    "spez_w_m2": 30.0,
+    "flaeche_m2": 320.0,
+    "heizgrenze": 12.0,
+    "innen": 20.0,
+    "personen": 14.0,
+    "kw_person": 0.2,
+    "sperrzeit_h": 0.0,
+    "qges": 12.4,
+    "mindest_kw": 3.72,
+    "auslegung": "hybrid",
+    "diagramm": "CS5800/6800iAW - W35°C CS",
+    "vl": 35.0
+   },
+   "tww": [
+    "Auslegung TWW.pdf"
+   ],
+   "hiu": []
+  },
+  {
+   "id": "2.1.1.2",
+   "ordner": "2.1.1.2_6WE_15kW_CS8800AW 15ORT",
+   "gebaeude": "neubau",
+   "system": "mono",
+   "ww": "friwa",
+   "we": 6,
+   "kw": 15.0,
+   "geraet": "CS8800iAW 15 O-T",
+   "n": 1,
+   "schemata": [],
+   "auslegung": {
+    "datei": "Auslegung WP.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 0.0,
+    "spez_w_m2": 30.0,
+    "flaeche_m2": 480.0,
+    "heizgrenze": 12.0,
+    "innen": 20.0,
+    "personen": 21.0,
+    "kw_person": 0.1,
+    "sperrzeit_h": 0.0,
+    "qges": 16.5,
+    "mindest_kw": 4.95,
+    "auslegung": "hybrid",
+    "diagramm": "CS8800iAW - W35°C CS 7000i",
+    "vl": 35.0
+   },
+   "tww": [
+    "Auslegung TWW.pdf"
+   ],
+   "hiu": []
+  },
+  {
+   "id": "2.1.1.3",
+   "ordner": "2.1.1.3_8WE_20kW_CS5001AW22",
+   "gebaeude": "neubau",
+   "system": "mono",
+   "ww": "friwa",
+   "we": 8,
+   "kw": 20.0,
+   "geraet": "CS5001 AW22",
+   "n": 1,
+   "schemata": [],
+   "auslegung": {
+    "datei": "Auslegung WP.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 0.0,
+    "spez_w_m2": 30.0,
+    "flaeche_m2": 640.0,
+    "heizgrenze": 12.0,
+    "innen": 20.0,
+    "personen": 28.0,
+    "kw_person": 0.2,
+    "sperrzeit_h": 0.0,
+    "qges": 24.8,
+    "mindest_kw": 7.44,
+    "auslegung": "hybrid",
+    "diagramm": "CS5001 AW22 CS5001 AW22",
+    "vl": 35.0,
+    "vl_angenommen": true
+   },
+   "tww": [
+    "Auslegung TWW.pdf"
+   ],
+   "hiu": []
+  },
+  {
+   "id": "2.1.1.4",
+   "ordner": "2.1.1.4_10WE_24kW_2CS8800AW13",
+   "gebaeude": "neubau",
+   "system": "mono",
+   "ww": "friwa",
+   "we": 10,
+   "kw": 24.0,
+   "geraet": "CS8800iAW 13 O-T",
+   "n": 2,
+   "schemata": [],
+   "auslegung": {
+    "datei": "Auslegung WP.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 0.0,
+    "spez_w_m2": 30.0,
+    "flaeche_m2": 800.0,
+    "heizgrenze": 12.0,
+    "innen": 20.0,
+    "personen": 35.0,
+    "kw_person": 0.2,
+    "sperrzeit_h": 0.0,
+    "qges": 31.0,
+    "mindest_kw": 9.3,
+    "auslegung": "hybrid",
+    "diagramm": "2er Kaskade CS8800 35°C",
+    "vl": 35.0
+   },
+   "tww": [
+    "Auslegung TWW.pdf"
+   ],
+   "hiu": []
+  },
+  {
+   "id": "2.1.1.5",
+   "ordner": "2.1.1.5_12WE_29kW_2CS8800AW15",
+   "gebaeude": "neubau",
+   "system": "mono",
+   "ww": "friwa",
+   "we": 12,
+   "kw": 29.0,
+   "geraet": "CS8800iAW 15 O-T",
+   "n": 2,
+   "schemata": [],
+   "auslegung": {
+    "datei": "Auslegung WP.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 0.0,
+    "spez_w_m2": 30.0,
+    "flaeche_m2": 960.0,
+    "heizgrenze": 12.0,
+    "innen": 20.0,
+    "personen": 42.0,
+    "kw_person": 0.2,
+    "sperrzeit_h": 0.0,
+    "qges": 37.2,
+    "mindest_kw": 11.16,
+    "auslegung": "hybrid",
+    "diagramm": "2er Kaskade CS8800 35°C",
+    "vl": 35.0
+   },
+   "tww": [
+    "Auslegung TWW.pdf"
+   ],
+   "hiu": []
+  },
+  {
+   "id": "2.1.1.6",
+   "ordner": "2.1.1.6_14WE_34kW_3CS8800AW13",
+   "gebaeude": "neubau",
+   "system": "mono",
+   "ww": "friwa",
+   "we": 14,
+   "kw": 34.0,
+   "geraet": "CS8800iAW 13 O-T",
+   "n": 3,
+   "schemata": [],
+   "auslegung": {
+    "datei": "Auslegung WP.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 0.0,
+    "spez_w_m2": 30.0,
+    "flaeche_m2": 1120.0,
+    "heizgrenze": 12.0,
+    "innen": 20.0,
+    "personen": 49.0,
+    "kw_person": 0.2,
+    "sperrzeit_h": 0.0,
+    "qges": 43.4,
+    "mindest_kw": 13.02,
+    "auslegung": "hybrid",
+    "diagramm": "3er Kaskade CS8800 35°C",
+    "vl": 35.0
+   },
+   "tww": [
+    "Auslegung TWW.pdf"
+   ],
+   "hiu": []
+  },
+  {
+   "id": "2.1.1.7",
+   "ordner": "2.1.1.7_16WE_39kW_2xCS5001AW22",
+   "gebaeude": "neubau",
+   "system": "mono",
+   "ww": "friwa",
+   "we": 16,
+   "kw": 39.0,
+   "geraet": "CS5001 AW22",
+   "n": 2,
+   "schemata": [],
+   "auslegung": {
+    "datei": "Auslegung WP.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 0.0,
+    "spez_w_m2": 30.0,
+    "flaeche_m2": 1280.0,
+    "heizgrenze": null,
+    "innen": 20.0,
+    "personen": 56.0,
+    "kw_person": 0.1,
+    "sperrzeit_h": 0.0,
+    "qges": 44.0,
+    "mindest_kw": 13.2,
+    "auslegung": "hybrid",
+    "diagramm": "2er Kaskade CS5001 AW22",
+    "vl": 35.0,
+    "vl_angenommen": true
+   },
+   "tww": [
+    "Auslegung TWW.pdf"
+   ],
+   "hiu": []
+  },
+  {
+   "id": "2.1.2.3",
+   "ordner": "2.1.2.3_8 WE_2L_CS5001AW22",
+   "gebaeude": "neubau",
+   "system": "mono",
+   "ww": "hiu",
+   "we": 8,
+   "kw": null,
+   "geraet": "CS5001 AW22",
+   "n": 1,
+   "schemata": [],
+   "auslegung": {
+    "datei": "Auslegung WP.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 24.0,
+    "spez_w_m2": 0.0,
+    "flaeche_m2": 0.0,
+    "heizgrenze": 12.0,
+    "innen": 20.0,
+    "personen": 0.0,
+    "kw_person": 0.1,
+    "sperrzeit_h": 0.0,
+    "qges": 24.0,
+    "mindest_kw": 7.2,
+    "auslegung": "hybrid",
+    "diagramm": "CS5001 AW22 CS5001 AW22",
+    "vl": 35.0,
+    "vl_angenommen": true
+   },
+   "tww": [],
+   "hiu": []
+  },
+  {
+   "id": "2.1.3.1",
+   "ordner": "2.1.3.1_4WE_10kW_CS5800AW 7MB",
+   "gebaeude": "neubau",
+   "system": "mono",
+   "ww": "dle",
+   "we": 4,
+   "kw": 10.0,
+   "geraet": "CS5800/6800iAW 7 OR-S",
+   "n": 1,
+   "schemata": [
+    "4WE_10kW_CS5800_AWMB_1ug_FBH"
+   ],
+   "auslegung": {
+    "datei": "Auslegung WP.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 0.0,
+    "spez_w_m2": 30.0,
+    "flaeche_m2": 320.0,
+    "heizgrenze": 12.0,
+    "innen": 20.0,
+    "personen": 0.0,
+    "kw_person": 0.2,
+    "sperrzeit_h": 0.0,
+    "qges": 9.6,
+    "mindest_kw": 2.88,
+    "auslegung": "hybrid",
+    "diagramm": "CS5800/6800iAW - W35°C CS",
+    "vl": 35.0
+   },
+   "tww": [],
+   "hiu": []
+  },
+  {
+   "id": "2.1.3.2",
+   "ordner": "2.1.3.2_6WE_15kW_CS5800AW 12ORT",
+   "gebaeude": "neubau",
+   "system": "mono",
+   "ww": "dle",
+   "we": 6,
+   "kw": 15.0,
+   "geraet": "CS5800/6800iAW 12 OR-T",
+   "n": 1,
+   "schemata": [],
+   "auslegung": {
+    "datei": "Auslegung WP.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 0.0,
+    "spez_w_m2": 30.0,
+    "flaeche_m2": 480.0,
+    "heizgrenze": 12.0,
+    "innen": 20.0,
+    "personen": 0.0,
+    "kw_person": 0.2,
+    "sperrzeit_h": 0.0,
+    "qges": 14.4,
+    "mindest_kw": 4.32,
+    "auslegung": "hybrid",
+    "diagramm": "CS5800/6800iAW - W35°C CS",
+    "vl": 35.0
+   },
+   "tww": [],
+   "hiu": []
+  },
+  {
+   "id": "2.1.3.3",
+   "ordner": "2.1.3.3_8WE_20kW_CS8800AW 15ORT",
+   "gebaeude": "neubau",
+   "system": "mono",
+   "ww": "dle",
+   "we": 8,
+   "kw": 20.0,
+   "geraet": "CS8800iAW 15 O-T",
+   "n": 1,
+   "schemata": [
+    "6721896965"
+   ],
+   "auslegung": {
+    "datei": "Auslegung WP.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 0.0,
+    "spez_w_m2": 30.0,
+    "flaeche_m2": 640.0,
+    "heizgrenze": 12.0,
+    "innen": 20.0,
+    "personen": 0.0,
+    "kw_person": 0.1,
+    "sperrzeit_h": 0.0,
+    "qges": 19.2,
+    "mindest_kw": 5.76,
+    "auslegung": "hybrid",
+    "diagramm": "CS8800iAW - W35°C CS 7000i",
+    "vl": 35.0
+   },
+   "tww": [],
+   "hiu": []
+  },
+  {
+   "id": "2.1.3.4",
+   "ordner": "2.1.3.4_10WE_24kW_2xCS8800iAW11",
+   "gebaeude": "neubau",
+   "system": "mono",
+   "ww": "dle",
+   "we": 10,
+   "kw": 24.0,
+   "geraet": "CS8800iAW 11 O-T",
+   "n": 2,
+   "schemata": [
+    "10WE_2CS8800_BP500-7EM"
+   ],
+   "auslegung": {
+    "datei": "Auslegung WP.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 0.0,
+    "spez_w_m2": 30.0,
+    "flaeche_m2": 800.0,
+    "heizgrenze": 12.0,
+    "innen": 20.0,
+    "personen": 0.0,
+    "kw_person": 0.1,
+    "sperrzeit_h": 0.0,
+    "qges": 24.0,
+    "mindest_kw": 7.2,
+    "auslegung": "hybrid",
+    "diagramm": "2er Kaskade CS8800 35°C",
+    "vl": 35.0
+   },
+   "tww": [],
+   "hiu": []
+  },
+  {
+   "id": "2.1.3.5",
+   "ordner": "2.1.3.5_12WE_29kW_CS5001AW22",
+   "gebaeude": "neubau",
+   "system": "mono",
+   "ww": "dle",
+   "we": 12,
+   "kw": 29.0,
+   "geraet": "CS5001 AW22",
+   "n": 1,
+   "schemata": [
+    "12WE_29KW_CS5001_BP500_1ug"
+   ],
+   "auslegung": {
+    "datei": "Auslegung WP.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 0.0,
+    "spez_w_m2": 30.0,
+    "flaeche_m2": 960.0,
+    "heizgrenze": 12.0,
+    "innen": 20.0,
+    "personen": 0.0,
+    "kw_person": 0.2,
+    "sperrzeit_h": 0.0,
+    "qges": 28.8,
+    "mindest_kw": 8.64,
+    "auslegung": "hybrid",
+    "diagramm": "CS5001 AW22 CS5001 AW22",
+    "vl": 35.0,
+    "vl_angenommen": true
+   },
+   "tww": [],
+   "hiu": []
+  },
+  {
+   "id": "2.1.3.6",
+   "ordner": "2.1.3.6_14WE_34kW_2xCS8800iAW15",
+   "gebaeude": "neubau",
+   "system": "mono",
+   "ww": "dle",
+   "we": 14,
+   "kw": 34.0,
+   "geraet": "CS8800iAW 15 O-T",
+   "n": 2,
+   "schemata": [
+    "14WE_2CS8800_BP500-7EM"
+   ],
+   "auslegung": {
+    "datei": "Auslegung WP.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 0.0,
+    "spez_w_m2": 30.0,
+    "flaeche_m2": 1120.0,
+    "heizgrenze": 12.0,
+    "innen": 20.0,
+    "personen": 0.0,
+    "kw_person": 0.1,
+    "sperrzeit_h": 0.0,
+    "qges": 33.6,
+    "mindest_kw": 10.08,
+    "auslegung": "hybrid",
+    "diagramm": "2er Kaskade CS8800 35°C",
+    "vl": 35.0
+   },
+   "tww": [],
+   "hiu": []
+  },
+  {
+   "id": "2.1.3.7",
+   "ordner": "2.1.3.7_16WE_39kW_2xCS8800iAW15",
+   "gebaeude": "neubau",
+   "system": "mono",
+   "ww": "dle",
+   "we": 16,
+   "kw": 39.0,
+   "geraet": "CS8800iAW 15 O-T",
+   "n": 2,
+   "schemata": [
+    "16WE_2CS8800_BP500-7EM"
+   ],
+   "auslegung": {
+    "datei": "Auslegung WP.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 0.0,
+    "spez_w_m2": 30.0,
+    "flaeche_m2": 1280.0,
+    "heizgrenze": 12.0,
+    "innen": 20.0,
+    "personen": 0.0,
+    "kw_person": 0.1,
+    "sperrzeit_h": 0.0,
+    "qges": 38.4,
+    "mindest_kw": 11.52,
+    "auslegung": "hybrid",
+    "diagramm": "2er Kaskade CS8800 35°C",
+    "vl": 35.0
+   },
+   "tww": [],
+   "hiu": []
+  }
+ ]
+}

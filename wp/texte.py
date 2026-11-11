@@ -389,9 +389,7 @@ def klartext(e: dict, r: dict, katalog: dict) -> list[dict]:
     v = r.get("mfh")
     if v and v["auswahl"]:
         z = v["auswahl"][0]["zelle"]
-        out.append({"text": f"MFH-Musterlösung {z['we']} WE / {z['kw']} kW: **{' · '.join(z['komponenten'])}**"
-                            + (f" – GAEB-Bestellvorschlag {z['vorlage']} liegt vor." if z.get("vorlage") else "."),
-                    "status": ""})
+        out.append({"text": f"MFH-Musterlösung {z['we']} WE / {z['kw']} kW: **{' · '.join(z['komponenten'])}**.", "status": ""})
     return out
 
 
