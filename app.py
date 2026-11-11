@@ -126,6 +126,9 @@ def mfh_bereich(r: dict, e: dict) -> None:
     st.caption("Die passende Hydraulik zur Musterlösung wählen Sie im Reiter „Hydraulik“. Musterlösungen ersetzen keine Fachplanung.")
 
 
+STUFE_ZEICHEN = {"passt": "✅", "vorlage": "🟡", "prinzip": "❌"}
+
+
 def hydraulik_bereich(r: dict, e: dict) -> None:
     """Hydraulik-Auswahl aus den Musterlösungen – wie hydHtml() in index.html."""
     lib, g_ = D.hydraulik(), r["gewaehlt"]
@@ -137,12 +140,20 @@ def hydraulik_bereich(r: dict, e: dict) -> None:
     passend = [x for x in liste if x["passend"]]
     gew = HY.gewaehlt(e, r, lib)
     st.caption(f"Maschine: {(str(g_['n']) + ' × ') if g_['n'] > 1 else ''}{g_['geraet']} · {HY.WW_TEXT[HY.ww_art(e, r)]} · "
-               f"{'Hybrid' if HY.system_art(e, lib) == 'hybrid' else 'monoenergetisch/monovalent'} · "
-               + (f"{len(passend)} passende Hydraulik(en) aus den Musterlösungen." if passend
-                  else "Keine Hydraulik passt in allen Merkmalen – ähnliche Hydrauliken unten, Abweichungen markiert."))
+               f"{'Hybrid (mit zweitem Wärmeerzeuger)' if HY.system_art(e, lib) == 'hybrid' else 'monoenergetisch/monovalent'}"
+               + (f" · {len(passend)} passende Hydraulik(en) aus den Musterlösungen." if passend else "."))
+    for t_ in HY.hinweise(e, r, lib):
+        st.warning(t_)
+    st.caption("Ampel: ✅ passt direkt = Schema 1 : 1 verwendbar · 🟡 Vorlage = gleiche Baureihe, die genannten Punkte ergänzen · "
+               "❌ Prinzip = andere Baureihe, nur zur Orientierung.")
+
+    def stufe(x: dict) -> str:
+        return f"{STUFE_ZEICHEN[x['stufe']]} {HY.STUFE_TEXT[x['stufe']]}"
+
     if gew:
-        st.markdown(f"**{'Ausgewählt' if gew['manuell'] else 'Vorgeschlagen'}: {gew['titel']}** "
-                    + ("✅ passt" if gew["passend"] else "⚠️ weicht ab"))
+        st.markdown(f"**{'Ausgewählt' if gew['manuell'] else 'Vorgeschlagen'}: {gew['titel']}** · {stufe(gew)}")
+        if gew["anpassen"]:
+            st.markdown("**Anpassen:**\n" + "\n".join("- " + t_ for t_ in gew["anpassen"]))
         st.image(str(D.hydraulik_bild(gew["id"])), width="stretch")
         st.caption("Musterlösungen mit diesem Schema: " + ", ".join(gew["loesungen"]))
     alle = st.toggle(f"Alle {len(liste)} Hydrauliken zeigen", key="hyd_alle")
@@ -150,7 +161,8 @@ def hydraulik_bereich(r: dict, e: dict) -> None:
     for x in zeigen:
         c_b, c_t = st.columns([1, 2])
         c_b.image(str(D.hydraulik_bild(x["id"])), width="stretch")
-        c_t.markdown(f"**{x['titel']}**  \n" + " · ".join(f"{'✅' if x['passt'][k] else '❌'} {t}" for k, t, _ in HY.MERKMALE)
+        c_t.markdown(f"**{x['titel']}** · {stufe(x)}  \n" + " · ".join(f"{'✅' if x['passt'][k] else '❌'} {t}" for k, t, _ in HY.MERKMALE)
+                     + "".join("  \n– " + t_ for t_ in x["anpassen"])
                      + f"  \nMusterlösungen: {', '.join(x['loesungen'])}")
         aktiv = gew and gew["id"] == x["id"] and gew["manuell"]
         if c_t.button("Auswahl aufheben" if aktiv else "Diese Hydraulik wählen", key="hyd_" + x["id"]):
@@ -223,13 +235,14 @@ with links:
                 neu_setzen("heizlast.methode", "heizlast.spez_w_m2", "heizlast.flaeche_m2", "heizlast.gebaeudeart", "heizlast.vbh", "tww.personen", "tww.system")
                 st.rerun()
             if wahl("Warmwasserbereitung", "mfh.ww", {"friwa": "Zentral · FriWa", "hiu": "Dezentral · HIU", "dle": "Ohne · DLE",
-                                                      "speicher": "Speicher ≤ NL 4"}):
+                                                      "speicher": "Speicher · bis 4 WE"}):
                 M.eingaben_folgen(E, "mfh.ww")
                 neu_setzen("heizlast.methode", "heizlast.spez_w_m2", "heizlast.flaeche_m2", "heizlast.gebaeudeart", "heizlast.vbh", "tww.personen", "tww.system")
                 st.rerun()
             st.caption("MFH-Musterlösungen: je WE 80 m² und 3,5 Personen (Personen und Wohnfläche werden vorbelegt). "
                        "Zentral = Frischwasserstation mit eigenem Puffer (> 60 °C), dezentral = Wohnungsstationen (HIU, 2-Leiter, "
-                       "< 60 °C), ohne = elektrische Durchlauferhitzer je Wohnung.")
+                       "< 60 °C), ohne = elektrische Durchlauferhitzer je Wohnung, Speicher = Warmwasserspeicher an der Wärmepumpe – "
+                       "nur für kleine MFH bis Leistungskennzahl NL 4 (etwa 4 Wohnungen).")
         arten = {a: a for a in R.VOLLBENUTZUNGSSTUNDEN}
         if wahl("Gebäudeart", "heizlast.gebaeudeart", arten, radio=False):
             E["heizlast"]["vbh"] = float(R.VOLLBENUTZUNGSSTUNDEN[E["heizlast"]["gebaeudeart"]])

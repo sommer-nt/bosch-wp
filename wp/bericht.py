@@ -603,8 +603,11 @@ def pdf_bytes(e: dict, r: dict, daten: dict, katalog: dict) -> bytes:
     if hg and D.hydraulik_bild(hg["id"]).exists():
         pdf.schrift_(8.4, True)
         pdf.multi_cell(184, 4.2, pdf.t(f"Hydraulik: {hg['titel']} ({'ausgewählt' if hg['manuell'] else 'vorgeschlagen'}"
-                                       f"{'' if hg['passend'] else ', weicht ab'} · Musterlösungen {', '.join(hg['loesungen'])})"),
+                                       f" · {HY.STUFE_TEXT[hg['stufe']]} · Musterlösungen {', '.join(hg['loesungen'])})"),
                        new_x="LMARGIN", new_y="NEXT")
+        if hg["anpassen"]:
+            pdf.schrift_(7.6)
+            pdf.multi_cell(184, 3.6, pdf.t("Anpassen: " + " · ".join(hg["anpassen"])), new_x="LMARGIN", new_y="NEXT")
         y = pdf.get_y() + 1
         pdf.image(str(D.hydraulik_bild(hg["id"])), x=13, y=y, w=184)
         pdf.set_y(y + 184 * 910 / 1287 + 2)

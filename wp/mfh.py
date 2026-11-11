@@ -15,7 +15,7 @@ from __future__ import annotations
 from . import rechnen as R
 
 WW_TEXT = {"friwa": "Zentral (Frischwasserstation)", "hiu": "Dezentral (HIU / Wohnungsstation)",
-           "dle": "Ohne – dezentral elektrisch (DLE)", "speicher": "Speicher (max. NL 4)"}
+           "dle": "Ohne – dezentral elektrisch (DLE)", "speicher": "Warmwasserspeicher (bis ca. 4 WE / NL 4)"}
 MUSTER_SPEZ = {"bestand": 45, "neubau": 30}   # W/m² wie Kostenübersicht (mfh_matrix.json „annahmen“)
 
 

@@ -47,6 +47,21 @@ def test_auswahl_passend_und_manuell():
     assert h["manuell"] and not h["passend"] and not h["passt"]["anzahl"]
 
 
+def test_ohne_passende_hydraulik_vorlage_mit_anpassungen():
+    """7 WE mit Speicher und CS5001: keine Musterlösungs-Hydraulik passt – ähnlichste als Vorlage, Anpassungen und Hinweise."""
+    e = mfh_eingabe("sanierung", 7, "speicher")
+    e["auswahl"].update(geraet="CS5001 AW22", anzahl=1)
+    r = rechne(e)
+    h = HY.gewaehlt(e, r, LIB)
+    assert h and not h["passend"] and not h["manuell"] and h["stufe"] == "vorlage" and h["passt"]["serie"]
+    assert any(t.startswith("Warmwasser: Warmwasserspeicher") for t in h["anpassen"])
+    hw = HY.hinweise(e, r, LIB)
+    assert any("NL 4" in t for t in hw) and any("keine Hydraulikzeichnung" in t for t in hw)
+    e = mfh_eingabe("neubau", 10, "dle")
+    r = rechne(e)
+    assert HY.gewaehlt(e, r, LIB)["anpassen"] == [] and HY.hinweise(e, r, LIB) == []
+
+
 def test_excel_auslegung_uebernehmen():
     """Musterlösung 2.1.3.6 (14 WE, 2 × CS8800 AW15, 35 °C, GEG-Hybrid): Rechenkern bestätigt die Excel-Auslegung."""
     L = next(L for L in LIB["loesungen"] if L["id"] == "2.1.3.6")
@@ -78,6 +93,7 @@ def test_hydraulik_python_gleich_html(tmp_path):
                                    capture_output=True, text=True, check=True).stdout)
     for e, j in zip(ein, js["auswahl"]):
         r = rechne(e)
-        gleich({"schemata": HY.schemata(e, r, LIB), "gewaehlt": HY.gewaehlt(e, r, LIB), "loesungen": [L["id"] for L in HY.loesungen(e, r, LIB)]}, j)
+        gleich({"schemata": HY.schemata(e, r, LIB), "gewaehlt": HY.gewaehlt(e, r, LIB), "loesungen": [L["id"] for L in HY.loesungen(e, r, LIB)],
+               "hinweise": HY.hinweise(e, r, LIB)}, j)
     for nr, j in zip(loes, js["uebernehmen"]):
         gleich(HY.uebernehmen(P.neu(), next(L for L in LIB["loesungen"] if L["id"] == nr)), j)

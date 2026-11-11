@@ -18,7 +18,7 @@ Eigenes Projekt neben Bosch Flow (Netzrechner) und Bosch Speicher. Zwei Versione
 ## Bedienung (Reihenfolge der Schnellauslegung)
 
 1. Neubau oder Sanierung, **Ein-/Zweifamilienhaus oder Mehrfamilienhaus** (MFH: Wohneinheiten und gleich zu Beginn die
-   Warmwasserbereitung – zentral FriWa, dezentral HIU, ohne/DLE oder Speicher ≤ NL 4), Gebäudeart, Raumtemperatur,
+   Warmwasserbereitung – zentral FriWa, dezentral HIU, ohne/DLE oder Speicher bis 4 WE / NL 4), Gebäudeart, Raumtemperatur,
    PLZ → Norm-Außentemperatur, Heizgrenze (Neubau 12 °C, Bestand 15 °C)
 2. Wärmebedarf: Heizlast in kW, W/m² (Gebäudestandard je Neubau/Bestand) oder Jahresverbrauch
 3. Heizkreise (bis 4): Heizkörper (55 °C), FBH (35 °C), Konvektoren (45 °C) → max. Vorlauf aus dem höchsten Kreis,
@@ -98,6 +98,12 @@ Eingaben der Excel-Auslegung einer Musterlösung (PLZ, θe, Heizgrenze, W/m² un
 Vorlauf, Kriterium, Wärmepumpe); der Rechenkern prüft die Musterlösung nach (Test: QGES und Mindestleistung wie Excel).
 Hinweis: Die Excel-Auslegungen der Musterlösungen nutzen das GEG-Hybrid-Kriterium (0,3 · Q) und 35 °C (Neubau) bzw.
 55 °C (Bestand) Vorlauf. Die gewählte Hydraulik steht in Ausdruck, PDF und Projektmappe.
+
+Ampel je Hydraulik: ✓ passt direkt (alle Merkmale) · ● Vorlage (gleiche Baureihe – was anzupassen ist, steht dabei,
+z. B. „Frischwasserstation mit eigenem Warmwasser-Puffer ergänzen“) · ✗ Prinzip (andere Baureihe, nur zur Orientierung).
+Passt keine, wird die ähnlichste als Vorlage vorgeschlagen. Hintergrund: In den Musterlösungs-Ordnern für FriWa, HIU und
+bivalent liegen nur Auslegungen, keine Hydraulikzeichnung – fast alle Schemata stammen aus „ohne WW / DLE“. Hinweis bei
+Speicher über 4 WE (Leistungskennzahl NL 4).
 
 Übernahme der Daten: `python tools/hydraulik_import.py ORDNER…` (entpackte ZIP-Ordner; erzeugt `daten/hydrauliken.json`
 und `daten/hydrauliken/*.jpg`), danach `python tools/excel_import.py --nur-einbetten`. Logik in `wp/hydraulik.py` und

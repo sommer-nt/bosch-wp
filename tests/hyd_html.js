@@ -12,7 +12,7 @@ const f = JSON.parse(fs.readFileSync(process.argv[3], 'utf8')), lib = ctx.HYDRAU
 const out = {
   auswahl: f.eingaben.map(e => {
     const r = ctx.MFK.rechneMitMuster(e, ctx.GERAETE_DATEN, ctx.KATALOG_DATEN, ctx.MFH_DATEN);
-    return {schemata: ctx.HYD.schemata(e, r, lib), gewaehlt: ctx.HYD.gewaehlt(e, r, lib), loesungen: ctx.HYD.loesungen(e, r, lib).map(L => L.id)};
+    return {schemata: ctx.HYD.schemata(e, r, lib), gewaehlt: ctx.HYD.gewaehlt(e, r, lib), loesungen: ctx.HYD.loesungen(e, r, lib).map(L => L.id), hinweise: ctx.HYD.hinweise(e, r, lib)};
   }),
   uebernehmen: f.loesungen.map(id => ctx.HYD.uebernehmen(JSON.parse(JSON.stringify(f.neu)), lib.loesungen.find(L => L.id === id))),
 };

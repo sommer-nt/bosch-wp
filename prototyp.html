@@ -179,6 +179,9 @@
   #druck .doku ul.klartext li{font-size:7.4pt;padding:0.6mm 0 0.6mm 5mm} #druck .doku .kopf{font-size:9pt} #druck .dokschema{grid-template-columns:1fr;font-size:8pt} #druck .dokschema img{width:100%;max-height:120mm;object-fit:contain}
   #druck .doku ul.klartext li{font-size:8.4pt;padding:1mm 0 1mm 6mm}
   .hydgew{border:1px solid var(--bosch-blue);border-radius:12px;padding:10px;margin:8px 0 12px;background:var(--paper)}
+  .stufe{font-weight:700;white-space:nowrap} .stufe.passt{color:#18a058} .stufe.vorlage{color:#b26a00} .stufe.prinzip{color:#e20015}
+  .hydhinw{border-left:4px solid var(--warn);background:var(--paper);padding:6px 10px;margin:6px 0;border-radius:6px;font-size:13px}
+  ul.anp{margin:4px 0 6px 18px;padding:0;font-size:12.5px;color:#4a5866}
   .hydgew .kopf{font-size:14px;margin-bottom:6px} img.hydgross{width:100%;display:block;border:1px solid var(--line);border-radius:8px;background:#fff}
   .hydliste{display:grid;gap:10px}
   .hyd{display:grid;grid-template-columns:200px 1fr;gap:12px;align-items:start;border:1px solid var(--line);border-radius:10px;padding:8px;background:var(--paper)}
@@ -241,9 +244,9 @@
     <div id="mfhEingabe">
       <label class="f">Wohneinheiten<span class="e"><input data-k="mfh.we" type="number" step="1" min="2" max="40"><small>WE</small></span></label>
       <div class="sub">Warmwasserbereitung</div>
-      <div class="seg" data-seg="mfh.ww"><button data-v="friwa">Zentral · FriWa</button><button data-v="hiu">Dezentral · HIU</button><button data-v="dle">Ohne · DLE</button><button data-v="speicher">Speicher ≤ NL 4</button></div>
+      <div class="seg" data-seg="mfh.ww"><button data-v="friwa">Zentral · FriWa</button><button data-v="hiu">Dezentral · HIU</button><button data-v="dle">Ohne · DLE</button><button data-v="speicher">Speicher · bis 4 WE</button></div>
       <p class="hint">MFH-Musterlösungen: je WE 80 m² und 3,5 Personen (Personen und Wohnfläche werden vorbelegt). Zentral = Frischwasserstation mit eigenem Puffer (&gt; 60 °C),
-        dezentral = Wohnungsstationen (HIU, 2-Leiter, &lt; 60 °C), ohne = elektrische Durchlauferhitzer je Wohnung.</p>
+        dezentral = Wohnungsstationen (HIU, 2-Leiter, &lt; 60 °C), ohne = elektrische Durchlauferhitzer je Wohnung, Speicher = Warmwasserspeicher an der Wärmepumpe – nur für kleine MFH bis Leistungskennzahl NL 4 (etwa 4 Wohnungen).</p>
     </div>
     <label class="f">Gebäudeart<span class="e"><select data-k="heizlast.gebaeudeart" id="gebaeudeart"></select></span></label>
     <label class="f">Raumtemperatur θi<span class="e"><input data-k="klima.innen" type="number" step="1"><small>°C</small></span></label>
@@ -720,7 +723,7 @@ if (typeof module !== 'undefined') module.exports = RK;
 <script id="mfhkern">
 // MFH-Musterlösungen – gleiche Logik wie wp/mfh.py (Tests vergleichen beide über node)
 const MFK = (() => {
-  const WW_TEXT = {friwa: 'Zentral (Frischwasserstation)', hiu: 'Dezentral (HIU / Wohnungsstation)', dle: 'Ohne – dezentral elektrisch (DLE)', speicher: 'Speicher (max. NL 4)'};
+  const WW_TEXT = {friwa: 'Zentral (Frischwasserstation)', hiu: 'Dezentral (HIU / Wohnungsstation)', dle: 'Ohne – dezentral elektrisch (DLE)', speicher: 'Warmwasserspeicher (bis ca. 4 WE / NL 4)'};
   const MUSTER_SPEZ = {bestand: 45, neubau: 30};   // W/m² wie Kostenübersicht
 
   function eingabenFolgen(e, k) {
@@ -952,6 +955,20 @@ function schemaZahl(x, d) {
 const HYD = (() => {
   const MERKMALE = [['serie', 'Baureihe', 8], ['anzahl', 'Anzahl Wärmepumpen', 4], ['ww', 'Warmwasser', 3], ['system', 'Betriebsweise', 2]];
   const WW_TEXT = {friwa: 'Frischwasserstation', hiu: 'Wohnungsstationen (HIU)', dle: 'ohne zentrales Warmwasser (DLE)', speicher: 'Warmwasserspeicher'};
+  // Ampel je Hydraulik: passt direkt / als Vorlage (gleiche Baureihe, Rest anpassen) / nur Prinzip (andere Baureihe)
+  const STUFE_TEXT = {passt: 'passt direkt', vorlage: 'als Vorlage nutzbar – anpassen', prinzip: 'nur als Prinzip – andere Baureihe'};
+  const WW_ERGAENZEN = {friwa: 'Frischwasserstation mit eigenem Warmwasser-Puffer ergänzen (nicht am Trennpuffer)',
+    hiu: 'Wohnungsstationen (HIU) über ein 2-Leiter-Netz ab dem Heizungspuffer ergänzen',
+    dle: 'Warmwasserteil entfällt – Durchlauferhitzer je Wohnung',
+    speicher: 'Warmwasserspeicher an der Wärmepumpe ergänzen'};
+  function anpassen(passt, g, s, ww, sys) {
+    const t = [];
+    if (!passt.serie) t.push(`Baureihe: Schema zeigt ${s.serien.join(' / ')} statt ${g.serie} – Wärmepumpe, Inneneinheit und Anschlüsse nach Unterlage der ${g.serie}; Puffer und Heizkreise sind übertragbar`);
+    if (!passt.anzahl) t.push(`Anzahl: Schema für ${s.anzahl.join(' oder ')} Wärmepumpe(n) statt ${g.n} – ` + (g.n > 1 ? 'Kaskade mit Kaskadenregler, jede Wärmepumpe an den Puffer' : 'nur eine Wärmepumpe an den Puffer'));
+    if (!passt.ww) t.push('Warmwasser: ' + WW_ERGAENZEN[ww]);
+    if (!passt.system) t.push('Betriebsweise: ' + (sys === 'hybrid' ? 'zweiten Wärmeerzeuger (Gas) als Hybrid ergänzen' : 'zweiten Wärmeerzeuger des Schemas weglassen (monoenergetisch mit Heizstab)'));
+    return t;
+  }
   function wwArt(e, r) {
     const m = e.mfh || {};
     if (m.art === 'mfh') return m.ww || 'friwa';
@@ -969,7 +986,9 @@ const HYD = (() => {
     const passt = {serie: s.serien.includes(g.serie), anzahl: s.anzahl.includes(g.n), ww: s.ww.includes(wwArt(e, r)),
       system: s.system.includes(sys) || (sys === 'hybrid' && s.system.includes('bivalent'))};
     const punkte = MERKMALE.reduce((a, [k, , p]) => a + (passt[k] ? p : 0), 0);
-    return {id: s.id, titel: s.titel, loesungen: s.loesungen, passt, punkte, passend: Object.values(passt).every(Boolean)};
+    const passend = Object.values(passt).every(Boolean);
+    return {id: s.id, titel: s.titel, loesungen: s.loesungen, passt, punkte, passend, stufe: passend ? 'passt' : (passt.serie ? 'vorlage' : 'prinzip'),
+      anpassen: anpassen(passt, g, s, wwArt(e, r), sys)};
   }
   function schemata(e, r, lib) {
     if (!r.gewaehlt || !lib) return [];
@@ -987,8 +1006,16 @@ const HYD = (() => {
   function gewaehlt(e, r, lib) {
     const liste = schemata(e, r, lib), wahl = (e.hydraulik || {}).schema || '';
     if (wahl) { const x = liste.find(x => x.id === wahl); if (x) return Object.assign({}, x, {manuell: true}); }
-    const x = liste.find(x => x.passend);
+    const x = liste.find(x => x.passend) || liste[0];   // sonst die ähnlichste als Vorlage
     return x ? Object.assign({}, x, {manuell: false}) : null;
+  }
+  // Erklärende Hinweise (Speicher im MFH, fehlende Hydraulikzeichnung) – wie wp/hydraulik.hinweise()
+  function hinweise(e, r, lib) {
+    if (!r.gewaehlt || !lib) return [];
+    const m = e.mfh || {}, t = [], we = m.art === 'mfh' ? Math.trunc(+m.we || 0) : 0;
+    if (wwArt(e, r) === 'speicher' && we > 4) t.push(`Ein Warmwasserspeicher an der Wärmepumpe reicht nur für kleine Mehrfamilienhäuser bis Leistungskennzahl NL 4 (etwa 4 Wohnungen). Für ${we} WE besser „Zentral · FriWa“ oder „Dezentral · HIU“ wählen.`);
+    if (!schemata(e, r, lib).some(x => x.passend)) t.push('Für diese Kombination enthalten die Musterlösungen keine Hydraulikzeichnung (bei FriWa, HIU und bivalent liegen dort nur die Auslegungen bei). Vorgeschlagen ist die ähnlichste Hydraulik als Vorlage – was anzupassen ist, steht darunter.');
+    return t;
   }
   const serieVon = gid => gid.split('iAW')[0].split(' AW')[0].split('/')[0];
   function loesungen(e, r, lib) {
@@ -1019,7 +1046,7 @@ const HYD = (() => {
     n.hydraulik = {schema: L.schemata.length ? L.schemata[0] : '', loesung: L.id};
     return n;
   }
-  return {MERKMALE, WW_TEXT, wwArt, systemArt, schemata, gewaehlt, loesungen, uebernehmen};
+  return {MERKMALE, WW_TEXT, STUFE_TEXT, wwArt, systemArt, schemata, gewaehlt, hinweise, loesungen, uebernehmen};
 })();
 </script>
 
@@ -1510,19 +1537,26 @@ function auslKurz(L) {
   const a = L.auslegung;
   return `${L.id} · ${L.gebaeude === 'neubau' ? 'Neubau' : 'Bestand'} · ${L.we || '–'} WE · ${(L.n > 1 ? L.n + ' × ' : '') + esc(L.geraet)} · QGES ${f(a.qges, 1)} kW · Vorlauf ${f(a.vl, 0)} °C${a.vl_angenommen ? ' (angenommen)' : ''} · ${{hybrid: 'GEG-Hybrid (0,3 · Q)', monoenergetisch: 'monoenergetisch', monovalent: 'monovalent'}[a.auslegung] || '–'} · PLZ ${esc(a.plz)} (θe ${fT(a.nat)} °C)`;
 }
+const STUFE_ZEICHEN = {passt: '✓', vorlage: '◐', prinzip: '✗'};
+const stufeHtml = x => `<span class="stufe ${x.stufe}">${STUFE_ZEICHEN[x.stufe]} ${HYD.STUFE_TEXT[x.stufe]}</span>`;
+const anpHtml = x => x.anpassen.length ? `<ul class="anp">${x.anpassen.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : '';
 function hydHtml(r) {
   if (typeof HYDRAULIK_DATEN === 'undefined' || !r.gewaehlt) return '<p class="hint">Erst eine Wärmepumpe auslegen – dann erscheinen hier die passenden Hydrauliken zur Auswahl.</p>';
   const lib = HYDRAULIK_DATEN, liste = HYD.schemata(E, r, lib), gew = HYD.gewaehlt(E, r, lib), g = r.gewaehlt;
   const passend = liste.filter(x => x.passend), zeigen = HYD_ALLE ? liste : (passend.length ? passend : liste.slice(0, 4));
-  let h = `<p class="hint" style="margin-top:0">Maschine: <b>${g.n > 1 ? g.n + ' × ' : ''}${esc(g.geraet)}</b> · ${esc(HYD.WW_TEXT[HYD.wwArt(E, r)])} · ${HYD.systemArt(E, lib) === 'hybrid' ? 'Hybrid' : 'monoenergetisch/monovalent'}.
-    ${passend.length ? `${passend.length} passende Hydraulik${passend.length > 1 ? 'en' : ''} aus den Musterlösungen.` : 'Keine Hydraulik passt in allen Merkmalen – ähnliche Hydrauliken unten, Abweichungen markiert.'}</p>`;
+  let h = `<p class="hint" style="margin-top:0">Maschine: <b>${g.n > 1 ? g.n + ' × ' : ''}${esc(g.geraet)}</b> · ${esc(HYD.WW_TEXT[HYD.wwArt(E, r)])} · ${HYD.systemArt(E, lib) === 'hybrid' ? 'Hybrid (mit zweitem Wärmeerzeuger)' : 'monoenergetisch/monovalent'}.
+    ${passend.length ? `${passend.length} passende Hydraulik${passend.length > 1 ? 'en' : ''} aus den Musterlösungen.` : ''}</p>`
+    + HYD.hinweise(E, r, lib).map(t => `<div class="hydhinw">${esc(t)}</div>`).join('')
+    + `<p class="hint">Ampel: <span class="stufe passt">✓ passt direkt</span> = Schema 1 : 1 verwendbar · <span class="stufe vorlage">◐ Vorlage</span> = gleiche Baureihe, die genannten Punkte ergänzen · <span class="stufe prinzip">✗ Prinzip</span> = andere Baureihe, nur zur Orientierung.</p>`;
   if (gew) {
-    h += `<div class="hydgew"><div class="kopf">${gew.manuell ? 'Ausgewählt' : 'Vorgeschlagen'}: <b>${esc(gew.titel)}</b>${gew.passend ? ' <span class="mok">✓ passt</span>' : ' <span class="mbad">! weicht ab</span>'}</div>
+    h += `<div class="hydgew"><div class="kopf">${gew.manuell ? 'Ausgewählt' : 'Vorgeschlagen'}: <b>${esc(gew.titel)}</b> ${stufeHtml(gew)}</div>
+      ${gew.anpassen.length ? '<div class="hint"><b>Anpassen:</b></div>' + anpHtml(gew) : ''}
       ${hydBild(gew.id, 'hydgross')}<p class="hint">Musterlösungen mit diesem Schema: ${gew.loesungen.map(esc).join(', ')}</p></div>`;
   }
   h += '<div class="hydliste">' + zeigen.map(x => `<div class="hyd${gew && gew.id === x.id ? ' erst' : ''}">${hydBild(x.id, 'hydklein')}
-    <div><div class="t"><b>${esc(x.titel)}</b></div>
+    <div><div class="t"><b>${esc(x.titel)}</b> ${stufeHtml(x)}</div>
       <div class="hint">${HYD.MERKMALE.map(([k, t]) => `<span class="${x.passt[k] ? 'mok' : 'mbad'}">${x.passt[k] ? '✓' : '✗'}</span> ${t}`).join(' · ')}</div>
+      ${anpHtml(x)}
       <div class="hint">Musterlösungen: ${x.loesungen.map(esc).join(', ')}</div>
       <div class="lk"><button data-hyd="${esc(x.id)}">${gew && gew.id === x.id && gew.manuell ? 'Auswahl aufheben' : 'Diese Hydraulik wählen'}</button></div></div></div>`).join('') + '</div>';
   if (liste.length > zeigen.length || HYD_ALLE) h += `<p><button data-alle="1">${HYD_ALLE ? 'Nur passende Hydrauliken zeigen' : `Alle ${liste.length} Hydrauliken zeigen`}</button></p>`;
@@ -1845,8 +1879,8 @@ function baueDruck() {
     <div class="dk-tab">${vdiTabelle(r)}</div>${fuss(3, n)}</div>`;
   const hGew = g ? HYD.gewaehlt(E, r, HYDRAULIK_DATEN) : null;
   h += `<div class="seite">${klein}<div class="dk-h">Hydraulik, Anbindung und Rechenweg</div>
-    ${hGew ? `<div class="dk-h2">Hydraulik: ${esc(hGew.titel)} (${hGew.manuell ? 'ausgewählt' : 'vorgeschlagen'}${hGew.passend ? '' : ', weicht ab'} · Musterlösungen ${esc(hGew.loesungen.join(', '))})</div>
-      ${hydBild(hGew.id, 'dk-hdb')}`
+    ${hGew ? `<div class="dk-h2">Hydraulik: ${esc(hGew.titel)} (${hGew.manuell ? 'ausgewählt' : 'vorgeschlagen'} · ${HYD.STUFE_TEXT[hGew.stufe]} · Musterlösungen ${esc(hGew.loesungen.join(', '))})</div>
+      ${hGew.anpassen.length ? `<p class="hint" style="margin:0 0 3px">Anpassen: ${esc(hGew.anpassen.join(' · '))}</p>` : ''}${hydBild(hGew.id, 'dk-hdb')}`
     : `${schema(r, {breite: 760})}<p class="hint">Prinzipdarstellung der Auslegung – keine Hydraulik der Musterlösungen ausgewählt.</p>`}
     <div class="dk-h2">Warmwasser und Anbindung</div>${anbindungHtml(r)}
     <div class="dk-h2">Herleitung der Heizlast</div>
@@ -1877,7 +1911,7 @@ function kurzbericht() {
   z.push('Auf einen Blick');
   for (const x of klartext(E, r, KAT)) z.push('- ' + x.text.replace(/\*\*/g, ''));
   const h = r.gewaehlt ? HYD.gewaehlt(E, r, HYDRAULIK_DATEN) : null;
-  if (h) z.push('', 'Hydraulik', `- ${h.titel} (${h.manuell ? 'ausgewählt' : 'vorgeschlagen'}${h.passend ? '' : ', weicht ab'}) – Musterlösungen ${h.loesungen.join(', ')}`);
+  if (h) z.push('', 'Hydraulik', `- ${h.titel} (${h.manuell ? 'ausgewählt' : 'vorgeschlagen'} · ${HYD.STUFE_TEXT[h.stufe]}) – Musterlösungen ${h.loesungen.join(', ')}`, ...h.anpassen.map(t => '- Anpassen: ' + t));
   return z.join('\r\n') + '\r\n';
 }
 // ZIP (ohne Kompression) – Projektdatei, Kurzbericht, Hydraulik

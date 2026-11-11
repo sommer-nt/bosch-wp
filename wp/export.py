@@ -28,8 +28,9 @@ def kurzbericht(e: dict, r: dict, katalog: dict) -> str:
     z += ["- " + x["text"].replace("**", "") for x in T.klartext(e, r, katalog)]
     h = HY.gewaehlt(e, r, D.hydraulik()) if r.get("gewaehlt") else None
     if h:
-        z += ["", "Hydraulik", f"- {h['titel']} ({'ausgewählt' if h['manuell'] else 'vorgeschlagen'}"
-              f"{'' if h['passend'] else ', weicht ab'}) – Musterlösungen {', '.join(h['loesungen'])}"]
+        z += ["", "Hydraulik", f"- {h['titel']} ({'ausgewählt' if h['manuell'] else 'vorgeschlagen'} · "
+              f"{HY.STUFE_TEXT[h['stufe']]}) – Musterlösungen {', '.join(h['loesungen'])}"]
+        z += ["- Anpassen: " + t for t in h["anpassen"]]
     return "\r\n".join(z) + "\r\n"
 
 

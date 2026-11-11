@@ -11,6 +11,12 @@ import copy
 MERKMALE = (("serie", "Baureihe", 8), ("anzahl", "Anzahl Wärmepumpen", 4), ("ww", "Warmwasser", 3), ("system", "Betriebsweise", 2))
 WW_TEXT = {"friwa": "Frischwasserstation", "hiu": "Wohnungsstationen (HIU)", "dle": "ohne zentrales Warmwasser (DLE)",
            "speicher": "Warmwasserspeicher"}
+# Ampel je Hydraulik: passt direkt / als Vorlage (gleiche Baureihe, Rest anpassen) / nur Prinzip (andere Baureihe)
+STUFE_TEXT = {"passt": "passt direkt", "vorlage": "als Vorlage nutzbar – anpassen", "prinzip": "nur als Prinzip – andere Baureihe"}
+WW_ERGAENZEN = {"friwa": "Frischwasserstation mit eigenem Warmwasser-Puffer ergänzen (nicht am Trennpuffer)",
+                "hiu": "Wohnungsstationen (HIU) über ein 2-Leiter-Netz ab dem Heizungspuffer ergänzen",
+                "dle": "Warmwasserteil entfällt – Durchlauferhitzer je Wohnung",
+                "speicher": "Warmwasserspeicher an der Wärmepumpe ergänzen"}
 
 
 def ww_art(e: dict, r: dict) -> str:
@@ -38,8 +44,42 @@ def bewerte(e: dict, r: dict, s: dict, lib: dict | None = None) -> dict:
     passt = {"serie": g["serie"] in s["serien"], "anzahl": g["n"] in s["anzahl"], "ww": ww_art(e, r) in s["ww"],
              "system": sys_ in s["system"] or (sys_ == "hybrid" and "bivalent" in s["system"])}
     punkte = sum(p for k, _, p in MERKMALE if passt[k])
+    passend = all(passt.values())
     return {"id": s["id"], "titel": s["titel"], "loesungen": s["loesungen"], "passt": passt, "punkte": punkte,
-            "passend": all(passt.values())}
+            "passend": passend, "stufe": "passt" if passend else ("vorlage" if passt["serie"] else "prinzip"),
+            "anpassen": anpassen(passt, g, s, ww_art(e, r), sys_)}
+
+
+def anpassen(passt: dict, g: dict, s: dict, ww: str, sys_: str) -> list[str]:
+    """Was an der Hydraulik zu ändern ist, damit sie zur ausgelegten Maschine passt (Klartext)."""
+    t = []
+    if not passt["serie"]:
+        t.append(f"Baureihe: Schema zeigt {' / '.join(s['serien'])} statt {g['serie']} – Wärmepumpe, Inneneinheit und Anschlüsse "
+                 f"nach Unterlage der {g['serie']}; Puffer und Heizkreise sind übertragbar")
+    if not passt["anzahl"]:
+        t.append(f"Anzahl: Schema für {' oder '.join(str(a) for a in s['anzahl'])} Wärmepumpe(n) statt {g['n']} – "
+                 + ("Kaskade mit Kaskadenregler, jede Wärmepumpe an den Puffer" if g["n"] > 1 else "nur eine Wärmepumpe an den Puffer"))
+    if not passt["ww"]:
+        t.append("Warmwasser: " + WW_ERGAENZEN[ww])
+    if not passt["system"]:
+        t.append("Betriebsweise: " + ("zweiten Wärmeerzeuger (Gas) als Hybrid ergänzen" if sys_ == "hybrid"
+                                      else "zweiten Wärmeerzeuger des Schemas weglassen (monoenergetisch mit Heizstab)"))
+    return t
+
+
+def hinweise(e: dict, r: dict, lib: dict) -> list[str]:
+    """Erklärende Hinweise zur Hydraulik-Auswahl (Speicher im MFH, fehlende Hydraulikzeichnung)."""
+    if not r.get("gewaehlt") or not lib:
+        return []
+    m, t = e.get("mfh") or {}, []
+    we = int(m.get("we") or 0) if m.get("art") == "mfh" else 0
+    if ww_art(e, r) == "speicher" and we > 4:
+        t.append(f"Ein Warmwasserspeicher an der Wärmepumpe reicht nur für kleine Mehrfamilienhäuser bis Leistungskennzahl NL 4 "
+                 f"(etwa 4 Wohnungen). Für {we} WE besser „Zentral · FriWa“ oder „Dezentral · HIU“ wählen.")
+    if not any(x["passend"] for x in schemata(e, r, lib)):
+        t.append("Für diese Kombination enthalten die Musterlösungen keine Hydraulikzeichnung (bei FriWa, HIU und bivalent liegen "
+                 "dort nur die Auslegungen bei). Vorgeschlagen ist die ähnlichste Hydraulik als Vorlage – was anzupassen ist, steht darunter.")
+    return t
 
 
 def schemata(e: dict, r: dict, lib: dict) -> list[dict]:
@@ -60,14 +100,14 @@ def schemata(e: dict, r: dict, lib: dict) -> list[dict]:
 
 
 def gewaehlt(e: dict, r: dict, lib: dict) -> dict | None:
-    """Gewählte Hydraulik (e["hydraulik"]["schema"]) oder automatisch die beste passende."""
+    """Gewählte Hydraulik (e["hydraulik"]["schema"]) oder automatisch die beste passende, sonst die ähnlichste."""
     liste = schemata(e, r, lib)
     wahl = (e.get("hydraulik") or {}).get("schema") or ""
     if wahl:
         x = next((x for x in liste if x["id"] == wahl), None)
         if x:
             return {**x, "manuell": True}
-    x = next((x for x in liste if x["passend"]), None)
+    x = next((x for x in liste if x["passend"]), liste[0] if liste else None)   # sonst die ähnlichste als Vorlage
     return {**x, "manuell": False} if x else None
 
 
