@@ -1,6 +1,6 @@
 """PDF-Ausdruck der Schnellauslegung (A4 hoch) – gleicher Aufbau wie „Drucken / PDF“ in index.html.
 
-Seite 1: Projekt, gewählte Wärmepumpe, Kennzahlen, Herleitung der Heizlast
+Seite 1: Projekt, gewählte Wärmepumpe, Kennzahlen, Auf einen Blick (Klartext), Herleitung der Heizlast
 Seite 2: Heizleistung über der Außentemperatur, passende Wärmepumpen je Baureihe
 Seite 3: Anlagenschema (Prinzip), Jahresbilanz, Haftungsausschluss
 """
@@ -512,6 +512,16 @@ def pdf_bytes(e: dict, r: dict, daten: dict, katalog: dict) -> bytes:
         pdf.schrift_(7.8, False, (122, 75, 0))
         pdf.multi_cell(184, 4.5, pdf.t(m), border=1, fill=True, new_x="LMARGIN", new_y="NEXT")
         pdf.ln(1)
+    pdf.h2("Auf einen Blick")
+    farben = {"ok": (24, 160, 88), "warn": (178, 106, 0), "bad": ROT, "": HELL}
+    for x in T.klartext(e, r, katalog):
+        yy = pdf.get_y()
+        pdf.set_fill_color(*farben[x["status"]])
+        pdf.ellipse(14, yy + 1.4, 1.8, 1.8, style="F")
+        pdf.schrift_(7.8)
+        pdf.set_xy(18, yy)
+        pdf.multi_cell(179, 4.1, pdf.t(x["text"]), markdown=True, new_x="LMARGIN", new_y="NEXT")
+        pdf.set_y(pdf.get_y() + 0.6)
     pdf.h2("Herleitung der Heizlast")
     for a, b, c in T.herleitung(e, r):
         fett = a.startswith("Gesamt")

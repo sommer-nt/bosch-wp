@@ -396,207 +396,226 @@ r = M.rechne(E, DATEN, KAT, D.mfh())   # MFH: Wärmepumpe der Musterlösung bei 
 g = r["gewaehlt"]
 ie = T.inneneinheit(E, r, KAT)
 with rechts:
-    for m in T.meldungen(E, r, KAT):
-        st.warning(m)
-    abw = [] if EX else T.experten_abweichungen(E)
-    if abw:
-        c_a, c_b = st.columns([4, 1])
-        c_a.warning("Experteneinstellungen aktiv: " + ", ".join(abw) + ".")
-        if c_b.button("Auf Standard zurücksetzen"):
-            T.experten_zuruecksetzen(E)
-            for k_ in [k_ for k_ in ss if str(k_).startswith(("w_", "n_"))]:
-                del ss[k_]
-            st.rerun()
-    ks = [("Gesamtheizlast QGES", f"{T.f(r['qges'], 2)} kW", f"QH {T.f(r['qh'], 2)} + QTW {T.f(r['qtw'], 2)} + QSperr {T.f(r['qsperr'], 2)}", ""),
-          ("Mindestleistung WP", f"{T.f(r['mindestleistung'], 2)} kW", T.KRITERIUM[r["kriterium"]], "")]
-    if g and g["moeglich"]:
-        ks += [("Bivalenzpunkt", T.biv_text(g), "Schnitt mit Gebäudekennlinie", "ok" if g["ok"] else "bad"),
-               ("Leistung bei θe", f"{T.f(g['q_nat'], 2)} kW", f"Abdeckung {T.f(g['abdeckung'] * 100, 0)} %", "ok" if g["abdeckung"] >= 1 else "warn"),
-               ("Heizstab bei θe", f"{T.f(g['heizstab_kw'], 2)} kW",
-                f"verfügbar {T.f(g['heizstab_max_kw'], 0)} kW" if g["heizstab_max_kw"] is not None else "bauseits",
-                "ok" if g["heizstab_kw"] <= 0 else "warn"),
-               ("WP-Deckungsanteil", f"{T.f(g['deckung'] * 100, 1)} %", f"VDI 4650 ({'Sole' if r['waermequelle'] == 'sole' else 'Luft'}/Wasser, parallel)", "ok" if g["deckung"] >= 0.98 else "warn")]
-    spalten = st.columns(3)
-    for i, (a, b, c, klasse) in enumerate(ks):
-        spalten[i % 3].markdown(f"<div class='kpi {klasse}'><div class='t'>{a}</div><div class='v'>{b}</div><div class='s'>{c}</div></div>",
+    bestell_titel = "Bestellvorschlag" if r.get("mfh") else "Systempakete"
+    t_ueb, t_leis, t_ger, t_hyd, t_best, t_rech = st.tabs(["Überblick", "Leistung & Heizkurve", "Geräteauswahl",
+                                                           "Hydraulik & Warmwasser", bestell_titel, "Rechenweg"])
+    with t_ueb:
+        st.markdown("**Auf einen Blick**")
+        st.markdown("\n".join(f"- {T.STATUS_ICON[x['status']]} {x['text']}" for x in T.klartext(E, r, KAT)))
+        for m in T.meldungen(E, r, KAT):
+            st.warning(m)
+        abw = [] if EX else T.experten_abweichungen(E)
+        if abw:
+            c_a, c_b = st.columns([4, 1])
+            c_a.warning("Experteneinstellungen aktiv: " + ", ".join(abw) + ".")
+            if c_b.button("Auf Standard zurücksetzen"):
+                T.experten_zuruecksetzen(E)
+                for k_ in [k_ for k_ in ss if str(k_).startswith(("w_", "n_"))]:
+                    del ss[k_]
+                st.rerun()
+        ks = [("Gesamtheizlast QGES", f"{T.f(r['qges'], 2)} kW", f"QH {T.f(r['qh'], 2)} + QTW {T.f(r['qtw'], 2)} + QSperr {T.f(r['qsperr'], 2)}", ""),
+              ("Mindestleistung WP", f"{T.f(r['mindestleistung'], 2)} kW", T.KRITERIUM[r["kriterium"]], "")]
+        if g and g["moeglich"]:
+            ks += [("Bivalenzpunkt", T.biv_text(g), "Schnitt mit Gebäudekennlinie", "ok" if g["ok"] else "bad"),
+                   ("Leistung bei θe", f"{T.f(g['q_nat'], 2)} kW", f"Abdeckung {T.f(g['abdeckung'] * 100, 0)} %", "ok" if g["abdeckung"] >= 1 else "warn"),
+                   ("Heizstab bei θe", f"{T.f(g['heizstab_kw'], 2)} kW",
+                    f"verfügbar {T.f(g['heizstab_max_kw'], 0)} kW" if g["heizstab_max_kw"] is not None else "bauseits",
+                    "ok" if g["heizstab_kw"] <= 0 else "warn"),
+                   ("WP-Deckungsanteil", f"{T.f(g['deckung'] * 100, 1)} %", f"VDI 4650 ({'Sole' if r['waermequelle'] == 'sole' else 'Luft'}/Wasser, parallel)", "ok" if g["deckung"] >= 0.98 else "warn")]
+        spalten = st.columns(3)
+        for i, (a, b, c, klasse) in enumerate(ks):
+            tip = T.GLOSSAR.get(T.KPI_GLOSSAR.get(a, ""), "").replace("'", "&#39;")
+            spalten[i % 3].markdown(f"<div class='kpi {klasse}' title='{tip}'><div class='t'>{a}{' ⓘ' if tip else ''}</div><div class='v'>{b}</div>"
+                                    f"<div class='s'>{c}</div></div>", unsafe_allow_html=True)
+
+        if g:
+            k = KAT["geraete"].get(g["geraet"], {})
+            s = D.serie(g["serie"])
+            bilder = [(KAT.get("bilder", {}).get(g["geraet"]), g["geraet"]), ((ie or {}).get("bild"), (ie or {}).get("typ"))]
+            bilder = [(D.DATEN / "bilder" / f"{b_}.jpg", t_) for b_, t_ in bilder if b_ and (D.DATEN / "bilder" / f"{b_}.jpg").exists()]
+            if bilder:
+                st.image([str(b_) for b_, _ in bilder], caption=[t_ for _, t_ in bilder], width=150)
+            st.subheader(("{} × ".format(g["n"]) if g["n"] > 1 else "") + g["geraet"])
+            st.caption(f"{s['name']} · {s['bauart']} · {('aus MFH-Musterlösung' if r.get('mfh_wp') else 'Empfehlung') if not E['auswahl']['geraet'] else 'manuell gewählt'}"
+                       + (f" · mit {ie['typ']} ({ie['art']})" if ie else ""))
+            d = st.columns(4)
+            d[0].metric("Bestell-Nr. Außeneinheit", k.get("artnr") or "–")
+            d[1].metric("Bestell-Nr. Inneneinheit", (ie or {}).get("artnr") or "–")
+            d[2].metric(f"Max. Leistung {'B0' if r['waermequelle'] == 'sole' else 'A-7'}/W{T.f(r['vl'], 0)}", f"{T.f(g.get('q_a7'), 2)} kW")
+            d[3].metric("Taktgrenze", f"≈ {T.ft(g['taktgrenze'])} °C" if g.get("taktgrenze") is not None else "–")
+            st.caption(f"SCOP 35/55 °C: {T.f(k.get('scop35'), 2)} / {T.f(k.get('scop55'), 2)} · Schallleistung ErP: "
+                       f"{k.get('lw_db', '–')} dB(A) · {k.get('masse', '')} · UVP (intern): {T.euro(k['uvp'] * g['n']) if k.get('uvp') else '–'}"
+                       + (f" + {T.euro(ie['uvp'])}" if ie and ie.get("uvp") else ""))
+
+        if r.get("kennlinien"):
+            kl = r["kennlinien"]
+            fig = go.Figure()
+            for d_ in DATEN["geraete"]:
+                if d_["serie"] == g["serie"] and d_["id"] != g["geraet"]:
+                    kk = R.kurve_bei_vl(d_["max"], r["vl"])
+                    if kk:
+                        fig.add_scatter(x=kl["t"], y=R.werte_im_bereich(kk, kl["t"], g["n"]), name=d_["kurz"], mode="lines",
+                                        line=dict(color="#a0aab5", width=1, dash="dot"))
+            if kl["min"]:
+                fig.add_scatter(x=kl["t"], y=kl["min"], name="Mindestleistung (1 Gerät)", mode="lines", line=dict(color=BLAU, dash="dash"))
+            fig.add_scatter(x=kl["t"], y=kl["last"], name="Gebäudekennlinie", mode="lines", line=dict(color="#141e29", width=2.5))
+            fig.add_scatter(x=kl["t"], y=kl["max"], name=g["geraet"] + " (max.)", mode="lines", line=dict(color=BLAU, width=3.5))
+            if g["bivalenz_art"] == "punkt":
+                qb = R.last(g["bivalenz"], r["qh"] + r["qsperr"], r["qtw"], r["nat"], r["heizgrenze"])
+                fig.add_scatter(x=[g["bivalenz"]], y=[qb], mode="markers+text", text=[f"Bivalenzpunkt {T.ft(g['bivalenz'])} °C"],
+                                textposition="bottom left", marker=dict(size=11, color=BLAU), showlegend=False)
+            fig.add_vline(x=r["nat"], line_dash="dot", line_color="#78889a", annotation_text=f"θe {T.ft(r['nat'])} °C")
+            fig.add_vline(x=-7, line_color="#e20015", line_width=1.6, annotation_text="A-7 (Außenluft −7 °C)", annotation_font_color="#e20015")
+            if g["bivalenz_art"] == "punkt":
+                fig.add_vrect(x0=g["bivalenz"] - 0.8, x1=g["bivalenz"] + 0.8, fillcolor="#f28c28", opacity=0.14, line_width=0)
+            fig.update_layout(height=420, margin=dict(l=10, r=10, t=30, b=10), xaxis_title="Außentemperatur in °C",
+                              yaxis_title="Heizleistung in kW", yaxis_rangemode="tozero", legend=dict(orientation="h", y=1.12), template="plotly_white")
+            st.plotly_chart(fig, width="stretch")
+            st.caption(T.min_hinweis(r))
+
+    with t_leis:
+        hkv = r.get("heizkurve")
+        if hkv:
+            st.markdown("**Heizkurve** – Vorlauf- und Rücklauftemperatur über der Außentemperatur (DIN EN 442)")
+            fh = go.Figure()
+            fh.add_scatter(x=hkv["t"], y=hkv["vl"], name="Vorlauf", mode="lines", line=dict(color=ROT, width=3))
+            fh.add_scatter(x=hkv["t"], y=hkv["rl"], name="Rücklauf", mode="lines", line=dict(color=BLAU, width=2, dash="dash"))
+            pk = hkv["punkte"]
+            fh.add_scatter(x=[float(t_) for t_ in pk], y=list(pk.values()), mode="markers+text", showlegend=False,
+                           text=[f"A{t_}: {T.f(v_, 1)} °C" for t_, v_ in pk.items()], textposition="top right", marker=dict(size=9, color=ROT))
+            if g and g.get("vl_max_geraet"):
+                fh.add_hline(y=g["vl_max_geraet"], line_dash="dash", line_color="#78889a",
+                             annotation_text=f"max. Vorlauf WP {T.f(g['vl_max_geraet'], 0)} °C")
+            fh.update_layout(height=280, margin=dict(l=10, r=10, t=30, b=10), xaxis_title="Außentemperatur in °C",
+                             yaxis_title="Temperatur in °C", legend=dict(orientation="h", y=1.15), template="plotly_white")
+            st.plotly_chart(fh, width="stretch")
+            st.caption(f"Maßgebend: {T.HK_TYP.get(hkv['typ'], hkv['typ'])} (Exponent n = {T.f(hkv['exponent'], 1)}, Spreizung "
+                       f"{T.f(hkv['spreizung'], 0)} K bei θe) · {T.f(r['vl'], 0)} °C Vorlauf bei θe {T.ft(r['nat'])} °C bis zur Heizgrenze "
+                       f"{T.ft(r['heizgrenze'])} °C. Bei milderen Außentemperaturen sinkt der Vorlauf – die Wärmepumpe arbeitet dann effizienter "
+                       f"und mit mehr Leistung als im Diagramm oben (dort konstant {T.f(r['vl'], 0)} °C wie Excel-Werkzeug).")
+
+        if r.get("eheizer"):
+            st.markdown(f"**E-Heizer je Baugröße** – QGES {T.f(r['qges'], 2)} kW − Heizleistung bei θe {T.ft(r['nat'])} °C "
+                        f"und {T.f(r['vl'], 0)} °C Vorlauf (wie Excel-Werkzeug)")
+            st.dataframe([{"Bild": D.bild_uri(KAT.get("bilder", {}).get(x["geraet"])),
+                           "Wärmepumpe": (f"{x['n']} × " if x["n"] > 1 else "") + x["geraet"] + (" (gewählt)" if x["geraet"] == g["geraet"] else ""),
+                           f"Leistung bei θe": x["text_q"], "E-Heizer": x["text_eh"], "in Watt": x["text_w"], "Bewertung": x["bewertung"]}
+                          for x in T.eheizer_zeilen(r)], hide_index=True, width="stretch",
+                         column_config={"Bild": st.column_config.ImageColumn("", width="small")})
+            vb = r.get("vdi_bivalenz")
+            tab = {"ϑBiv in °C": ["Leistungsanteil μ", "αH,a bivalent-parallel", "αH,a bivalent-alternativ"]}
+            for i_, t_ in enumerate(R.VDI_BIV_T):
+                tab[("+" if t_ > 0 else "") + str(t_)] = [R.VDI_BIV_MU[i_], R.VDI_BIV_PAR[i_], R.VDI_BIV_ALT[i_]]
+            naechst = min(R.VDI_BIV_T, key=lambda t_: abs(t_ - vb["t_biv"])) if vb else None
+            st.markdown("**Deckungsanteil nach Bivalenzpunkt** (DIN V 4701-10 / VDI 4650)")
+            import pandas as pd
+            df = pd.DataFrame(tab)
+            spalte = ("+" if naechst and naechst > 0 else "") + str(naechst) if vb else None
+            st.dataframe(df.style.format({c_: "{:.2f}" for c_ in df.columns[1:]}).set_properties(
+                subset=[spalte] if spalte else [], **{"background-color": "#005691", "color": "white", "font-weight": "bold"}),
+                hide_index=True, width="stretch")
+            if vb:
+                st.caption(f"Bivalenzpunkt {T.ft(g['bivalenz'])} °C: αH,a parallel ≈ {T.f(vb['alpha_parallel'], 2)}, "
+                           f"alternativ ≈ {T.f(vb['alpha_alternativ'], 2)} (linear interpoliert).")
+
+        en = r.get("energie")
+        if en:
+            st.markdown("**Jahresbilanz (Schätzung)**")
+            if True:
+                c = st.columns(4)
+                c[0].metric("Jahreswärme Heizung + WW", f"{T.f(en['waerme_kwh'], 0)} kWh/a")
+                if en.get("scop"):
+                    c[1].metric("Strom Wärmepumpe", f"{T.f(en['strom_wp_kwh'], 0)} kWh/a", help=f"SCOP ≈ {T.f(en['scop'], 2)}")
+                    c[2].metric("Strom Heizstab", f"{T.f(en['strom_heizstab_kwh'], 0)} kWh/a")
+                    c[3].metric("Umweltwärme", f"{T.f(en['umwelt_kwh'], 0)} kWh/a")
+
+    with t_ger:
+        st.markdown("**Mögliche Wärmepumpen** – kleinste passende Größe je Gerät (★ kleinste der Baureihe)")
+        emp = set(r["empfehlung_je_serie"])
+        zeilen = []
+        # gewählte Baureihe zuerst, darunter die Alternativen aus anderen Baureihen (wie index.html)
+        liste = sorted(r["kandidaten"], key=lambda c: 0 if g and c["serie"] == g["serie"] else 1)
+        for c in liste:
+            zeilen.append({"": "🟢" if c["ok"] else ("⚪" if not c["moeglich"] else "🔴"),
+                           "Gruppe": "gewählte Baureihe" if g and c["serie"] == g["serie"] else "Alternative",
+                           "Bild": D.bild_uri(KAT.get("bilder", {}).get(c["geraet"])),
+                           "Wärmepumpe": c["geraet"] + (" ★" if f"{c['geraet']}|{c['n']}" in emp else ""), "Anz.": c["n"],
+                           f"{'B0' if r['waermequelle'] == 'sole' else 'A-7'}/W{T.f(r['vl'], 0)} [kW]": round(c["q_a7"], 2) if c["moeglich"] else None,
+                           "bei θe [kW]": round(c["q_nat"], 2) if c["moeglich"] else None,
+                           "Abdeckung [%]": round(c["abdeckung"] * 100) if c["moeglich"] else None,
+                           "Bivalenzpunkt": T.biv_text(c), "Heizstab [kW]": round(c["heizstab_kw"], 1) if c["moeglich"] else None,
+                           "Deckung [%]": round(c["deckung"] * 100, 1) if c["moeglich"] else None,
+                           "UVP [€]": KAT["geraete"].get(c["geraet"], {}).get("uvp", 0) * c["n"] or None,
+                           "Hinweis": c["grund"] or ("überdimensioniert" if c.get("ueberdimensioniert") else "")})
+        st.dataframe(zeilen, hide_index=True, width="stretch", column_config={"Bild": st.column_config.ImageColumn("", width="small")})
+        st.caption("A-7/W.. = Heizleistung bei −7 °C Außenluft und Auslegungsvorlauf (Prüfpunkt nach EN 14511, Bezug der Mindestleistung); "
+                   "B0/W.. bei Sole/Wasser = Sole 0 °C. θe = Norm-Außentemperatur.")
+
+    with t_hyd:
+        if g:
+            st.markdown("**Anlagenschema (vereinfacht)**")
+            svg = S.schema_svg(r, ie, T.heizkreis_liste(E), S.FARBEN_DRUCK).replace('width="900" height="470"', 'width="100%"')
+            st.markdown("<div style='background:#fff;border:1px solid #d3dce5;border-radius:12px;padding:8px'>" + svg + "</div>",
+                        unsafe_allow_html=True)
+            st.caption("Prinzipdarstellung – Zubehör, Speicher und Sicherheitstechnik im SysCon planen.")
+
+        kacheln = T.anbindung(E, r)
+        if kacheln:
+            st.markdown("**Warmwasser & Anbindung**")
+            sp_ = st.columns(len(kacheln) if len(kacheln) <= 4 else 3)
+            for i_, (a_, b_, c_) in enumerate(kacheln):
+                sp_[i_ % len(sp_)].markdown(f"<div class='kpi'><div class='t'>{a_}</div><div class='v'>{b_}</div><div class='s'>{c_}</div></div>",
+                                            unsafe_allow_html=True)
+    with t_best:
+        # ---- MFH-Bestellvorschlag (Musterlösungen) – wie mfhHtml() in index.html
+        if r["mfh"]:
+            mfh_bereich(r, E)
+
+        # ---- Passende Systempakete (BOPA) – wie index.html
+        if g and not r["mfh"]:
+            PK = D.pakete()
+            st.markdown("**Passende Systempakete (BOPA)** – Komplettpaket mit Speicher und Zubehör · Preisvorteil 6 %")
+            if g["n"] > 1:
+                st.caption("Für Kaskaden gibt es keine Komplettpakete – Zubehör und Speicher im SysCon planen.")
+            else:
+                pl = T.pakete_fuer(r, ie, PK)
+                if not pl:
+                    st.caption(f"Für {g['geraet']} sind im Produktkatalog keine Systempakete aufgeführt.")
+                if pl and r["tww"]["system"] == "friwa" and r["tww"]["aktiv"]:
+                    st.caption("Hinweis: Die Pakete enthalten Warmwasserspeicher – für eine Frischwasserstation im SysCon planen.")
+                titel = []
+                for p_ in pl:
+                    if p_["titel"] not in titel:
+                        titel.append(p_["titel"])
+                for t_ in titel:
+                    gruppe = [p_ for p_ in pl if p_["titel"] == t_]
+                    st.markdown(f"<div style='font-size:12px;font-weight:700;color:#4a5866;text-transform:uppercase;margin-top:6px'>{t_}</div>",
                                 unsafe_allow_html=True)
+                    st.dataframe([{"Paket": p_["paket"] + (" ★" if p_["passt"] else ""), "Variante": p_["variante"],
+                                   "WW-Speicher [l]": p_["ww_l"], "Puffer [l]": p_["puffer_l"], "Bestell-Nr.": p_["artnr"],
+                                   "UVP [€]": p_["uvp"]} for p_ in gruppe], hide_index=True, width="stretch")
+                    with st.expander("Paketinhalt"):
+                        st.markdown("\n".join("- " + x_ for x_ in gruppe[0]["inhalt"]))
+                if pl:
+                    st.caption(f"★ passt zur gewählten Inneneinheit{' (' + ie['typ'] + ')' if ie else ''}. "
+                               "Quelle: Produktkatalog Klima-, Lüftungs- und Wärmepumpen-Sortiment, März 2026.")
+                zub = T.zubehoer_fuer(r, PK)
+                if zub:
+                    with st.expander(f"Empfohlenes Zubehör zur Baureihe ({len(zub)})"):
+                        st.dataframe([{"Zubehör": z_["text"], "Bestell-Nr.": z_["artnr"], "UVP [€]": z_["uvp"]} for z_ in zub],
+                                     hide_index=True, width="stretch")
+                        hk_ = T.heizkreis_liste(E)
+                        st.caption(f"Heizkreise laut Eingabe: {sum(not x['gemischt'] for x in hk_)} ungemischt, "
+                                   f"{sum(x['gemischt'] for x in hk_)} gemischt – Heizkreispaket BOPA HK HP je Heizkreis berücksichtigen.")
 
-    if g:
-        k = KAT["geraete"].get(g["geraet"], {})
-        s = D.serie(g["serie"])
-        bilder = [(KAT.get("bilder", {}).get(g["geraet"]), g["geraet"]), ((ie or {}).get("bild"), (ie or {}).get("typ"))]
-        bilder = [(D.DATEN / "bilder" / f"{b_}.jpg", t_) for b_, t_ in bilder if b_ and (D.DATEN / "bilder" / f"{b_}.jpg").exists()]
-        if bilder:
-            st.image([str(b_) for b_, _ in bilder], caption=[t_ for _, t_ in bilder], width=150)
-        st.subheader(("{} × ".format(g["n"]) if g["n"] > 1 else "") + g["geraet"])
-        st.caption(f"{s['name']} · {s['bauart']} · {('aus MFH-Musterlösung' if r.get('mfh_wp') else 'Empfehlung') if not E['auswahl']['geraet'] else 'manuell gewählt'}"
-                   + (f" · mit {ie['typ']} ({ie['art']})" if ie else ""))
-        d = st.columns(4)
-        d[0].metric("Bestell-Nr. Außeneinheit", k.get("artnr") or "–")
-        d[1].metric("Bestell-Nr. Inneneinheit", (ie or {}).get("artnr") or "–")
-        d[2].metric(f"Max. Leistung {'B0' if r['waermequelle'] == 'sole' else 'A-7'}/W{T.f(r['vl'], 0)}", f"{T.f(g.get('q_a7'), 2)} kW")
-        d[3].metric("Taktgrenze", f"≈ {T.ft(g['taktgrenze'])} °C" if g.get("taktgrenze") is not None else "–")
-        st.caption(f"SCOP 35/55 °C: {T.f(k.get('scop35'), 2)} / {T.f(k.get('scop55'), 2)} · Schallleistung ErP: "
-                   f"{k.get('lw_db', '–')} dB(A) · {k.get('masse', '')} · UVP (intern): {T.euro(k['uvp'] * g['n']) if k.get('uvp') else '–'}"
-                   + (f" + {T.euro(ie['uvp'])}" if ie and ie.get("uvp") else ""))
-
-    # ---- MFH-Bestellvorschlag (Musterlösungen) – wie mfhHtml() in index.html
-    if r["mfh"]:
-        mfh_bereich(r, E)
-
-    # ---- Passende Systempakete (BOPA) – wie index.html
-    if g and not r["mfh"]:
-        PK = D.pakete()
-        st.markdown("**Passende Systempakete (BOPA)** – Komplettpaket mit Speicher und Zubehör · Preisvorteil 6 %")
-        if g["n"] > 1:
-            st.caption("Für Kaskaden gibt es keine Komplettpakete – Zubehör und Speicher im SysCon planen.")
-        else:
-            pl = T.pakete_fuer(r, ie, PK)
-            if not pl:
-                st.caption(f"Für {g['geraet']} sind im Produktkatalog keine Systempakete aufgeführt.")
-            if pl and r["tww"]["system"] == "friwa" and r["tww"]["aktiv"]:
-                st.caption("Hinweis: Die Pakete enthalten Warmwasserspeicher – für eine Frischwasserstation im SysCon planen.")
-            titel = []
-            for p_ in pl:
-                if p_["titel"] not in titel:
-                    titel.append(p_["titel"])
-            for t_ in titel:
-                gruppe = [p_ for p_ in pl if p_["titel"] == t_]
-                st.markdown(f"<div style='font-size:12px;font-weight:700;color:#4a5866;text-transform:uppercase;margin-top:6px'>{t_}</div>",
-                            unsafe_allow_html=True)
-                st.dataframe([{"Paket": p_["paket"] + (" ★" if p_["passt"] else ""), "Variante": p_["variante"],
-                               "WW-Speicher [l]": p_["ww_l"], "Puffer [l]": p_["puffer_l"], "Bestell-Nr.": p_["artnr"],
-                               "UVP [€]": p_["uvp"]} for p_ in gruppe], hide_index=True, width="stretch")
-                with st.expander("Paketinhalt"):
-                    st.markdown("\n".join("- " + x_ for x_ in gruppe[0]["inhalt"]))
-            if pl:
-                st.caption(f"★ passt zur gewählten Inneneinheit{' (' + ie['typ'] + ')' if ie else ''}. "
-                           "Quelle: Produktkatalog Klima-, Lüftungs- und Wärmepumpen-Sortiment, März 2026.")
-            zub = T.zubehoer_fuer(r, PK)
-            if zub:
-                with st.expander(f"Empfohlenes Zubehör zur Baureihe ({len(zub)})"):
-                    st.dataframe([{"Zubehör": z_["text"], "Bestell-Nr.": z_["artnr"], "UVP [€]": z_["uvp"]} for z_ in zub],
-                                 hide_index=True, width="stretch")
-                    hk_ = T.heizkreis_liste(E)
-                    st.caption(f"Heizkreise laut Eingabe: {sum(not x['gemischt'] for x in hk_)} ungemischt, "
-                               f"{sum(x['gemischt'] for x in hk_)} gemischt – Heizkreispaket BOPA HK HP je Heizkreis berücksichtigen.")
-
-    if r.get("kennlinien"):
-        kl = r["kennlinien"]
-        fig = go.Figure()
-        for d_ in DATEN["geraete"]:
-            if d_["serie"] == g["serie"] and d_["id"] != g["geraet"]:
-                kk = R.kurve_bei_vl(d_["max"], r["vl"])
-                if kk:
-                    fig.add_scatter(x=kl["t"], y=R.werte_im_bereich(kk, kl["t"], g["n"]), name=d_["kurz"], mode="lines",
-                                    line=dict(color="#a0aab5", width=1, dash="dot"))
-        if kl["min"]:
-            fig.add_scatter(x=kl["t"], y=kl["min"], name="Mindestleistung (1 Gerät)", mode="lines", line=dict(color=BLAU, dash="dash"))
-        fig.add_scatter(x=kl["t"], y=kl["last"], name="Gebäudekennlinie", mode="lines", line=dict(color="#141e29", width=2.5))
-        fig.add_scatter(x=kl["t"], y=kl["max"], name=g["geraet"] + " (max.)", mode="lines", line=dict(color=BLAU, width=3.5))
-        if g["bivalenz_art"] == "punkt":
-            qb = R.last(g["bivalenz"], r["qh"] + r["qsperr"], r["qtw"], r["nat"], r["heizgrenze"])
-            fig.add_scatter(x=[g["bivalenz"]], y=[qb], mode="markers+text", text=[f"Bivalenzpunkt {T.ft(g['bivalenz'])} °C"],
-                            textposition="bottom left", marker=dict(size=11, color=BLAU), showlegend=False)
-        fig.add_vline(x=r["nat"], line_dash="dot", line_color="#78889a", annotation_text=f"θe {T.ft(r['nat'])} °C")
-        fig.add_vline(x=-7, line_color="#e20015", line_width=1.6, annotation_text="A-7 (Außenluft −7 °C)", annotation_font_color="#e20015")
-        if g["bivalenz_art"] == "punkt":
-            fig.add_vrect(x0=g["bivalenz"] - 0.8, x1=g["bivalenz"] + 0.8, fillcolor="#f28c28", opacity=0.14, line_width=0)
-        fig.update_layout(height=420, margin=dict(l=10, r=10, t=30, b=10), xaxis_title="Außentemperatur in °C",
-                          yaxis_title="Heizleistung in kW", yaxis_rangemode="tozero", legend=dict(orientation="h", y=1.12), template="plotly_white")
-        st.plotly_chart(fig, width="stretch")
-        st.caption(T.min_hinweis(r))
-
-    hkv = r.get("heizkurve")
-    if hkv:
-        st.markdown("**Heizkurve** – Vorlauf- und Rücklauftemperatur über der Außentemperatur (DIN EN 442)")
-        fh = go.Figure()
-        fh.add_scatter(x=hkv["t"], y=hkv["vl"], name="Vorlauf", mode="lines", line=dict(color=ROT, width=3))
-        fh.add_scatter(x=hkv["t"], y=hkv["rl"], name="Rücklauf", mode="lines", line=dict(color=BLAU, width=2, dash="dash"))
-        pk = hkv["punkte"]
-        fh.add_scatter(x=[float(t_) for t_ in pk], y=list(pk.values()), mode="markers+text", showlegend=False,
-                       text=[f"A{t_}: {T.f(v_, 1)} °C" for t_, v_ in pk.items()], textposition="top right", marker=dict(size=9, color=ROT))
-        if g and g.get("vl_max_geraet"):
-            fh.add_hline(y=g["vl_max_geraet"], line_dash="dash", line_color="#78889a",
-                         annotation_text=f"max. Vorlauf WP {T.f(g['vl_max_geraet'], 0)} °C")
-        fh.update_layout(height=280, margin=dict(l=10, r=10, t=30, b=10), xaxis_title="Außentemperatur in °C",
-                         yaxis_title="Temperatur in °C", legend=dict(orientation="h", y=1.15), template="plotly_white")
-        st.plotly_chart(fh, width="stretch")
-        st.caption(f"Maßgebend: {T.HK_TYP.get(hkv['typ'], hkv['typ'])} (Exponent n = {T.f(hkv['exponent'], 1)}, Spreizung "
-                   f"{T.f(hkv['spreizung'], 0)} K bei θe) · {T.f(r['vl'], 0)} °C Vorlauf bei θe {T.ft(r['nat'])} °C bis zur Heizgrenze "
-                   f"{T.ft(r['heizgrenze'])} °C. Bei milderen Außentemperaturen sinkt der Vorlauf – die Wärmepumpe arbeitet dann effizienter "
-                   f"und mit mehr Leistung als im Diagramm oben (dort konstant {T.f(r['vl'], 0)} °C wie Excel-Werkzeug).")
-
-    if r.get("eheizer"):
-        st.markdown(f"**E-Heizer je Baugröße** – QGES {T.f(r['qges'], 2)} kW − Heizleistung bei θe {T.ft(r['nat'])} °C "
-                    f"und {T.f(r['vl'], 0)} °C Vorlauf (wie Excel-Werkzeug)")
-        st.dataframe([{"Bild": D.bild_uri(KAT.get("bilder", {}).get(x["geraet"])),
-                       "Wärmepumpe": (f"{x['n']} × " if x["n"] > 1 else "") + x["geraet"] + (" (gewählt)" if x["geraet"] == g["geraet"] else ""),
-                       f"Leistung bei θe": x["text_q"], "E-Heizer": x["text_eh"], "in Watt": x["text_w"], "Bewertung": x["bewertung"]}
-                      for x in T.eheizer_zeilen(r)], hide_index=True, width="stretch",
-                     column_config={"Bild": st.column_config.ImageColumn("", width="small")})
-        vb = r.get("vdi_bivalenz")
-        tab = {"ϑBiv in °C": ["Leistungsanteil μ", "αH,a bivalent-parallel", "αH,a bivalent-alternativ"]}
-        for i_, t_ in enumerate(R.VDI_BIV_T):
-            tab[("+" if t_ > 0 else "") + str(t_)] = [R.VDI_BIV_MU[i_], R.VDI_BIV_PAR[i_], R.VDI_BIV_ALT[i_]]
-        naechst = min(R.VDI_BIV_T, key=lambda t_: abs(t_ - vb["t_biv"])) if vb else None
-        st.markdown("**Deckungsanteil nach Bivalenzpunkt** (DIN V 4701-10 / VDI 4650)")
-        import pandas as pd
-        df = pd.DataFrame(tab)
-        spalte = ("+" if naechst and naechst > 0 else "") + str(naechst) if vb else None
-        st.dataframe(df.style.format({c_: "{:.2f}" for c_ in df.columns[1:]}).set_properties(
-            subset=[spalte] if spalte else [], **{"background-color": "#005691", "color": "white", "font-weight": "bold"}),
-            hide_index=True, width="stretch")
-        if vb:
-            st.caption(f"Bivalenzpunkt {T.ft(g['bivalenz'])} °C: αH,a parallel ≈ {T.f(vb['alpha_parallel'], 2)}, "
-                       f"alternativ ≈ {T.f(vb['alpha_alternativ'], 2)} (linear interpoliert).")
-
-    st.markdown("**Mögliche Wärmepumpen** – kleinste passende Größe je Gerät (★ kleinste der Baureihe)")
-    emp = set(r["empfehlung_je_serie"])
-    zeilen = []
-    # gewählte Baureihe zuerst, darunter die Alternativen aus anderen Baureihen (wie index.html)
-    liste = sorted(r["kandidaten"], key=lambda c: 0 if g and c["serie"] == g["serie"] else 1)
-    for c in liste:
-        zeilen.append({"": "🟢" if c["ok"] else ("⚪" if not c["moeglich"] else "🔴"),
-                       "Gruppe": "gewählte Baureihe" if g and c["serie"] == g["serie"] else "Alternative",
-                       "Bild": D.bild_uri(KAT.get("bilder", {}).get(c["geraet"])),
-                       "Wärmepumpe": c["geraet"] + (" ★" if f"{c['geraet']}|{c['n']}" in emp else ""), "Anz.": c["n"],
-                       f"{'B0' if r['waermequelle'] == 'sole' else 'A-7'}/W{T.f(r['vl'], 0)} [kW]": round(c["q_a7"], 2) if c["moeglich"] else None,
-                       "bei θe [kW]": round(c["q_nat"], 2) if c["moeglich"] else None,
-                       "Abdeckung [%]": round(c["abdeckung"] * 100) if c["moeglich"] else None,
-                       "Bivalenzpunkt": T.biv_text(c), "Heizstab [kW]": round(c["heizstab_kw"], 1) if c["moeglich"] else None,
-                       "Deckung [%]": round(c["deckung"] * 100, 1) if c["moeglich"] else None,
-                       "UVP [€]": KAT["geraete"].get(c["geraet"], {}).get("uvp", 0) * c["n"] or None,
-                       "Hinweis": c["grund"] or ("überdimensioniert" if c.get("ueberdimensioniert") else "")})
-    st.dataframe(zeilen, hide_index=True, width="stretch", column_config={"Bild": st.column_config.ImageColumn("", width="small")})
-    st.caption("A-7/W.. = Heizleistung bei −7 °C Außenluft und Auslegungsvorlauf (Prüfpunkt nach EN 14511, Bezug der Mindestleistung); "
-               "B0/W.. bei Sole/Wasser = Sole 0 °C. θe = Norm-Außentemperatur.")
-
-    if g:
-        st.markdown("**Anlagenschema (vereinfacht)**")
-        svg = S.schema_svg(r, ie, T.heizkreis_liste(E), S.FARBEN_DRUCK).replace('width="900" height="470"', 'width="100%"')
-        st.markdown("<div style='background:#fff;border:1px solid #d3dce5;border-radius:12px;padding:8px'>" + svg + "</div>",
-                    unsafe_allow_html=True)
-        st.caption("Prinzipdarstellung – Zubehör, Speicher und Sicherheitstechnik im SysCon planen.")
-
-    kacheln = T.anbindung(E, r)
-    if kacheln:
-        st.markdown("**Warmwasser & Anbindung**")
-        sp_ = st.columns(len(kacheln) if len(kacheln) <= 4 else 3)
-        for i_, (a_, b_, c_) in enumerate(kacheln):
-            sp_[i_ % len(sp_)].markdown(f"<div class='kpi'><div class='t'>{a_}</div><div class='v'>{b_}</div><div class='s'>{c_}</div></div>",
-                                        unsafe_allow_html=True)
-    with st.expander("Herleitung Heizlast", expanded=False):
-        st.table([{"Größe": a, "Formel": b, "Wert": c} for a, b, c in T.herleitung(E, r)])
-    en = r.get("energie")
-    if en:
-        with st.expander("Jahresbilanz (Schätzung)", expanded=False):
-            c = st.columns(4)
-            c[0].metric("Jahreswärme Heizung + WW", f"{T.f(en['waerme_kwh'], 0)} kWh/a")
-            if en.get("scop"):
-                c[1].metric("Strom Wärmepumpe", f"{T.f(en['strom_wp_kwh'], 0)} kWh/a", help=f"SCOP ≈ {T.f(en['scop'], 2)}")
-                c[2].metric("Strom Heizstab", f"{T.f(en['strom_heizstab_kwh'], 0)} kWh/a")
-                c[3].metric("Umweltwärme", f"{T.f(en['umwelt_kwh'], 0)} kWh/a")
+        if not r.get("mfh") and not g:
+            st.caption("Heizlast eingeben – dann erscheinen hier die passenden Systempakete.")
+    with t_rech:
+        st.markdown("**So rechnet die Schnellauslegung**")
+        st.markdown("\n".join(f"{i_ + 1}. **{a_}** – {b_}" for i_, (a_, b_) in enumerate(T.RECHENWEG)))
+        st.markdown("**Herleitung Heizlast**")
+        if True:
+            st.table([{"Größe": a, "Formel": b, "Wert": c} for a, b, c in T.herleitung(E, r)])
 
     st.download_button("📄 Auslegung als PDF", B.pdf_bytes(E, r, DATEN, KAT),
                        f"WP-Auslegung_{name}{'_intern' if E['preise_drucken'] else ''}.pdf", "application/pdf", type="primary")

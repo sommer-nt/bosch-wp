@@ -27,6 +27,11 @@ Eigenes Projekt neben Bosch Flow (Netzrechner) und Bosch Speicher. Zwei Versione
 5. Wärmequelle Luft/Wasser (Außenaufstellung, Entfernung zum Gebäude) oder Sole/Wasser (Innenaufstellung)
 6. Beste Lösung oder Produkt wählen (Kaskade nur, wo die Baureihe es erlaubt)
 
+**Ergebnis in Reitern:** Überblick (Klartext „Auf einen Blick“, Kennzahlen, gewählte Wärmepumpe, Leistungsdiagramm) ·
+Leistung & Heizkurve · Geräteauswahl · Hydraulik & Warmwasser · Bestellvorschlag (MFH) bzw. Systempakete · Rechenweg
+(Schritte, Herleitung, Begriffe). Fachbegriffe sind über „?“ erklärt; Klartext und Glossar stehen in `wp/texte.py` und
+`<script id="texte">` (Test vergleicht beide). Der Klartext steht auch auf Seite 1 von Ausdruck und PDF.
+
 **Expertenmodus:** Gebäudehülle, Heizwert, Vollbenutzungsstunden, Nutzungsgrad, Warmwasser nach DIN V 18599-10,
 Lastprofil/Nachheizzeit, Kaltwassertemperatur, Sperrzeit, Betriebsweise, Spreizung, Entzugsleistung, Baureihen.
 

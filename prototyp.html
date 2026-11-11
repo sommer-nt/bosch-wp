@@ -152,6 +152,26 @@
   #druck table.mfhpos{table-layout:fixed;width:100%}
   #druck table.mfhpos td,#druck table.mfhpos th{font-size:6.6pt;padding:0 3px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .mok{color:#18a058;font-weight:700} .mbad{color:#e20015;font-weight:700}
+  /* Reiter im Ergebnis, Klartext, Erklärungen */
+  .ergtabs{display:flex;flex-wrap:wrap;gap:4px;position:sticky;top:0;z-index:5;background:var(--panel2);padding:6px 4px 10px;border-radius:0 0 10px 10px}
+  .ergtabs button{border:1px solid var(--line);background:var(--paper);color:var(--ink-soft);border-radius:18px;padding:6px 14px;font-size:13px;cursor:pointer}
+  .ergtabs button.on{background:var(--bosch-blue);border-color:var(--bosch-blue);color:#fff;font-weight:700}
+  #ergebnis .card.aus{display:none!important}
+  ul.klartext{list-style:none;margin:0 0 10px;padding:0}
+  ul.klartext li{position:relative;padding:5px 0 5px 28px;font-size:14px;line-height:1.45;border-bottom:1px solid var(--line-soft)}
+  ul.klartext li:last-child{border-bottom:0}
+  ul.klartext li::before{content:"•";position:absolute;left:6px;top:4px;font-weight:800;color:var(--ink-faint)}
+  ul.klartext li.ok::before{content:"✓";color:#18a058} ul.klartext li.warn::before{content:"!";color:#b26a00}
+  ul.klartext li.bad::before{content:"✗";color:#e20015}
+  .info{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;border:1px solid var(--ink-faint);
+    color:var(--ink-faint);font-size:10.5px;font-weight:700;cursor:help;position:relative;vertical-align:middle;margin-left:4px;text-transform:none;letter-spacing:0}
+  .info:hover::after,.info:focus::after{content:attr(data-tip);position:absolute;left:50%;top:22px;transform:translateX(-50%);width:280px;z-index:20;
+    background:var(--ink);color:var(--paper);font-size:12px;font-weight:400;line-height:1.4;padding:8px 10px;border-radius:8px;white-space:normal;text-align:left;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+  #druck ul.klartext.dk-klar li{font-size:8.2pt;padding:1.2mm 0 1.2mm 6mm;line-height:1.35}
+  .kpi .info:hover::after,.kpi .info:focus::after{left:-12px;transform:none}
+  ol.rechenweg{margin:0;padding-left:20px} ol.rechenweg li{margin:4px 0;font-size:13.5px;line-height:1.45}
+  dl.glossar{margin:0;display:grid;grid-template-columns:minmax(120px,180px) 1fr;gap:6px 14px;font-size:13px}
+  dl.glossar dt{font-weight:700} dl.glossar dd{margin:0;color:var(--ink-soft)}
 
   /* ---- Prototyp: Vorführversion ---- */
   #bExperte, .exp, .preis, label.f.nur-intern, details { display:none !important }
@@ -200,8 +220,8 @@
     <label class="f">Raumtemperatur θi<span class="e"><input data-k="klima.innen" type="number" step="1"><small>°C</small></span></label>
     <label class="f">PLZ<span class="e"><input data-k="projekt.plz" type="text" inputmode="numeric" maxlength="5"></span></label>
     <label class="f">Ort<span class="e"><input data-k="projekt.ort" type="text"></span></label>
-    <label class="f">Norm-Außentemperatur θe<span class="e"><input data-k="klima.nat" type="number" step="0.5"><small>°C</small></span></label>
-    <label class="f">Heizgrenztemperatur<span class="e"><input data-k="klima.heizgrenze" type="number" step="1"><small>°C</small></span></label>
+    <label class="f"><span>Norm-Außentemperatur θe <span class="info" data-g="nat">?</span></span><span class="e"><input data-k="klima.nat" type="number" step="0.5"><small>°C</small></span></label>
+    <label class="f"><span>Heizgrenztemperatur <span class="info" data-g="heizgrenze">?</span></span><span class="e"><input data-k="klima.heizgrenze" type="number" step="1"><small>°C</small></span></label>
     <p class="hint" id="plzHinweis">θe über die PLZ (DIN/TS 12831-1, Klimadaten Excel-Werkzeug), kann überschrieben werden. Heizgrenze: Neubau 12 °C, Bestand 15 °C.</p>
   </div></div>
 
@@ -300,26 +320,35 @@
 
 <!-- ============================================================ Ergebnisse -->
 <div id="ergebnis">
-  <div class="card"><h2>Ergebnis <span class="rechts" id="stand"></span></h2><div class="in">
+  <div class="ergtabs" id="ergTabs" role="tablist">
+    <button data-tab="ueberblick">Überblick</button><button data-tab="leistung">Leistung &amp; Heizkurve</button><button data-tab="geraete">Geräteauswahl</button><button data-tab="hydraulik">Hydraulik &amp; Warmwasser</button><button data-tab="bestellung" id="tabBestellung">Bestellvorschlag</button><button data-tab="rechenweg">Rechenweg</button>
+  </div>
+  <div class="card" data-tab="ueberblick"><h2>Auf einen Blick <span class="rechts" id="stand"></span></h2><div class="in">
+    <ul class="klartext" id="klartext"></ul>
     <div id="meldungen"></div>
     <div class="kpis" id="kpis"></div>
   </div></div>
-  <div class="card"><h2>Gewählte Wärmepumpe</h2><div class="in" id="wpKarte"></div></div>
-  <div class="card" id="mfhKarte"><h2>MFH-Bestellvorschlag <span class="rechts">Musterlösungen Bosch · Kostenübersicht 20.08.2026</span></h2><div class="in" style="overflow-x:auto" id="mfh"></div></div>
-  <div class="card" id="bopaKarte"><h2>Passende Systempakete (BOPA) <span class="rechts">Komplettpaket mit Speicher und Zubehör · Preisvorteil 6 %</span></h2><div class="in" style="overflow-x:auto" id="pakete"></div></div>
-  <div class="card"><h2>Heizleistung über der Außentemperatur</h2><div class="in">
+  <div class="card" data-tab="ueberblick geraete"><h2>Gewählte Wärmepumpe</h2><div class="in" id="wpKarte"></div></div>
+  <div class="card" data-tab="ueberblick leistung"><h2>Heizleistung über der Außentemperatur <span class="info" data-g="kennlinie">?</span></h2><div class="in">
     <div class="legende" id="legende"></div><div id="diagramm"></div>
-    <div class="sub" style="margin-top:14px">Heizkurve – Vorlauf- und Rücklauftemperatur über der Außentemperatur</div><div id="heizkurve"></div></div></div>
-  <div class="card"><h2>E-Heizer je Baugröße &amp; Deckungsanteil nach Bivalenzpunkt</h2><div class="in" style="overflow-x:auto"><div id="eheizer"></div></div></div>
-  <div class="card"><h2>Mögliche Wärmepumpen <span class="rechts">kleinste passende Größe je Gerät · Klick wählt aus</span></h2><div class="in" style="overflow-x:auto">
+    <p class="hint">So lesen: Die schwarze <b>Gebäudekennlinie</b> zeigt den Bedarf, die blaue Kurve die maximale Leistung der Wärmepumpe.
+      Wo Blau über Schwarz liegt, schafft die Wärmepumpe den Bedarf allein; links vom <b>Bivalenzpunkt</b> hilft der Heizstab.
+      Rechts der <b>Taktgrenze</b> liegt der Bedarf unter der kleinsten Leistung (gestrichelt) – die Wärmepumpe taktet.</p></div></div>
+  <div class="card" data-tab="leistung"><h2>Heizkurve – Vorlauf und Rücklauf über der Außentemperatur <span class="info" data-g="heizkurve">?</span></h2><div class="in"><div id="heizkurve"></div></div></div>
+  <div class="card" data-tab="leistung"><h2>E-Heizer je Baugröße &amp; Deckungsanteil nach Bivalenzpunkt <span class="info" data-g="deckung">?</span></h2><div class="in" style="overflow-x:auto"><div id="eheizer"></div></div></div>
+  <div class="card" data-tab="leistung"><h2>Jahresbilanz (Schätzung) <span class="info" data-g="scop">?</span></h2><div class="in" id="energie"></div></div>
+  <div class="card" data-tab="geraete"><h2>Mögliche Wärmepumpen <span class="rechts">kleinste passende Größe je Gerät · Klick wählt aus</span></h2><div class="in" style="overflow-x:auto">
     <table id="tabKandidaten"></table>
     <p class="hint">A-7/W55 = Heizleistung bei −7 °C Außenluft und 55 °C Vorlauf (Prüfpunkt nach EN 14511, Bezug der Mindestleistung);
-      B0/W.. bei Sole/Wasser = Sole 0 °C. θe = Norm-Außentemperatur.</p></div></div>
-  <div class="card"><h2>Herleitung Heizlast</h2><div class="in"><table class="formel" id="herleitung"></table></div></div>
-  <div class="card"><h2>Anlagenschema (vereinfacht)</h2><div class="in"><div id="schema"></div>
+      B0/W.. bei Sole/Wasser = Sole 0 °C. θe = Norm-Außentemperatur. Grün = erfüllt das Kriterium, rot = zu klein, ★ = kleinste passende Größe der Baureihe.</p></div></div>
+  <div class="card" data-tab="hydraulik"><h2>Anlagenschema (vereinfacht)</h2><div class="in"><div id="schema"></div>
     <p class="hint">Prinzipdarstellung für die Schnellauslegung. Zubehör, Speicher und Sicherheitstechnik im SysCon planen.</p></div></div>
-  <div class="card"><h2>Warmwasser &amp; Anbindung</h2><div class="in" id="anbindung"></div></div>
-  <div class="card"><h2>Jahresbilanz (Schätzung)</h2><div class="in" id="energie"></div></div>
+  <div class="card" data-tab="hydraulik"><h2>Warmwasser &amp; Anbindung</h2><div class="in" id="anbindung"></div></div>
+  <div class="card" id="mfhKarte" data-tab="bestellung"><h2>MFH-Bestellvorschlag <span class="rechts">Musterlösungen Bosch · Kostenübersicht 20.08.2026</span></h2><div class="in" style="overflow-x:auto" id="mfh"></div></div>
+  <div class="card" id="bopaKarte" data-tab="bestellung"><h2>Passende Systempakete (BOPA) <span class="rechts">Komplettpaket mit Speicher und Zubehör · Preisvorteil 6 %</span></h2><div class="in" style="overflow-x:auto" id="pakete"></div></div>
+  <div class="card" data-tab="rechenweg"><h2>So rechnet die Schnellauslegung</h2><div class="in"><ol class="rechenweg" id="rechenweg"></ol></div></div>
+  <div class="card" data-tab="rechenweg"><h2>Herleitung Heizlast</h2><div class="in"><table class="formel" id="herleitung"></table></div></div>
+  <div class="card" data-tab="rechenweg"><h2>Begriffe</h2><div class="in"><dl class="glossar" id="glossar"></dl></div></div>
 </div>
 </div>
 <div class="fuss">Entwickelt von Daniel Sommer · HC/SDE3-PSD · Leistungsdaten: <span id="quelle"></span> · Katalog: Gesamtkatalog März 2026 · Ergebnis ersetzt keine Fachplanung.</div>
@@ -917,6 +946,74 @@ function schemaZahl(x, d) {
 }
 </script>
 
+<script id="texte">
+// Erklärungen: Glossar und Klartext-Zusammenfassung – gleich wie wp/texte.py (GLOSSAR, klartext); Test vergleicht beide
+const GLOSSAR = {
+  qges: 'Gesamtheizlast QGES: Leistung, die das Gebäude bei der Norm-Außentemperatur braucht – Heizung (QH) plus Zuschlag für Warmwasser (QTW) und Sperrzeiten des Energieversorgers (QSperr).',
+  mindest: 'Mindestleistung der Wärmepumpe bei A-7 (Außenluft −7 °C): monoenergetisch 70 % von QGES (Heizstab übernimmt den Rest an wenigen kalten Tagen), monovalent 100 % bei θe, GEG-Hybrid 30 % von QH.',
+  biv: 'Bivalenzpunkt: Außentemperatur, bis zu der die Wärmepumpe den Bedarf allein deckt. Darunter hilft der Heizstab (monoenergetisch) bzw. der zweite Wärmeerzeuger. Je tiefer, desto besser.',
+  qnat: 'Leistung bei θe: Heizleistung der Wärmepumpe bei der Norm-Außentemperatur und dem gewählten Vorlauf; Abdeckung = Anteil an QGES.',
+  heizstab: 'Heizstab bei θe: elektrische Zusatzleistung am kältesten Auslegungstag (QGES minus WP-Leistung). Der E-Heizer der Inneneinheit liefert bis 9 kW.',
+  deckung: 'WP-Deckungsanteil: Anteil der Jahres-Heizwärme, den die Wärmepumpe selbst liefert (VDI 4650 aus dem Bivalenzpunkt). Ab ca. 98 % ist der Heizstab im Jahr kaum relevant.',
+  takt: 'Taktgrenze: Oberhalb dieser Außentemperatur braucht das Gebäude weniger als die kleinste Leistung der Wärmepumpe – sie schaltet dann ein und aus. Puffer bzw. ausreichend Wasservolumen beruhigen den Betrieb.',
+  a7: 'A-7: Prüfpunkt nach EN 14511 – Außenluft −7 °C. A-7/W55 = Leistung bei −7 °C Luft und 55 °C Vorlauf.',
+  nat: 'θe (Norm-Außentemperatur): tiefste Auslegungstemperatur am Standort nach DIN/TS 12831-1, aus der PLZ.',
+  heizgrenze: 'Heizgrenze: Außentemperatur, ab der nicht mehr geheizt wird (Neubau ca. 12 °C, Bestand ca. 15 °C). Dort endet die Gebäudekennlinie bei 0 kW.',
+  kennlinie: 'Gebäudekennlinie: Bedarf über der Außentemperatur – QGES bei θe, linear fallend bis 0 kW an der Heizgrenze. Wo die WP-Kurve darüber liegt, schafft die Wärmepumpe den Bedarf allein.',
+  heizkurve: 'Heizkurve: nötige Vorlauftemperatur je Außentemperatur. Bei milderem Wetter reicht ein niedrigerer Vorlauf – das steigert Effizienz (COP) und Leistung der Wärmepumpe.',
+  scop: 'SCOP: Jahresarbeitszahl nach EN 14825 (mittleres Klima) – Wärme je kWh Strom über das Jahr; bei 35 °C (Fußbodenheizung) höher als bei 55 °C (Heizkörper).',
+  kaskade: 'Kaskade: mehrere Wärmepumpen über einen Kaskadenregler (HPC800i C, HPC 301 C) – mehr Leistung, feinere Modulation und Redundanz.'
+};
+function klartext(e, r, katalog) {
+  const z = (x, d = 1) => (x === null || x === undefined) ? '–' : schemaZahl(x, d);
+  const zt = x => (x === null || x === undefined) ? '–' : z(x, 1).replace('-', '−');
+  const out = [];
+  let qs = `**${z(r.qges, 1)} kW**: ${z(r.qh, 1)} kW Heizung`;
+  if (r.qtw > 0) qs += ` + ${z(r.qtw, 1)} kW Warmwasser`;
+  if (r.qsperr > 0) qs += ` + ${z(r.qsperr, 1)} kW Sperrzeit`;
+  out.push({text: `Das Gebäude braucht bei der Norm-Außentemperatur ${zt(r.nat)} °C insgesamt ${qs}.`, status: ''});
+  const g = r.gewaehlt;
+  if (!g) { out.push({text: 'Noch keine passende Wärmepumpe – Heizlast, Vorlauf oder Baureihen prüfen.', status: r.qges > 0 ? 'bad' : ''}); return out; }
+  const liste = (katalog.inneneinheiten[g.serie] || []).filter(i => !i.ab_anzahl || g.n >= i.ab_anzahl), regler = liste.filter(i => i.ab_anzahl);
+  const ies = regler.length ? regler : liste, ie = ies.find(i => i.typ === (e.auswahl || {}).inneneinheit) || ies[0] || null;
+  const woher = !(e.auswahl || {}).geraet ? (r.mfh_wp ? 'Aus der MFH-Musterlösung' : 'Empfohlen') : 'Gewählt';
+  out.push({text: `${woher}: **${g.n > 1 ? g.n + ' × ' : ''}${g.geraet}**` + (ie ? ` mit ${ie.typ}` : '') + '.', status: ''});
+  if (!g.moeglich) { out.push({text: `Nicht möglich: ${g.grund}.`, status: 'bad'}); return out; }
+  const art = g.bivalenz_art;
+  if (art === 'unter') out.push({text: `Die Wärmepumpe deckt den Bedarf allein – auch bei ${zt(r.nat)} °C (Abdeckung **${z(g.abdeckung * 100, 0)} %**), kein Heizstab nötig.`, status: 'ok'});
+  else if (art === 'punkt') {
+    const zuViel = g.heizstab_max_kw !== null && g.heizstab_max_kw !== undefined && g.heizstab_kw > g.heizstab_max_kw + 1e-9;
+    let t = `Die Wärmepumpe schafft den Bedarf allein bis **${zt(g.bivalenz)} °C** (Bivalenzpunkt). Nur darunter hilft der Heizstab – bei ${zt(r.nat)} °C mit **${z(g.heizstab_kw, 1)} kW**`;
+    if (g.heizstab_max_kw !== null && g.heizstab_max_kw !== undefined) t += ` (eingebaut ${z(g.heizstab_max_kw, 0)} kW)`;
+    out.push({text: t + (zuViel ? '; das reicht nicht – größere Wärmepumpe oder Kaskade wählen.' : '.'), status: zuViel ? 'bad' : (g.ok ? 'ok' : 'warn')});
+  } else out.push({text: 'Die Wärmepumpe reicht selbst an der Heizgrenze nicht – größere Wärmepumpe oder Kaskade wählen.', status: 'bad'});
+  const krit = {monovalent: 'monovalent', monoenergetisch: 'monoenergetisch', hybrid: 'GEG-Hybrid'}[r.kriterium];
+  if (g.ok) out.push({text: `Damit ist die Auslegung **${krit}** erfüllt: gefordert ${z(r.mindestleistung, 1)} kW, die Wärmepumpe liefert ${z(g.q_a7, 1)} kW bei ${r.waermequelle === 'sole' ? 'B0' : 'A-7'}.`, status: 'ok'});
+  else out.push({text: `Auslegung **${krit}** nicht erfüllt: ${g.grund}.`, status: 'bad'});
+  const en = r.energie;
+  let t = `Übers Jahr liefert die Wärmepumpe rund **${z(g.deckung * 100, 0)} %** der Wärme`;
+  if (en && en.scop) t += `, Strombedarf ca. **${z(en.strom_wp_kwh + en.strom_heizstab_kwh, 0)} kWh/a** (SCOP ≈ ${z(en.scop, 2)})`;
+  out.push({text: t + '.', status: g.deckung >= 0.98 ? 'ok' : 'warn'});
+  if (g.taktgrenze !== null && g.taktgrenze !== undefined && g.taktgrenze < r.heizgrenze)
+    out.push({text: `Ab ca. **${zt(g.taktgrenze)} °C** braucht das Gebäude weniger als die kleinste Leistung der Wärmepumpe – sie taktet dann; Puffer bzw. Wasservolumen einplanen.`, status: ''});
+  const hk = r.heizkurve;
+  if (hk) {
+    const p = hk.punkte;
+    let s = `Vorlauf ${z(r.vl, 0)} °C bei ${zt(r.nat)} °C`;
+    if ('-7' in p) s += `, bei −7 °C ca. ${z(p['-7'], 0)} °C`;
+    if ('7' in p) s += `, bei +7 °C ca. ${z(p['7'], 0)} °C`;
+    const vmax = g.vl_max_geraet, zuHoch = vmax !== null && vmax !== undefined && r.vl > vmax;
+    out.push({text: s + (zuHoch ? ` – über dem max. Vorlauf der Wärmepumpe (${z(vmax, 0)} °C).` : ' (Heizkurve) – je niedriger der Vorlauf, desto effizienter.'), status: zuHoch ? 'bad' : ''});
+  }
+  const v = r.mfh;
+  if (v && v.auswahl.length) {
+    const c = v.auswahl[0].zelle;
+    out.push({text: `MFH-Musterlösung ${c.we} WE / ${c.kw} kW: **${c.komponenten.join(' · ')}**` + (c.vorlage ? ` – GAEB-Bestellvorschlag ${c.vorlage} liegt vor.` : '.'), status: ''});
+  }
+  return out;
+}
+</script>
+
 <script>
 // =================================================================== Oberfläche
 const D = GERAETE_DATEN, KAT = KATALOG_DATEN, KLIMA = KLIMA_DATEN;
@@ -1185,7 +1282,10 @@ function zeichne() {
   $('#meldungen').innerHTML = meldungen(r).map(x => `<div class="meldung">${esc(x)}</div>`).join('')
     + (abw.length ? `<div class="meldung">Experteneinstellungen aktiv: ${esc(abw.join(', '))}. <button id="bExpReset" style="margin-left:8px">Auf Standard zurücksetzen</button></div>` : '');
   if ($('#bExpReset')) $('#bExpReset').onclick = expertenZuruecksetzen;
-  $('#kpis').innerHTML = kpis(r).map(k => `<div class="kpi ${k.c || ''}"><div class="t">${k.t}</div><div class="v">${k.v}</div><div class="s">${k.s || ''}</div></div>`).join('');
+  $('#klartext').innerHTML = klartext(E, r, KAT).map(x => `<li class="${x.status}">${fett(x.text)}</li>`).join('');
+  $('#tabBestellung').textContent = r.mfh ? 'Bestellvorschlag' : 'Systempakete';
+  zeigeTab(TAB);
+  $('#kpis').innerHTML = kpis(r).map(k => `<div class="kpi ${k.c || ''}"><div class="t">${k.t}${info(k.g)}</div><div class="v">${k.v}</div><div class="s">${k.s || ''}</div></div>`).join('');
   $('#wpKarte').innerHTML = wpKarte(r);
   $('#pakete').innerHTML = paketeHtml(r, true);
   $('#mfhKarte').style.display = r.mfh ? '' : 'none';
@@ -1356,13 +1456,13 @@ function bivText(g) {
 }
 function kpis(r) {
   const g = r.gewaehlt, ks = [
-    {t: 'Gesamtheizlast QGES', v: f(r.qges, 2) + ' <small>kW</small>', s: `QH ${f(r.qh, 2)} + QTW ${f(r.qtw, 2)} + QSperr ${f(r.qsperr, 2)}`},
-    {t: 'Mindestleistung WP', v: f(r.mindestleistung, 2) + ' <small>kW</small>', s: {monovalent: '1,0 · QGES bei θe', monoenergetisch: '0,7 · QGES bei A-7 (Außenluft −7 °C)', hybrid: '0,3 · QH bei A-7 (−7 °C, GEG)'}[r.kriterium]}];
+    {g: 'qges', t: 'Gesamtheizlast QGES', v: f(r.qges, 2) + ' <small>kW</small>', s: `QH ${f(r.qh, 2)} + QTW ${f(r.qtw, 2)} + QSperr ${f(r.qsperr, 2)}`},
+    {g: 'mindest', t: 'Mindestleistung WP', v: f(r.mindestleistung, 2) + ' <small>kW</small>', s: {monovalent: '1,0 · QGES bei θe', monoenergetisch: '0,7 · QGES bei A-7 (Außenluft −7 °C)', hybrid: '0,3 · QH bei A-7 (−7 °C, GEG)'}[r.kriterium]}];
   if (g && g.moeglich) {
-    ks.push({t: 'Bivalenzpunkt', v: bivText(g), s: 'Schnitt mit Gebäudekennlinie', c: g.ok ? 'ok' : 'bad'});
-    ks.push({t: 'Leistung bei θe', v: f(g.q_nat, 2) + ' <small>kW</small>', s: 'Abdeckung ' + f(g.abdeckung * 100, 0) + ' %', c: g.abdeckung >= 1 ? 'ok' : 'warn'});
-    ks.push({t: 'Heizstab bei θe', v: f(g.heizstab_kw, 2) + ' <small>kW</small>', s: g.heizstab_max_kw != null ? 'verfügbar ' + f(g.heizstab_max_kw, 0) + ' kW' : 'bauseits', c: g.heizstab_kw <= 0 ? 'ok' : (g.heizstab_max_kw != null && g.heizstab_kw > g.heizstab_max_kw ? 'bad' : 'warn')});
-    ks.push({t: 'WP-Deckungsanteil', v: f(g.deckung * 100, 1) + ' <small>%</small>', s: 'VDI 4650 (' + (r.waermequelle === 'sole' ? 'Sole' : 'Luft') + '/Wasser, parallel)', c: g.deckung >= 0.98 ? 'ok' : 'warn'});
+    ks.push({g: 'biv', t: 'Bivalenzpunkt', v: bivText(g), s: 'Schnitt mit Gebäudekennlinie', c: g.ok ? 'ok' : 'bad'});
+    ks.push({g: 'qnat', t: 'Leistung bei θe', v: f(g.q_nat, 2) + ' <small>kW</small>', s: 'Abdeckung ' + f(g.abdeckung * 100, 0) + ' %', c: g.abdeckung >= 1 ? 'ok' : 'warn'});
+    ks.push({g: 'heizstab', t: 'Heizstab bei θe', v: f(g.heizstab_kw, 2) + ' <small>kW</small>', s: g.heizstab_max_kw != null ? 'verfügbar ' + f(g.heizstab_max_kw, 0) + ' kW' : 'bauseits', c: g.heizstab_kw <= 0 ? 'ok' : (g.heizstab_max_kw != null && g.heizstab_kw > g.heizstab_max_kw ? 'bad' : 'warn')});
+    ks.push({g: 'deckung', t: 'WP-Deckungsanteil', v: f(g.deckung * 100, 1) + ' <small>%</small>', s: 'VDI 4650 (' + (r.waermequelle === 'sole' ? 'Sole' : 'Luft') + '/Wasser, parallel)', c: g.deckung >= 0.98 ? 'ok' : 'warn'});
   }
   return ks;
 }
@@ -1479,6 +1579,28 @@ function legende(r) {
     <span><i style="border-color:var(--chart-ink)"></i>Gebäudekennlinie QGES</span>
     <span title="Normprüfpunkt nach EN 14511: Außenluft −7 °C. Bezugspunkt für die Mindestleistung (Excel-Werkzeug, GEG)."><i style="border-color:#e20015"></i>A-7 = Außenluft −7 °C (Prüfpunkt EN 14511)</span><span><i style="border-color:#f28c28;border-top-width:8px;opacity:.5"></i>Bivalenzpunkt</span>`;
 }
+// ------------------------------------------------------------------ Erklärungen (Klartext, Glossar, Reiter)
+const RECHENWEG = [
+  ['Heizlast QH', 'aus Vorgabe (DIN EN 12831), Wohnfläche × W/m², Jahresverbrauch (Excel-Blatt „Heizlast nach Verbrauch mit TWW“) oder Gebäudehülle.'],
+  ['Zuschläge → QGES', 'Warmwasser QTW aus Personen und Liter je Person (bzw. Nachheizzeit), Sperrzeit 2/4/6 h → +5/10/15 %.'],
+  ['Mindestleistung', 'nach Betriebsweise: monoenergetisch 0,7 · QGES bei A-7, monovalent QGES bei θe, GEG-Hybrid 0,3 · QH bei A-7.'],
+  ['Gebäudekennlinie', 'QGES bei θe, linear bis 0 kW an der Heizgrenze.'],
+  ['Gerätekurven', 'maximale und minimale Heizleistung je Gerät aus dem Excel-Werkzeug (Sole: Katalog), zwischen 35/45/55/65 °C Vorlauf interpoliert; Kaskaden addieren.'],
+  ['Bivalenzpunkt und Taktgrenze', 'Schnitt der Gerätekurve bzw. der Mindestleistung mit der Gebäudekennlinie.'],
+  ['Heizstab und Deckungsanteil', 'Heizstab = QGES − WP-Leistung bei θe; Jahres-Deckungsanteil nach VDI 4650 aus dem Bivalenzpunkt.'],
+  ['Empfehlung', 'kleinste Größe je Baureihe, die das Kriterium erfüllt; beim Mehrfamilienhaus die geprüfte Musterlösung.'],
+  ['Heizkurve und Anbindung', 'Vorlauf über der Außentemperatur (DIN EN 442), Rohrdimension der Verbindungsleitung (v ≤ 1 m/s, R ≤ 200 Pa/m), Erdsonden-Richtwert bei Sole.']];
+const GLOSSAR_TITEL = {qges: 'QGES', mindest: 'Mindestleistung', biv: 'Bivalenzpunkt', qnat: 'Leistung bei θe', heizstab: 'Heizstab', deckung: 'Deckungsanteil',
+  takt: 'Taktgrenze', a7: 'A-7', nat: 'θe', heizgrenze: 'Heizgrenze', kennlinie: 'Gebäudekennlinie', heizkurve: 'Heizkurve', scop: 'SCOP', kaskade: 'Kaskade'};
+const info = k => GLOSSAR[k] ? `<span class="info" tabindex="0" data-tip="${esc(GLOSSAR[k])}">?</span>` : '';
+const fett = t => esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+let TAB = (() => { try { return localStorage.getItem('wp_tab') || 'ueberblick'; } catch (e) { return 'ueberblick'; } })();
+function zeigeTab(t) {
+  TAB = t; try { localStorage.setItem('wp_tab', t); } catch (e) { /* */ }
+  $$('#ergTabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === t));
+  $$('#ergebnis .card[data-tab]').forEach(c => c.classList.toggle('aus', !c.dataset.tab.split(' ').includes(t)));
+}
+
 // Heizkurve (DIN EN 442) des maßgebenden Heizkreises mit max. Vorlauf der Wärmepumpe
 function heizkurveSvg(r, o) {
   const hk = r.heizkurve, g = r.gewaehlt;
@@ -1598,11 +1720,10 @@ function baueDruck() {
       <div class="dk-box"><div class="kopf">Gewählte Wärmepumpe</div><table>
         ${g ? tr('Außeneinheit', '<b>' + (g.n > 1 ? g.n + ' × ' : '') + esc(g.geraet) + '</b>') + tr('Bestell-Nr.', k.artnr || '–') + tr('Inneneinheit', ie ? esc(ie.typ) : '–') + (ie && ie.artnr ? tr('Bestell-Nr.', ie.artnr) : '') + tr('Bivalenzpunkt', bivText(g)) + tr('Abdeckung bei θe', g.moeglich ? f(g.abdeckung * 100, 0) + ' %' : '–') + (preise && k.uvp ? tr('UVP (netto)', euro(k.uvp * g.n + (ie && ie.uvp ? ie.uvp * (ie.ab_anzahl ? 1 : g.n) : 0))) : '') : tr('–', 'keine Auswahl')}
       </table></div></div>
-    ${g ? produktBilder(g, ie, 95) : ''}
+    ${g ? produktBilder(g, ie, 70) : ''}
+    <div class="dk-h2">Auf einen Blick</div><ul class="klartext dk-klar">${klartext(E, r, KAT).map(x => `<li class="${x.status}">${fett(x.text)}</li>`).join('')}</ul>
     <div class="dk-kpi"><h3>Kennzahlen auf einen Blick</h3><div class="g">${kp.map(([a, b]) => `<div><div class="t">${a}</div><div class="v">${b}</div></div>`).join('')}</div></div>
     ${meldungen ? `<div style="font-size:8.5pt">${meldungen}</div>` : ''}
-    <div class="dk-h2">Herleitung der Heizlast</div>
-    <table class="formel dk-tab">${herleitung(r)}</table>
     ${p.notiz ? `<div class="dk-h2">Notiz</div><p style="font-size:9pt">${esc(p.notiz)}</p>` : ''}
     ${fuss(1, n)}</div>`;
   h += `<div class="seite">${klein}<div class="dk-h">Leistungsdaten</div>
@@ -1614,10 +1735,12 @@ function baueDruck() {
     <table class="dk-tab">${kandidatenTabelle(r, preise, true)}</table>
     <div class="dk-h2">E-Heizer je Baugröße</div><div class="dk-tab">${eheizerHtml(r).replace('<table>', '<table class="dk-tab">')}</div>
     <div class="dk-tab">${vdiTabelle(r)}</div>${fuss(3, n)}</div>`;
-  h += `<div class="seite">${klein}<div class="dk-h">Anlagenschema und Anbindung</div>
+  h += `<div class="seite">${klein}<div class="dk-h">Anlagenschema, Anbindung und Rechenweg</div>
     ${schema(r, {breite: 760})}
     <p class="hint">Prinzipdarstellung – Zubehör, Speicher, Sicherheitstechnik und hydraulischer Abgleich sind in der Systemkonfiguration (SysCon) zu planen.</p>
     <div class="dk-h2">Warmwasser und Anbindung</div>${anbindungHtml(r)}
+    <div class="dk-h2">Herleitung der Heizlast</div>
+    <table class="formel dk-tab">${herleitung(r)}</table>
     ${fuss(4, n)}</div>`;
   if (r.mfh) h += `<div class="seite">${klein}<div class="dk-h">MFH-Bestellvorschlag (Musterlösung)</div>
     <div class="dk-tab">${mfhHtml(r, preise, true)}</div>${fuss(5, n)}</div>`;
@@ -1653,6 +1776,10 @@ function oeffnen(ev) {
 (function start() {
   let th = null; try { th = localStorage.getItem('wp_theme'); } catch (e) { /* */ }
   if (th === 'dark') { document.documentElement.dataset.theme = 'dark'; $('#bTheme').textContent = '☀'; }
+  $('#rechenweg').innerHTML = RECHENWEG.map(([a, b]) => `<li><b>${esc(a)}</b> – ${esc(b)}</li>`).join('');
+  $('#glossar').innerHTML = Object.keys(GLOSSAR).map(k => `<dt>${esc(GLOSSAR_TITEL[k] || k)}</dt><dd>${esc(GLOSSAR[k])}</dd>`).join('');
+  $$('.info[data-g]').forEach(el => { el.dataset.tip = GLOSSAR[el.dataset.g] || ''; el.tabIndex = 0; });
+  $$('#ergTabs button').forEach(b => b.onclick = () => zeigeTab(b.dataset.tab));
   bindeEingaben(); aktualisiere();
 })();
 </script>

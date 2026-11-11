@@ -281,3 +281,133 @@ HAFTUNG = ("Die Schnellauslegung dient der Produktvor- und Systemauswahl und ers
            "oder ein Planungsbüro auf Plausibilität, Aktualität, Richtigkeit und Vollständigkeit zu prüfen. "
            "Aufstellbedingungen, Einsatzgrenzen, R290-Sicherheitsbereiche und die elektrischen Anschlussbedingungen des "
            "Netzbetreibers sind zu beachten.")
+
+
+# ------------------------------------------------------------------------------------------------ Erklärungen
+# Glossar: kurze Erklärungen der Fachbegriffe (gleicher Text wie GLOSSAR in index.html, <script id="texte">)
+GLOSSAR = {
+    "qges": "Gesamtheizlast QGES: Leistung, die das Gebäude bei der Norm-Außentemperatur braucht – Heizung (QH) plus "
+            "Zuschlag für Warmwasser (QTW) und Sperrzeiten des Energieversorgers (QSperr).",
+    "mindest": "Mindestleistung der Wärmepumpe bei A-7 (Außenluft −7 °C): monoenergetisch 70 % von QGES (Heizstab "
+               "übernimmt den Rest an wenigen kalten Tagen), monovalent 100 % bei θe, GEG-Hybrid 30 % von QH.",
+    "biv": "Bivalenzpunkt: Außentemperatur, bis zu der die Wärmepumpe den Bedarf allein deckt. Darunter hilft der "
+           "Heizstab (monoenergetisch) bzw. der zweite Wärmeerzeuger. Je tiefer, desto besser.",
+    "qnat": "Leistung bei θe: Heizleistung der Wärmepumpe bei der Norm-Außentemperatur und dem gewählten Vorlauf; "
+            "Abdeckung = Anteil an QGES.",
+    "heizstab": "Heizstab bei θe: elektrische Zusatzleistung am kältesten Auslegungstag (QGES minus WP-Leistung). "
+                "Der E-Heizer der Inneneinheit liefert bis 9 kW.",
+    "deckung": "WP-Deckungsanteil: Anteil der Jahres-Heizwärme, den die Wärmepumpe selbst liefert (VDI 4650 aus dem "
+               "Bivalenzpunkt). Ab ca. 98 % ist der Heizstab im Jahr kaum relevant.",
+    "takt": "Taktgrenze: Oberhalb dieser Außentemperatur braucht das Gebäude weniger als die kleinste Leistung der "
+            "Wärmepumpe – sie schaltet dann ein und aus. Puffer bzw. ausreichend Wasservolumen beruhigen den Betrieb.",
+    "a7": "A-7: Prüfpunkt nach EN 14511 – Außenluft −7 °C. A-7/W55 = Leistung bei −7 °C Luft und 55 °C Vorlauf.",
+    "nat": "θe (Norm-Außentemperatur): tiefste Auslegungstemperatur am Standort nach DIN/TS 12831-1, aus der PLZ.",
+    "heizgrenze": "Heizgrenze: Außentemperatur, ab der nicht mehr geheizt wird (Neubau ca. 12 °C, Bestand ca. 15 °C). "
+                  "Dort endet die Gebäudekennlinie bei 0 kW.",
+    "kennlinie": "Gebäudekennlinie: Bedarf über der Außentemperatur – QGES bei θe, linear fallend bis 0 kW an der "
+                 "Heizgrenze. Wo die WP-Kurve darüber liegt, schafft die Wärmepumpe den Bedarf allein.",
+    "heizkurve": "Heizkurve: nötige Vorlauftemperatur je Außentemperatur. Bei milderem Wetter reicht ein niedrigerer "
+                 "Vorlauf – das steigert Effizienz (COP) und Leistung der Wärmepumpe.",
+    "scop": "SCOP: Jahresarbeitszahl nach EN 14825 (mittleres Klima) – Wärme je kWh Strom über das Jahr; bei 35 °C "
+            "(Fußbodenheizung) höher als bei 55 °C (Heizkörper).",
+    "kaskade": "Kaskade: mehrere Wärmepumpen über einen Kaskadenregler (HPC800i C, HPC 301 C) – mehr Leistung, feinere "
+               "Modulation und Redundanz.",
+}
+
+
+def klartext(e: dict, r: dict, katalog: dict) -> list[dict]:
+    """Auslegung in Sätzen erklärt (wie klartext() in index.html). Fett: **…**; Status: ok / warn / bad / ''."""
+    from .schema import zahl   # gleiche Rundung wie schemaZahl() in index.html
+
+    def z(x, d: int = 1) -> str:
+        return "–" if x is None else zahl(x, d)
+
+    def zt(x) -> str:
+        return "–" if x is None else z(x, 1).replace("-", "−")
+
+    out = []
+    qs = f"**{z(r['qges'], 1)} kW**: {z(r['qh'], 1)} kW Heizung"
+    if r["qtw"] > 0:
+        qs += f" + {z(r['qtw'], 1)} kW Warmwasser"
+    if r["qsperr"] > 0:
+        qs += f" + {z(r['qsperr'], 1)} kW Sperrzeit"
+    out.append({"text": f"Das Gebäude braucht bei der Norm-Außentemperatur {zt(r['nat'])} °C insgesamt {qs}.", "status": ""})
+    g = r.get("gewaehlt")
+    if not g:
+        out.append({"text": "Noch keine passende Wärmepumpe – Heizlast, Vorlauf oder Baureihen prüfen.", "status": "bad" if r["qges"] > 0 else ""})
+        return out
+    ie = inneneinheit(e, r, katalog)
+    woher = ("Aus der MFH-Musterlösung" if r.get("mfh_wp") else "Empfohlen") if not e["auswahl"].get("geraet") else "Gewählt"
+    out.append({"text": f"{woher}: **{(str(g['n']) + ' × ') if g['n'] > 1 else ''}{g['geraet']}**"
+                        + (f" mit {ie['typ']}" if ie else "") + ".", "status": ""})
+    if not g["moeglich"]:
+        out.append({"text": f"Nicht möglich: {g['grund']}.", "status": "bad"})
+        return out
+    art = g["bivalenz_art"]
+    if art == "unter":
+        out.append({"text": f"Die Wärmepumpe deckt den Bedarf allein – auch bei {zt(r['nat'])} °C (Abdeckung "
+                            f"**{z(g['abdeckung'] * 100, 0)} %**), kein Heizstab nötig.", "status": "ok"})
+    elif art == "punkt":
+        zu_viel = g["heizstab_max_kw"] is not None and g["heizstab_kw"] > g["heizstab_max_kw"] + 1e-9
+        t = (f"Die Wärmepumpe schafft den Bedarf allein bis **{zt(g['bivalenz'])} °C** (Bivalenzpunkt). Nur darunter hilft "
+             f"der Heizstab – bei {zt(r['nat'])} °C mit **{z(g['heizstab_kw'], 1)} kW**")
+        if g["heizstab_max_kw"] is not None:
+            t += f" (eingebaut {z(g['heizstab_max_kw'], 0)} kW)"
+        out.append({"text": t + ("; das reicht nicht – größere Wärmepumpe oder Kaskade wählen." if zu_viel else "."),
+                    "status": "bad" if zu_viel else ("ok" if g["ok"] else "warn")})
+    else:
+        out.append({"text": "Die Wärmepumpe reicht selbst an der Heizgrenze nicht – größere Wärmepumpe oder Kaskade wählen.", "status": "bad"})
+    krit = {"monovalent": "monovalent", "monoenergetisch": "monoenergetisch", "hybrid": "GEG-Hybrid"}[r["kriterium"]]
+    if g["ok"]:
+        out.append({"text": f"Damit ist die Auslegung **{krit}** erfüllt: gefordert {z(r['mindestleistung'], 1)} kW, die Wärmepumpe "
+                            f"liefert {z(g['q_a7'], 1)} kW bei {'B0' if r['waermequelle'] == 'sole' else 'A-7'}.", "status": "ok"})
+    else:
+        out.append({"text": f"Auslegung **{krit}** nicht erfüllt: {g['grund']}.", "status": "bad"})
+    en = r.get("energie")
+    t = f"Übers Jahr liefert die Wärmepumpe rund **{z(g['deckung'] * 100, 0)} %** der Wärme"
+    if en and en.get("scop"):
+        t += f", Strombedarf ca. **{z(en['strom_wp_kwh'] + en['strom_heizstab_kwh'], 0)} kWh/a** (SCOP ≈ {z(en['scop'], 2)})"
+    out.append({"text": t + ".", "status": "ok" if g["deckung"] >= 0.98 else "warn"})
+    if g.get("taktgrenze") is not None and g["taktgrenze"] < r["heizgrenze"]:
+        out.append({"text": f"Ab ca. **{zt(g['taktgrenze'])} °C** braucht das Gebäude weniger als die kleinste Leistung der "
+                            "Wärmepumpe – sie taktet dann; Puffer bzw. Wasservolumen einplanen.", "status": ""})
+    hk = r.get("heizkurve")
+    if hk:
+        p_ = hk["punkte"]
+        t = f"Vorlauf {z(r['vl'], 0)} °C bei {zt(r['nat'])} °C"
+        if "-7" in p_:
+            t += f", bei −7 °C ca. {z(p_['-7'], 0)} °C"
+        if "7" in p_:
+            t += f", bei +7 °C ca. {z(p_['7'], 0)} °C"
+        vmax = g.get("vl_max_geraet")
+        zu_hoch = vmax is not None and r["vl"] > vmax
+        out.append({"text": t + (f" – über dem max. Vorlauf der Wärmepumpe ({z(vmax, 0)} °C)." if zu_hoch
+                                 else " (Heizkurve) – je niedriger der Vorlauf, desto effizienter."), "status": "bad" if zu_hoch else ""})
+    v = r.get("mfh")
+    if v and v["auswahl"]:
+        z = v["auswahl"][0]["zelle"]
+        out.append({"text": f"MFH-Musterlösung {z['we']} WE / {z['kw']} kW: **{' · '.join(z['komponenten'])}**"
+                            + (f" – GAEB-Bestellvorschlag {z['vorlage']} liegt vor." if z.get("vorlage") else "."),
+                    "status": ""})
+    return out
+
+
+STATUS_ICON = {"ok": "✅", "warn": "⚠️", "bad": "❌", "": "•"}
+# KPI-Kachel → Glossar-Schlüssel (wie kpis() in index.html)
+KPI_GLOSSAR = {"Gesamtheizlast QGES": "qges", "Mindestleistung WP": "mindest", "Bivalenzpunkt": "biv", "Leistung bei θe": "qnat",
+               "Heizstab bei θe": "heizstab", "WP-Deckungsanteil": "deckung"}
+# Rechenweg in Schritten (wie RECHENWEG in index.html)
+RECHENWEG = [
+    ("Heizlast QH", "aus Vorgabe (DIN EN 12831), Wohnfläche × W/m², Jahresverbrauch (Excel-Blatt „Heizlast nach Verbrauch mit TWW“) "
+                    "oder Gebäudehülle."),
+    ("Zuschläge → QGES", "Warmwasser QTW aus Personen und Liter je Person (bzw. Nachheizzeit), Sperrzeit 2/4/6 h → +5/10/15 %."),
+    ("Mindestleistung", "nach Betriebsweise: monoenergetisch 0,7 · QGES bei A-7, monovalent QGES bei θe, GEG-Hybrid 0,3 · QH bei A-7."),
+    ("Gebäudekennlinie", "QGES bei θe, linear bis 0 kW an der Heizgrenze."),
+    ("Gerätekurven", "maximale und minimale Heizleistung je Gerät aus dem Excel-Werkzeug (Sole: Katalog), "
+                     "zwischen 35/45/55/65 °C Vorlauf interpoliert; Kaskaden addieren."),
+    ("Bivalenzpunkt und Taktgrenze", "Schnitt der Gerätekurve bzw. der Mindestleistung mit der Gebäudekennlinie."),
+    ("Heizstab und Deckungsanteil", "Heizstab = QGES − WP-Leistung bei θe; Jahres-Deckungsanteil nach VDI 4650 aus dem Bivalenzpunkt."),
+    ("Empfehlung", "kleinste Größe je Baureihe, die das Kriterium erfüllt; beim Mehrfamilienhaus die geprüfte Musterlösung."),
+    ("Heizkurve und Anbindung", "Vorlauf über der Außentemperatur (DIN EN 442), Rohrdimension der Verbindungsleitung "
+                                "(v ≤ 1 m/s, R ≤ 200 Pa/m), Erdsonden-Richtwert bei Sole."),
+]
