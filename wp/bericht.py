@@ -12,6 +12,7 @@ from pathlib import Path
 
 from fpdf import FPDF
 
+from . import daten as D
 from . import rechnen as R
 from . import schema as S
 from . import texte as T
@@ -511,6 +512,31 @@ def pdf_bytes(e: dict, r: dict, daten: dict, katalog: dict) -> bytes:
             pdf.schrift_(6.8, False, HELL)
             pdf.cell(0, 4, pdf.t(f"Bivalenzpunkt {T.ft(g['bivalenz'])} °C: αH,a parallel ≈ {T.f(vb['alpha_parallel'], 2)}, "
                                  f"alternativ ≈ {T.f(vb['alpha_alternativ'], 2)} (linear interpoliert)."), new_x="LMARGIN", new_y="NEXT")
+    # Passende Systempakete (BOPA)
+    if g:
+        pl = T.pakete_fuer(r, ie, D.pakete()) if g["n"] == 1 else []
+        pdf.h2("Passende Systempakete (BOPA)")
+        if g["n"] > 1:
+            pdf.schrift_(7.4, False, GRAU)
+            pdf.cell(0, 4.5, pdf.t("Für Kaskaden gibt es keine Komplettpakete – Zubehör und Speicher im SysCon planen."), new_x="LMARGIN", new_y="NEXT")
+        elif not pl:
+            pdf.schrift_(7.4, False, GRAU)
+            pdf.cell(0, 4.5, pdf.t(f"Für {g['geraet']} sind im Produktkatalog keine Systempakete aufgeführt."), new_x="LMARGIN", new_y="NEXT")
+        else:
+            kopf = ["Paket", "Variante", "WW-Speicher", "Puffer", "Bestell-Nr."] + (["UVP"] if preise else [])
+            breiten = [26, 70, 22, 18, 26] + ([22] if preise else [])
+            zeilen = [[p_["paket"] + (" ★" if p_["passt"] else ""), p_["variante"], f"{p_['ww_l']} l" if p_["ww_l"] else "–",
+                       f"{p_['puffer_l']} l" if p_["puffer_l"] else "–", p_["artnr"]] + ([T.euro(p_["uvp"])] if preise else []) for p_ in pl]
+            pdf.tabelle(kopf, zeilen, breiten, rechts=(2, 3, 4, 5), fett=lambda z: z[0].endswith("★"))
+            pdf.schrift_(6.8, False, HELL)
+            gruppen = []
+            for p_ in pl:
+                if p_["titel"] not in [x[0] for x in gruppen]:
+                    gruppen.append((p_["titel"], p_["inhalt"]))
+            for t_, inh in gruppen:
+                pdf.multi_cell(184, 3.5, pdf.t(f"{t_}: {' · '.join(inh)}"), new_x="LMARGIN", new_y="NEXT")
+            pdf.multi_cell(184, 3.5, pdf.t("★ passt zur gewählten Inneneinheit. Quelle: Produktkatalog Klima-, Lüftungs- und "
+                                           "Wärmepumpen-Sortiment, März 2026."), new_x="LMARGIN", new_y="NEXT")
     kacheln = T.anbindung(e, r)
     if kacheln:
         pdf.h2("Warmwasser und Anbindung")

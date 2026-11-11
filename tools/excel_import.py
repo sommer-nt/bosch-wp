@@ -213,13 +213,20 @@ def einbetten(daten: dict, klima: dict) -> None:
     block = ("\nconst GERAETE_DATEN = " + json.dumps(daten, ensure_ascii=False, separators=(",", ":")) +
              ";\nconst KATALOG_DATEN = " + json.dumps(_katalog(), ensure_ascii=False, separators=(",", ":")) +
              ";\nconst KLIMA_DATEN = " + json.dumps(klima, ensure_ascii=False, separators=(",", ":")) +
-             ";\nconst BILDER_DATEN = " + json.dumps(_bilder(), separators=(",", ":")) + ";\n")
+             ";\nconst BILDER_DATEN = " + json.dumps(_bilder(), separators=(",", ":")) +
+             ";\nconst PAKETE_DATEN = " + json.dumps(_pakete(), ensure_ascii=False, separators=(",", ":")) + ";\n")
     html.write_text(text[:i] + block + text[j:], encoding="utf-8")
 
 
 def _katalog() -> dict:
     """Katalogdaten (Bestell-Nr., UVP, technische Daten) – von Hand gepflegt in daten/katalog.json."""
     return json.loads((DATEN / "katalog.json").read_text(encoding="utf-8"))
+
+
+def _pakete() -> dict:
+    """Systempakete (daten/pakete.json, aus tools/pakete_import.py)."""
+    datei = DATEN / "pakete.json"
+    return json.loads(datei.read_text(encoding="utf-8")) if datei.exists() else {"pakete": [], "zubehoer": {}, "zubehoerpakete": []}
 
 
 def _bilder() -> dict:

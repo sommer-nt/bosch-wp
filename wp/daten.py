@@ -19,6 +19,12 @@ def katalog() -> dict:
 
 
 @lru_cache(maxsize=None)
+def pakete() -> dict:
+    datei = DATEN / "pakete.json"
+    return json.loads(datei.read_text(encoding="utf-8")) if datei.exists() else {"pakete": [], "zubehoer": {}, "zubehoerpakete": []}
+
+
+@lru_cache(maxsize=None)
 def klima() -> dict:
     return json.loads((DATEN / "klima.json").read_text(encoding="utf-8"))
 

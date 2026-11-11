@@ -216,6 +216,25 @@ def min_hinweis(r: dict) -> str:
     return quelle
 
 
+def pakete_fuer(r: dict, ie: dict | None, pk: dict) -> list[dict]:
+    """Systempakete zur gewählten Wärmepumpe (Einzelgerät): passende Inneneinheit zuerst, dann nach UVP.
+
+    Gleiche Auswahl wie paketeFuer() in index.html.
+    """
+    g = r.get("gewaehlt")
+    if not g or g["n"] > 1:
+        return []
+    typ = ie["typ"] if ie else None
+    liste = [dict(p, passt=bool(typ and p.get("inneneinheit") == typ)) for p in pk["pakete"] if p["geraet"] == g["geraet"]]
+    return sorted(liste, key=lambda p: (not p["passt"], p["uvp"], p["paket"]))
+
+
+def zubehoer_fuer(r: dict, pk: dict) -> list[dict]:
+    """Empfohlene Zubehörpakete und Zubehöre der Baureihe (aus dem Paketteil des Katalogs)."""
+    g = r.get("gewaehlt")
+    return pk["zubehoer"].get(g["serie"], []) if g else []
+
+
 def anbindung(e: dict, r: dict) -> list[tuple[str, str, str]]:
     """Kacheln (Titel, Wert, Zusatz) „Warmwasser & Anbindung“ wie index.html."""
     tw, ltg, er, k = r["tww"], r.get("leitung"), r.get("erdreich"), []

@@ -289,3 +289,35 @@ def test_schema_ohne_ueberschneidungen():
     out = subprocess.run(["node", str(ROOT / "tools" / "schema_pruefen.js"), str(ROOT / "index.html")],
                          capture_output=True, text=True, timeout=120)
     assert out.returncode == 0, out.stdout + out.stderr
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="node nicht installiert")
+def test_pakete_python_gleich_html(tmp_path):
+    """Systempakete: gleiche Auswahl und Reihenfolge in Python (texte.pakete_fuer) und HTML (paketeFuer)."""
+    from wp import texte as T
+    faelle = []
+    for aend in ({}, {"heizlast": {"vorgabe_kw": 6.3}}, {"auswahl": {"geraet": "CS8800iAW 13 O-T", "anzahl": 1, "inneneinheit": "AWMBi D"}},
+                 {"auswahl": {"geraet": "CS5800/6800iAW 7 OR-S", "anzahl": 1, "inneneinheit": "CS6800iAW 12 M"}},
+                 {"waermequelle": "sole", "auslegung": "monovalent"}, {"heizlast": {"vorgabe_kw": 95}}):
+        e = _mische(P.neu(), aend)
+        r = json.loads(json.dumps(rechne(e)))
+        ie = T.inneneinheit(e, r, D.katalog())
+        faelle.append({"r": r, "ie": ie, "py": [p["paket"] + str(p["passt"]) for p in T.pakete_fuer(r, ie, D.pakete())]})
+    datei = tmp_path / "p.json"
+    datei.write_text(json.dumps(faelle, ensure_ascii=False), encoding="utf-8")
+    skript = tmp_path / "p.js"
+    skript.write_text("""
+const fs = require('fs'), vm = require('vm');
+const html = fs.readFileSync(process.argv[2], 'utf8');
+const block = id => html.match(new RegExp('<script id="' + id + '">([\\\\s\\\\S]*?)</script>'))[1];
+const ctx = {}; vm.createContext(ctx);
+vm.runInContext(block('daten') + ';this.PAKETE_DATEN=PAKETE_DATEN;', ctx);
+const src = html.match(/\\/\\/ Systempakete zur gewählten Wärmepumpe[\\s\\S]*?\\n}\\n/)[0];
+vm.runInContext(src + ';this.paketeFuer=paketeFuer;', ctx);
+const f = JSON.parse(fs.readFileSync(process.argv[3], 'utf8'));
+process.stdout.write(JSON.stringify(f.map(x => ctx.paketeFuer(x.r, x.ie).map(p => p.paket + (p.passt ? 'True' : 'False')))));
+""", encoding="utf-8")
+    js = json.loads(subprocess.run(["node", str(skript), str(ROOT / "index.html"), str(datei)], capture_output=True, text=True, check=True).stdout)
+    for f_, j in zip(faelle, js):
+        assert f_["py"] == j
+    assert any(faelle[1]["py"]) and not faelle[5]["py"]          # EFH mit Paketen, Kaskade ohne

@@ -54,6 +54,15 @@ Lastprofil/Nachheizzeit, Kaltwassertemperatur, Sperrzeit, Betriebsweise, Spreizu
 9. **Mindestleistung (Modulation):** Herstellerdaten unverändert; Stufen (z. B. CS3800 O-S, Temperaturbänder) werden
    nicht geglättet und im Diagramm erläutert. In der Kaskade gilt die Mindestleistung eines Geräts.
 
+## Systempakete (BOPA)
+
+Zur gewählten Wärmepumpe (Einzelgerät) zeigt das Tool die fertigen Systempakete aus dem Produktkatalog
+„Klima-, Lüftungs- und Wärmepumpen-Sortiment“ (März 2026): Paket, Variante, Warmwasser-/Pufferspeicher, Bestell-Nr.,
+UVP (im Ausdruck nur „intern“) und Paketinhalt; Pakete zur gewählten Inneneinheit stehen oben (★). Dazu das
+empfohlene Zubehör der Baureihe (Heizkreispakete, Nachfüllpaket, MAG, Kabel …). 107 Pakete für CS3800, CS5800/6800,
+CS8800, CS7000, CS7400 und CS7800i LW; für CS5001, Supraeco T und Kaskaden gibt es keine Pakete.
+Übernahme: `python tools/pakete_import.py KATALOG.pdf`, danach `python tools/excel_import.py --nur-einbetten`.
+
 ## Anlagenschema
 
 `wp/schema.py` und `schemaSvg()` in `index.html` erzeugen dasselbe SVG (Test vergleicht beide); das PDF bettet es als

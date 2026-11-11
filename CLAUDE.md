@@ -16,7 +16,8 @@
   und zeichnen identisch. Rechenweg in `wp/rechnen.py` und `<script id="rechenkern">`, Anlagenschema in
   `wp/schema.py` und `<script id="schemasvg">` immer gemeinsam ändern; Tests vergleichen beide über node.
 - Daten: `tools/excel_import.py` (Excel-Werkzeug „WP-Auslegung_S“), `daten/katalog.json` von Hand
-  (Gesamtkatalog), Bilder mit `tools/bilder_import.py`; danach `python tools/excel_import.py --nur-einbetten`.
+  (Gesamtkatalog), Bilder mit `tools/bilder_import.py`, Systempakete mit `tools/pakete_import.py` (Produktkatalog
+  Klima-/Lüftungs-/WP-Sortiment); danach `python tools/excel_import.py --nur-einbetten`.
 - Eigenes Projekt neben Bosch Flow und Bosch Speicher; „Entwickelt von Daniel Sommer · HC/SDE3-PSD“ bleibt sichtbar.
 - Betrieb: eigener Ubuntu-Server mit Docker und nginx, siehe `deploy/ANLEITUNG.md` (wp.sommer-nt.de).
 - Vor jedem Push: `python -m pytest -q` muss grün sein.

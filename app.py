@@ -355,6 +355,43 @@ with rechts:
                    f"{k.get('lw_db', '–')} dB(A) · {k.get('masse', '')} · UVP (intern): {T.euro(k['uvp'] * g['n']) if k.get('uvp') else '–'}"
                    + (f" + {T.euro(ie['uvp'])}" if ie and ie.get("uvp") else ""))
 
+    # ---- Passende Systempakete (BOPA) – wie index.html
+    if g:
+        PK = D.pakete()
+        st.markdown("**Passende Systempakete (BOPA)** – Komplettpaket mit Speicher und Zubehör · Preisvorteil 6 %")
+        if g["n"] > 1:
+            st.caption("Für Kaskaden gibt es keine Komplettpakete – Zubehör und Speicher im SysCon planen.")
+        else:
+            pl = T.pakete_fuer(r, ie, PK)
+            if not pl:
+                st.caption(f"Für {g['geraet']} sind im Produktkatalog keine Systempakete aufgeführt.")
+            if pl and r["tww"]["system"] == "friwa" and r["tww"]["aktiv"]:
+                st.caption("Hinweis: Die Pakete enthalten Warmwasserspeicher – für eine Frischwasserstation im SysCon planen.")
+            titel = []
+            for p_ in pl:
+                if p_["titel"] not in titel:
+                    titel.append(p_["titel"])
+            for t_ in titel:
+                gruppe = [p_ for p_ in pl if p_["titel"] == t_]
+                st.markdown(f"<div style='font-size:12px;font-weight:700;color:#4a5866;text-transform:uppercase;margin-top:6px'>{t_}</div>",
+                            unsafe_allow_html=True)
+                st.dataframe([{"Paket": p_["paket"] + (" ★" if p_["passt"] else ""), "Variante": p_["variante"],
+                               "WW-Speicher [l]": p_["ww_l"], "Puffer [l]": p_["puffer_l"], "Bestell-Nr.": p_["artnr"],
+                               "UVP [€]": p_["uvp"]} for p_ in gruppe], hide_index=True, width="stretch")
+                with st.expander("Paketinhalt"):
+                    st.markdown("\n".join("- " + x_ for x_ in gruppe[0]["inhalt"]))
+            if pl:
+                st.caption(f"★ passt zur gewählten Inneneinheit{' (' + ie['typ'] + ')' if ie else ''}. "
+                           "Quelle: Produktkatalog Klima-, Lüftungs- und Wärmepumpen-Sortiment, März 2026.")
+            zub = T.zubehoer_fuer(r, PK)
+            if zub:
+                with st.expander(f"Empfohlenes Zubehör zur Baureihe ({len(zub)})"):
+                    st.dataframe([{"Zubehör": z_["text"], "Bestell-Nr.": z_["artnr"], "UVP [€]": z_["uvp"]} for z_ in zub],
+                                 hide_index=True, width="stretch")
+                    hk_ = T.heizkreis_liste(E)
+                    st.caption(f"Heizkreise laut Eingabe: {sum(not x['gemischt'] for x in hk_)} ungemischt, "
+                               f"{sum(x['gemischt'] for x in hk_)} gemischt – Heizkreispaket BOPA HK HP je Heizkreis berücksichtigen.")
+
     if r.get("kennlinien"):
         kl = r["kennlinien"]
         fig = go.Figure()
