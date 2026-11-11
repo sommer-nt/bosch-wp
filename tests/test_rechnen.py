@@ -100,10 +100,11 @@ def test_empfehlung_efh_wie_hpa():
 
 
 def test_kaskaden_wie_excel_navigation():
-    """CS3800 und CS7400 sind nicht kaskadierbar; CS5800/6800, CS8800, CS7000 als 2er-Kaskade, CS5001 bis 14."""
+    """CS3800 und CS7400 sind nicht kaskadierbar; CS5800/6800, CS7000 als 2er-Kaskade, CS8800 mit HPC800i C bis 3
+    (MFH-Musterlösungen), CS5001 bis 14."""
     km = {s["id"]: s["kaskade_max"] for s in D.geraete()["serien"]}
     assert km["CS3800"] == 1 and km["CS7400"] == 1
-    assert km["CS5800"] == km["CS8800"] == km["CS7000"] == 2 and km["CS5001"] == 14
+    assert km["CS5800"] == km["CS7000"] == 2 and km["CS8800"] == 3 and km["CS5001"] == 14
     r = rechne(e_mit(heizlast__vorgabe_kw=14, serien=["CS3800"]))
     assert all(c["n"] == 1 for c in r["kandidaten"])
 
@@ -331,4 +332,6 @@ def test_prototyp_aktuell_und_ohne_preise():
     spec.loader.exec_module(mod)
     soll = mod.baue()
     assert (ROOT / "prototyp.html").read_text(encoding="utf-8") == soll, "python tools/prototyp.py ausführen"
-    assert '"uvp":null' in soll and not __import__("re").search(r'"uvp":\s*\d', soll)
+    for feld in ("uvp", "ep", "summe"):   # keine Preise im Prototyp (auch nicht im MFH-Bestellvorschlag)
+        assert not __import__("re").search(rf'"{feld}":\s*\d', soll), feld
+    assert '"uvp":null' in soll

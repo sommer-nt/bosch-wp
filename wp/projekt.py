@@ -11,6 +11,7 @@ STANDARD: dict = {
     "experte": False,
     "projekt": {"name": "", "kunde": "", "plz": "", "ort": "", "bearbeiter": "", "datum": "", "notiz": ""},
     "gebaeude": {"typ": "sanierung"},
+    "mfh": {"art": "efh", "we": 8, "ww": "friwa", "zelle": ""},
     "klima": {"nat": -12.0, "heizgrenze": 15.0, "innen": 20.0},
     "heizlast": {
         "methode": "vorgabe", "vorgabe_kw": 10.0,

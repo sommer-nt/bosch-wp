@@ -3,7 +3,7 @@
     python tools/prototyp.py
 
 Gleicher Rechenweg und gleiche Darstellung wie index.html, aber
-- ohne Preise (UVP aus Katalog- und Paketdaten entfernt, Spalten ausgeblendet),
+- ohne Preise (UVP aus Katalog- und Paketdaten, Einzelpreise und Nettosummen der MFH-Bestellvorschläge entfernt),
 - ohne Expertenmodus (Standardwerte fest), ohne Excel-Vergleichstabelle VDI 4650 und ohne Zubehörliste,
 - deutlich als „Prototyp“ gekennzeichnet (Kopf, Ausdruck, Fußzeile) und mit eigener Browser-Sicherung.
 Nach jeder Änderung an index.html neu erzeugen (Test prüft, dass prototyp.html aktuell ist).
@@ -32,6 +32,8 @@ JS = r"""
   const kandidatenOrig = kandidatenTabelle, paketeOrig = paketeHtml, druckOrig = baueDruck;
   kandidatenTabelle = (r, preise, nurPassend) => kandidatenOrig(r, false, nurPassend);
   paketeHtml = (r, preise, druck) => paketeOrig(r, false, druck);
+  const mfhOrig = mfhHtml;
+  mfhHtml = (r, preise, druck) => mfhOrig(r, false, druck);
   vdiTabelle = () => '';
   const wpKarteOrig = wpKarte;
   wpKarte = r => wpKarteOrig(r).replace(/<div>UVP \(intern\)<b>[\s\S]*?<\/b><\/div>/, '');
@@ -49,8 +51,10 @@ JS = r"""
 
 
 def ohne_preise(daten: str) -> str:
-    """Alle UVP-Werte in eingebetteten JSON-Daten auf null setzen."""
-    return re.sub(r'"uvp":\s*[\d.]+', '"uvp":null', daten)
+    """Alle Preise in eingebetteten JSON-Daten auf null setzen (UVP, MFH-Einzelpreise und Nettosummen)."""
+    for feld in ("uvp", "ep", "summe"):
+        daten = re.sub(rf'"{feld}":\s*[\d.]+', f'"{feld}":null', daten)
+    return daten
 
 
 def baue() -> str:

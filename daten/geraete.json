@@ -29,8 +29,8 @@
    "bauart": "Monoblock",
    "kaeltemittel": "R290",
    "eheizer_kw": 9,
-   "kaskade_max": 2,
-   "hinweis": "E-Heizer bis 9 kW, 2er-Kaskade."
+   "kaskade_max": 3,
+   "hinweis": "E-Heizer bis 9 kW je Gerät. Kaskade mit Kaskadenregler HPC800i C (MFH-Musterlösungen bis 3 Geräte)."
   },
   {
    "id": "CS5001",

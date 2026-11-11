@@ -13,6 +13,7 @@ from pathlib import Path
 from fpdf import FPDF
 
 from . import daten as D
+from . import mfh as M
 from . import rechnen as R
 from . import schema as S
 from . import texte as T
@@ -281,6 +282,74 @@ def diagramm(pdf: Ausdruck, r: dict, daten: dict, x: float, y: float, w: float, 
         pdf.cell(40, 3.5, pdf.t("Taktgrenze ≈ " + T.ft(g["taktgrenze"]) + " °C"), align="C")
 
 
+def heizkurve(pdf: Ausdruck, r: dict, x: float, y: float, w: float, h: float):
+    """Heizkurve (DIN EN 442) wie heizkurveSvg() in index.html."""
+    import math
+    hk, g = r.get("heizkurve"), r.get("gewaehlt")
+    if not hk:
+        return
+    L, Rr, B = 12, 28, 10
+    t0, t1 = math.floor(hk["t"][0]) - 1, math.ceil(hk["t"][-1]) + 1
+    vmax = g.get("vl_max_geraet") if g else None
+    ymin, ymax = 20, math.ceil(max(hk["vl"] + [vmax or 0]) / 10) * 10 + 5
+    X = lambda t: x + L + (t - t0) / (t1 - t0) * (w - L - Rr)  # noqa: E731
+    Y = lambda v: y + h - B - (v - ymin) / (ymax - ymin) * (h - B - 3)  # noqa: E731
+    pdf.set_line_width(0.15)
+    pdf.set_draw_color(*GRID)
+    pdf.schrift_(6.5, False, GRAU)
+    v = ymin
+    while v <= ymax:
+        pdf.line(X(t0), Y(v), X(t1), Y(v))
+        pdf.set_xy(x, Y(v) - 2)
+        pdf.cell(L - 2, 4, str(v), align="R")
+        v += 10
+    ts = 4 if t1 - t0 > 30 else 2
+    t = math.ceil(t0 / ts) * ts
+    while t <= t1:
+        pdf.line(X(t), Y(ymin), X(t), Y(ymax))
+        pdf.set_xy(X(t) - 5, Y(ymin) + 1)
+        pdf.cell(10, 4, pdf.t(str(t).replace("-", "−")), align="C")
+        t += ts
+    pdf.set_xy(X(t0), Y(ymin) + 5)
+    pdf.cell(X(t1) - X(t0), 4, pdf.t("Außentemperatur in °C"), align="C")
+    with pdf.rotation(90, x + 2, y + (h - B) / 2):
+        pdf.set_xy(x + 2 - 20, y + (h - B) / 2 - 2)
+        pdf.cell(40, 4, pdf.t("Temperatur in °C"), align="C")
+    enden = []
+    if vmax:
+        pdf.set_draw_color(*HELL)
+        pdf.set_dash_pattern(1.6, 1.0)
+        pdf.line(X(t0), Y(vmax), X(t1), Y(vmax))
+        pdf.set_dash_pattern()
+        enden.append((vmax, f"max. Vorlauf WP {T.f(vmax, 0)} °C", HELL, False))
+    pdf.set_draw_color(*BLAU)
+    pdf.set_line_width(0.4)
+    pdf.set_dash_pattern(1.6, 1.0)
+    pdf.polyline([(X(t_), Y(v_)) for t_, v_ in zip(hk["t"], hk["rl"])])
+    pdf.set_dash_pattern()
+    enden.append((hk["rl"][0], "Rücklauf", BLAU, False))
+    pdf.set_draw_color(*ROT)
+    pdf.set_line_width(0.7)
+    pdf.polyline([(X(t_), Y(v_)) for t_, v_ in zip(hk["t"], hk["vl"])])
+    enden.append((hk["vl"][0], "Vorlauf", ROT, True))
+    for t_, v_ in hk["punkte"].items():
+        pdf.set_fill_color(*ROT)
+        pdf.set_draw_color(255, 255, 255)
+        pdf.set_line_width(0.3)
+        pdf.ellipse(X(float(t_)) - 1.1, Y(v_) - 1.1, 2.2, 2.2, style="DF")
+        pdf.schrift_(6.5)
+        pdf.set_xy(X(float(t_)) + 1.5, Y(v_) - 5)
+        pdf.cell(26, 3.5, pdf.t(f"A{t_}: {T.f(v_, 1)} °C"))
+    yl = -1e9
+    for qv, txt, farbe, fett in sorted(enden, key=lambda e: -e[0]):
+        yy = max(Y(qv) - 1.6, yl + 3.4)
+        yl = yy
+        pdf.schrift_(6.5, fett, farbe)
+        pdf.set_xy(X(t1) + 1.5, yy)
+        pdf.cell(Rr - 2, 3.2, pdf.t(txt))
+    pdf.set_line_width(0.3)
+
+
 # ------------------------------------------------------------------------------------------------ Schema
 def schema(pdf: Ausdruck, e: dict, r: dict, ie: dict | None, x: float, y: float, w: float) -> float:
     """Anlagenschema: dieselbe SVG-Zeichnung wie index.html (wp/schema.py), als Vektorgrafik eingebettet."""
@@ -295,6 +364,67 @@ def schema(pdf: Ausdruck, e: dict, r: dict, ie: dict | None, x: float, y: float,
 
 
 # ------------------------------------------------------------------------------------------------ Bericht
+def mfh_seite(pdf: Ausdruck, e: dict, r: dict, v: dict, preise: bool) -> None:
+    """MFH-Bestellvorschlag (Musterlösung) wie mfhHtml(r, preise, druck) in index.html."""
+    MD = D.mfh()
+    a_ = MD["annahmen"][v["tabelle"]]
+    pdf.add_page()
+    pdf.titel("MFH-Bestellvorschlag (Musterlösung)")
+    pdf.schrift_(7.6, False, GRAU)
+    pdf.multi_cell(184, 3.8, pdf.t(f"{'Neubau' if v['tabelle'] == 'neubau' else 'Bestand'} · {MD['systeme'][v['system']]} · "
+                                   f"{M.WW_TEXT[v['ww']]} · {v['we']} WE · Heizlast QH {T.f(v['qh'], 1)} kW · Musterannahmen: "
+                                   f"{a_['flaeche_we']} m² und {T.f(a_['personen_we'], 1)} Personen je WE, {a_['spez_w_m2']} W/m²"),
+                   new_x="LMARGIN", new_y="NEXT")
+    if not v["zellen"]:
+        pdf.multi_cell(184, 3.8, pdf.t("Für diese Kombination gibt es noch keine Musterlösung – Anlage im SysCon planen."),
+                       new_x="LMARGIN", new_y="NEXT")
+        return
+    if v["ausserhalb"]:
+        pdf.multi_cell(184, 3.8, pdf.t("Heizlast bzw. Wohneinheiten liegen über den Musterlösungen – größte Musterlösung angezeigt, "
+                                       "Anlage individuell planen (SysCon)."), new_x="LMARGIN", new_y="NEXT")
+
+    def kurz(txt: str, breite: float) -> str:
+        txt = pdf.t(txt)
+        if pdf.get_string_width(txt) <= breite - 1.5:
+            return txt
+        while txt and pdf.get_string_width(txt + "...") > breite - 1.5:
+            txt = txt[:-1]
+        return txt.rstrip() + "..."
+
+    for a in v["auswahl"]:
+        z = a["zelle"]
+        pdf.h2(f"{z.get('erzeuger') or 'Monoenergetisch'} · {z['we']} WE / {z['kw']} kW" + (f" · {z['variante']}" if z.get("variante") else ""))
+        pdf.schrift_(8.4, True)
+        pdf.multi_cell(184, 4.2, pdf.t(" · ".join(z["komponenten"]) + (f"   (Summe netto {T.euro(z['summe'])})" if preise else "")),
+                       new_x="LMARGIN", new_y="NEXT")
+        pdf.schrift_(7, False, GRAU)
+        pdf.multi_cell(184, 3.5, pdf.t(f"Muster-Heizlast {z['we']} WE · {a_['flaeche_we']} m² · {a_['spez_w_m2']} W/m² = "
+                                       f"{T.f(a['muster_qh'], 1)} kW · Prüfung mit Ihren Eingaben: {M.pruef_text(a, r)}"),
+                       new_x="LMARGIN", new_y="NEXT")
+        vo = MD["vorlagen"].get(z.get("vorlage") or "")
+        if not vo:
+            pdf.multi_cell(184, 3.5, pdf.t("Für diese Musterlösung liegt noch kein GAEB-Bestellvorschlag vor – Zubehör im SysCon ergänzen."),
+                           new_x="LMARGIN", new_y="NEXT")
+            continue
+        pos = M.positionen(vo, MD["langtexte"], v["we"])
+        pdf.multi_cell(184, 3.5, pdf.t(f"Bestellvorschlag {vo['nr']} ({vo['titel']}, {vo['datum']})"), new_x="LMARGIN", new_y="NEXT")
+        kopf = ["Pos.", "Menge", "Bestell-Nr.", "Bezeichnung", "Art"] + (["EP", "GP"] if preise else [])
+        breiten = [9, 13, 19, 90 if preise else 116, 19 if preise else 27] + ([17, 17] if preise else [])
+        pdf.schrift_(7.6)
+        zeilen = [[f"{int(p_['oz'][:2])}.{int(p_['oz'][2:])}", f"{T.f(p_['menge'], 0)} {p_['einheit']}", p_["artnr"] or "–",
+                   kurz(p_["text"], breiten[3]), kurz(M.art_text(p_).replace("Grundposition", "Grund").replace("Alternative", "Altern."), breiten[4])]
+                  + ([T.euro2(p_["ep"]), T.euro2(p_["gp"])] if preise else []) for p_ in pos]
+        pdf.tabelle(kopf, zeilen, breiten, rechts=(1, 5, 6))
+        if preise:
+            pdf.schrift_(8, True)
+            pdf.cell(184, 5, pdf.t(f"Summe Grund- und Normalpositionen: {T.euro2(M.summe(pos))} (ohne Alternativen und Bedarfspositionen)"),
+                     new_x="LMARGIN", new_y="NEXT")
+    pdf.schrift_(6.8, False, HELL)
+    pdf.multi_cell(184, 3.4, pdf.t("Alternativen ersetzen die Grundposition darüber; Bedarfspositionen nur bei Bedarf. Musterlösungen ersetzen "
+                                   "keine Fachplanung; Hydraulik, Speicher und Sicherheitstechnik im SysCon prüfen."), new_x="LMARGIN", new_y="NEXT")
+    pdf.add_page()
+
+
 def pdf_bytes(e: dict, r: dict, daten: dict, katalog: dict) -> bytes:
     p = e["projekt"]
     datum = ".".join(reversed((p.get("datum") or date.today().isoformat()).split("-")))
@@ -412,6 +542,17 @@ def pdf_bytes(e: dict, r: dict, daten: dict, katalog: dict) -> bytes:
         y = pdf.get_y() + 1
         diagramm(pdf, r, daten, 13, y, 184, 92)
         pdf.set_y(y + 96)
+    if r.get("heizkurve"):
+        hk = r["heizkurve"]
+        pdf.h2("Heizkurve (DIN EN 442)")
+        pdf.schrift_(6.8, False, GRAU)
+        pdf.cell(0, 4, pdf.t(f"Maßgebend: {T.HK_TYP.get(hk['typ'], hk['typ'])} (n = {T.f(hk['exponent'], 1)}, Spreizung {T.f(hk['spreizung'], 0)} K) · "
+                             f"Vorlauf sinkt bei milderen Außentemperaturen – Leistungsdiagramm oben konstant {T.f(r['vl'], 0)} °C (Excel-Werkzeug)"),
+                 new_x="LMARGIN", new_y="NEXT")
+        y = pdf.get_y() + 1
+        heizkurve(pdf, r, 13, y, 184, 50)
+        pdf.set_y(y + 53)
+        pdf.add_page()
     pdf.h2("Passende Wärmepumpen je Baureihe (kleinste passende Größe) und gewählte Wärmepumpe")
     emp = set(r["empfehlung_je_serie"])
     zeilen, bilder_tab = [], []
@@ -512,8 +653,11 @@ def pdf_bytes(e: dict, r: dict, daten: dict, katalog: dict) -> bytes:
             pdf.schrift_(6.8, False, HELL)
             pdf.cell(0, 4, pdf.t(f"Bivalenzpunkt {T.ft(g['bivalenz'])} °C: αH,a parallel ≈ {T.f(vb['alpha_parallel'], 2)}, "
                                  f"alternativ ≈ {T.f(vb['alpha_alternativ'], 2)} (linear interpoliert)."), new_x="LMARGIN", new_y="NEXT")
+    mv = r.get("mfh") if "mfh" in r else M.vorschlag(e, r, D.mfh(), daten, katalog)
+    if mv:
+        mfh_seite(pdf, e, r, mv, preise)
     # Passende Systempakete (BOPA)
-    if g:
+    if g and not mv:
         pl = T.pakete_fuer(r, ie, D.pakete()) if g["n"] == 1 else []
         pdf.h2("Passende Systempakete (BOPA)")
         if g["n"] > 1:

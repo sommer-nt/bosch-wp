@@ -31,7 +31,8 @@ SERIEN = [
     {"id": "CS5800", "name": "Compress 5800i / 6800i AW", "quelle": "luft", "bauart": "Monoblock", "kaeltemittel": "R290",
      "eheizer_kw": 9, "kaskade_max": 2, "hinweis": "E-Heizer bis 9 kW, 2er-Kaskade."},
     {"id": "CS8800", "name": "Compress 8800i AW", "quelle": "luft", "bauart": "Monoblock", "kaeltemittel": "R290",
-     "eheizer_kw": 9, "kaskade_max": 2, "hinweis": "E-Heizer bis 9 kW, 2er-Kaskade."},
+     "eheizer_kw": 9, "kaskade_max": 3,
+     "hinweis": "E-Heizer bis 9 kW je Gerät. Kaskade mit Kaskadenregler HPC800i C (MFH-Musterlösungen bis 3 Geräte)."},
     {"id": "CS5001", "name": "Compress 5000 AW (CS5001AW)", "quelle": "luft", "bauart": "Monoblock (Großanlage)",
      "kaeltemittel": "R290", "eheizer_kw": None, "kaskade_max": 14,
      "hinweis": "Großanlage, Kaskade bis 14 Geräte mit HPC 301 C. Zweiter Wärmeerzeuger/Heizstab bauseits."},
@@ -214,8 +215,17 @@ def einbetten(daten: dict, klima: dict) -> None:
              ";\nconst KATALOG_DATEN = " + json.dumps(_katalog(), ensure_ascii=False, separators=(",", ":")) +
              ";\nconst KLIMA_DATEN = " + json.dumps(klima, ensure_ascii=False, separators=(",", ":")) +
              ";\nconst BILDER_DATEN = " + json.dumps(_bilder(), separators=(",", ":")) +
-             ";\nconst PAKETE_DATEN = " + json.dumps(_pakete(), ensure_ascii=False, separators=(",", ":")) + ";\n")
+             ";\nconst PAKETE_DATEN = " + json.dumps(_pakete(), ensure_ascii=False, separators=(",", ":")) +
+             ";\nconst MFH_DATEN = " + json.dumps(_mfh(), ensure_ascii=False, separators=(",", ":")) + ";\n")
     html.write_text(text[:i] + block + text[j:], encoding="utf-8")
+
+
+def _mfh() -> dict:
+    """MFH-Musterbestellvorschläge (daten/mfh_matrix.json + verwendete Vorlagen aus daten/mfh_vorlagen.json)."""
+    sys.path.insert(0, str(HIER))
+    from wp import daten as wd
+    wd.mfh.cache_clear()
+    return wd.mfh()
 
 
 def _katalog() -> dict:

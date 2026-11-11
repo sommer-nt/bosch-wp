@@ -54,3 +54,16 @@ def geraet(gid: str) -> dict | None:
 
 def serie(sid: str) -> dict | None:
     return next((s for s in geraete()["serien"] if s["id"] == sid), None)
+
+
+@lru_cache(maxsize=None)
+def mfh() -> dict:
+    """MFH-Musterbestellvorschläge: Übersicht (mfh_matrix.json) + verwendete GAEB-Vorlagen (mfh_vorlagen.json)."""
+    m = json.loads((DATEN / "mfh_matrix.json").read_text(encoding="utf-8"))
+    datei = DATEN / "mfh_vorlagen.json"
+    v = json.loads(datei.read_text(encoding="utf-8")) if datei.exists() else {"vorlagen": {}, "langtexte": {}}
+    nrn = sorted({z["vorlage"] for z in m["zellen"] if z.get("vorlage")})
+    m["vorlagen"] = {n: v["vorlagen"][n] for n in nrn if n in v["vorlagen"]}
+    schl = {p["lang"] for x in m["vorlagen"].values() for g in x["gruppen"] for p in g["elemente"] if p.get("lang")}
+    m["langtexte"] = {k: t for k, t in v["langtexte"].items() if k in schl}
+    return m

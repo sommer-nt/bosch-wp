@@ -438,6 +438,16 @@
     "eheizer_kw": 9,
     "speicher": "extern",
     "vl_max": 75
+   },
+   {
+    "typ": "HPC800i C",
+    "art": "Kaskadenregler für Compress 8800i AW (je Gerät Pumpengruppe PGC und H-SCC32)",
+    "artnr": "7724001878",
+    "uvp": 2407,
+    "eheizer_kw": null,
+    "speicher": "extern",
+    "vl_max": 75,
+    "ab_anzahl": 2
    }
   ],
   "CS5001": [

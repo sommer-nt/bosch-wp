@@ -17,7 +17,9 @@ Eigenes Projekt neben Bosch Flow (Netzrechner) und Bosch Speicher. Zwei Versione
 
 ## Bedienung (Reihenfolge der Schnellauslegung)
 
-1. Neubau oder Sanierung, Gebäudeart, Raumtemperatur, PLZ → Norm-Außentemperatur, Heizgrenze (Neubau 12 °C, Bestand 15 °C)
+1. Neubau oder Sanierung, **Ein-/Zweifamilienhaus oder Mehrfamilienhaus** (MFH: Wohneinheiten und gleich zu Beginn die
+   Warmwasserbereitung – zentral FriWa, dezentral HIU, ohne/DLE oder Speicher ≤ NL 4), Gebäudeart, Raumtemperatur,
+   PLZ → Norm-Außentemperatur, Heizgrenze (Neubau 12 °C, Bestand 15 °C)
 2. Wärmebedarf: Heizlast in kW, W/m² (Gebäudestandard je Neubau/Bestand) oder Jahresverbrauch
 3. Heizkreise (bis 4): Heizkörper (55 °C), FBH (35 °C), Konvektoren (45 °C) → max. Vorlauf aus dem höchsten Kreis,
    Kreise mit niedrigerem Vorlauf gemischt (z. B. Sanierung: Heizkörperkreis + FBH-Kreis); im Schema mit Pumpe/Mischer
@@ -60,6 +62,29 @@ Preise (auch nicht im Ausdruck), ohne Expertenmodus, ohne VDI-Vergleichstabelle 
    Dazu die Tabelle **Deckungsanteil nach Bivalenzpunkt** (DIN V 4701-10 / VDI 4650) mit markierter Spalte.
 9. **Mindestleistung (Modulation):** Herstellerdaten unverändert; Stufen (z. B. CS3800 O-S, Temperaturbänder) werden
    nicht geglättet und im Diagramm erläutert. In der Kaskade gilt die Mindestleistung eines Geräts.
+
+## MFH-Bestellvorschläge (Musterlösungen)
+
+Beim Mehrfamilienhaus wählt das Tool aus der Kostenübersicht „MFH-Musterbestellvorschläge“ (Bestand 45 W/m², Neubau
+30 W/m², je WE 80 m² und 3,5 Personen; Stand 20.08.2026, 62 Lösungen in `daten/mfh_matrix.json`) die passende Musterlösung:
+Gebäudetyp → Tabelle, Betriebsweise (GEG-Hybrid → Hybrid MH200 bzw. bivalent CC8000, sonst monoenergetisch),
+Warmwasserbereitung → Zeile, dann die kleinste Lösung mit mindestens so vielen WE, deren Muster-Heizlast die berechnete
+Heizlast QH abdeckt (von Hand umschaltbar). Die Wärmepumpe der Musterlösung wird mit dem Rechenkern gegen die eigene
+Anlage geprüft und bei „Beste Lösung“ übernommen. Wo ein GAEB-Bestellvorschlag vorliegt (10 Lösungen), zeigt das Tool
+alle Positionen (Grund-, Alternativ-, Bedarfspositionen, Bestell-Nr., EP/GP) und exportiert ihn als **GAEB-Datei
+(.d83, byte-identisch zum Original)** oder CSV; Durchlauferhitzer je Wohnung werden auf die eingegebenen WE angepasst.
+Übernahme: `python tools/mfh_import.py ORDNER…` (liest alle *.D83, die Dateien selbst werden nicht eingecheckt),
+danach `python tools/excel_import.py --nur-einbetten`.
+
+Kaskaden: CS8800 mit Kaskadenregler HPC800i C bis 3 Geräte (wie Musterlösungen), CS5001 mit HPC 301 C bis 14.
+Im Schema hängt die Frischwasserstation an einem eigenen FriWa-Puffer, nicht am Trennpuffer der Heizung.
+
+## Heizkurve
+
+Vorlauf-/Rücklauftemperatur über der Außentemperatur nach DIN EN 442 für den maßgebenden Heizkreis (Heizkörper n = 1,3,
+10 K; FBH n = 1,1, 5 K; Konvektoren n = 1,4, 10 K) von θe bis zur Heizgrenze, mit max. Vorlauf der Wärmepumpe und den
+Werten bei A-7, A2 und A7. Das Leistungsdiagramm rechnet wie das Excel-Werkzeug mit konstantem Vorlauf; die
+Gebäudekennlinie läuft von QGES bei θe linear auf 0 kW an der Heizgrenze.
 
 ## Systempakete (BOPA)
 

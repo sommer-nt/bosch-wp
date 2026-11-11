@@ -9,3 +9,5 @@ deploy/.env
 *.xlsx
 *.zip
 Katalog*.pdf
+*.D83
+*.d83

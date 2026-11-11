@@ -10,7 +10,8 @@ VERTEILUNG_TEXT = {"fbh": "Fußbodenheizung", "hk": "Heizkörper", "beides": "Fu
 SPEZ = {"neubau": [(22, "KfW-Effizienzhaus 40+ (20–25 W/m²)"), (30, "KfW-Effizienzhaus 55 (30 W/m²)"),
                    (35, "KfW-Effizienzhaus 85 (35 W/m²)"), (38, "EnEV 2009 / GEG (35–40 W/m²)"), (15, "Passivhaus (15 W/m²)")],
         "sanierung": [(100, "Bestand WSchVO 1982 (80–120 W/m²)"), (70, "Bestand WSchVO 1995 (60–80 W/m²)"),
-                      (50, "EnEV 2002 (40–60 W/m²)"), (40, "KfW-Effizienzhaus 100 (40 W/m²)"), (38, "EnEV 2009 (35–40 W/m²)")]}
+                      (50, "EnEV 2002 (40–60 W/m²)"), (45, "MFH-Musterlösung Bestand (45 W/m²)"),
+                      (40, "KfW-Effizienzhaus 100 (40 W/m²)"), (38, "EnEV 2009 (35–40 W/m²)")]}
 HK_TYP = {"hk": "Heizkörper", "fbh": "Fußbodenheizung", "konvektor": "Konvektoren"}
 HK_MAX = 4
 
@@ -47,6 +48,10 @@ def euro(x) -> str:
     return "–" if x is None else f(x, 0) + " €"
 
 
+def euro2(x) -> str:
+    return "–" if x is None else f(x, 2) + " €"
+
+
 def biv_text(g: dict | None) -> str:
     if not g or not g.get("moeglich"):
         return "–"
@@ -57,11 +62,18 @@ def biv_text(g: dict | None) -> str:
     return ft(g["bivalenz"]) + " °C"
 
 
+def _regelungen(katalog: dict, g: dict) -> list[dict]:
+    """Inneneinheiten/Regelungen der Baureihe; bei einer Kaskade nur der Kaskadenregler (HPC 301 C, HPC800i C)."""
+    liste = [i for i in katalog["inneneinheiten"].get(g["serie"], []) if not i.get("ab_anzahl") or g["n"] >= i["ab_anzahl"]]
+    regler = [i for i in liste if i.get("ab_anzahl")]
+    return regler or liste
+
+
 def inneneinheit(e: dict, r: dict, katalog: dict) -> dict | None:
     g = r.get("gewaehlt")
     if not g:
         return None
-    liste = [i for i in katalog["inneneinheiten"].get(g["serie"], []) if not i.get("ab_anzahl") or g["n"] >= i["ab_anzahl"]]
+    liste = _regelungen(katalog, g)
     return next((i for i in liste if i["typ"] == e["auswahl"].get("inneneinheit")), liste[0] if liste else None)
 
 
@@ -69,7 +81,7 @@ def inneneinheiten(r: dict, katalog: dict) -> list[dict]:
     g = r.get("gewaehlt")
     if not g:
         return []
-    return [i for i in katalog["inneneinheiten"].get(g["serie"], []) if not i.get("ab_anzahl") or g["n"] >= i["ab_anzahl"]]
+    return _regelungen(katalog, g)
 
 
 def experten_abweichungen(e: dict) -> list[str]:

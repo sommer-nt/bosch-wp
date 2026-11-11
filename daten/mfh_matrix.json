@@ -1,0 +1,1130 @@
+{
+ "quelle": "Kostenübersicht MFH-Musterbestellvorschläge (Bestand/Neubau), Stand 20.08.2026 – Nettopreise",
+ "stand": "20.08.2026",
+ "annahmen": {
+  "bestand": {
+   "flaeche_we": 80,
+   "spez_w_m2": 45,
+   "personen_we": 3.5,
+   "ww_l_min_we": 14
+  },
+  "neubau": {
+   "flaeche_we": 80,
+   "spez_w_m2": 30,
+   "personen_we": 3.5,
+   "ww_l_min_we": 14
+  }
+ },
+ "ww": {
+  "friwa": "Zentrale WW-Bereitung > 60 °C (Frischwasserstation)",
+  "hiu": "Dezentrale WW-Bereitung < 60 °C (HIU / Wohnungsstation, 2-Leiter)",
+  "dle": "Ohne zentrale WW-Bereitung (dezentral elektrisch, DLE)",
+  "speicher": "TWW-Speicher (max. NL 4)"
+ },
+ "systeme": {
+  "mono": "Monoenergetisch",
+  "hybrid": "Hybrid MH200 / bivalent CC8000"
+ },
+ "zellen": [
+  {
+   "tabelle": "bestand",
+   "system": "mono",
+   "ww": "friwa",
+   "we": 4,
+   "kw": 15,
+   "komponenten": [
+    "CS8800 13",
+    "BH120-5",
+    "FF27",
+    "TH3500 12",
+    "BP500-7 ERZ"
+   ],
+   "summe": 34700,
+   "geraet": "CS8800iAW 13 O-T",
+   "n": 1,
+   "id": "B-mono-friwa-4"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "mono",
+   "ww": "friwa",
+   "we": 6,
+   "kw": 22,
+   "komponenten": [
+    "HPC800iC",
+    "2x CS8800 AW11",
+    "2x BP500-7EM",
+    "FF27",
+    "TH3500 12"
+   ],
+   "summe": 50500,
+   "geraet": "CS8800iAW 11 O-T",
+   "n": 2,
+   "id": "B-mono-friwa-6"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "mono",
+   "ww": "friwa",
+   "we": 8,
+   "kw": 29,
+   "komponenten": [
+    "CS5001 AW22",
+    "BP500E",
+    "FF27",
+    "TH3500 18",
+    "BP750-7 ERZ"
+   ],
+   "summe": 52400,
+   "geraet": "CS5001 AW22",
+   "n": 1,
+   "id": "B-mono-friwa-8"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "mono",
+   "ww": "friwa",
+   "we": 10,
+   "kw": 36,
+   "komponenten": [
+    "HPC800iC",
+    "2x CS8800 AW15",
+    "2x BP…-7EM",
+    "FF40",
+    "TH3500 18"
+   ],
+   "summe": 58900,
+   "geraet": "CS8800iAW 15 O-T",
+   "n": 2,
+   "id": "B-mono-friwa-10"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "mono",
+   "ww": "friwa",
+   "we": 12,
+   "kw": 44,
+   "komponenten": [
+    "2x CS5001 AW22",
+    "2x BP1000E",
+    "FF40",
+    "TH3500 18",
+    "BP500-7EM"
+   ],
+   "summe": 89100,
+   "geraet": "CS5001 AW22",
+   "n": 2,
+   "variante": "CS5001-Kaskade",
+   "id": "B-mono-friwa-12-a"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "mono",
+   "ww": "friwa",
+   "we": 12,
+   "kw": 44,
+   "komponenten": [
+    "HPC800iC",
+    "3x CS8800 AW15",
+    "2x BP…-7EM",
+    "FF40",
+    "TH3500 24"
+   ],
+   "summe": 75900,
+   "geraet": "CS8800iAW 15 O-T",
+   "n": 3,
+   "variante": "CS8800-Kaskade",
+   "id": "B-mono-friwa-12-b"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "mono",
+   "ww": "friwa",
+   "we": 14,
+   "kw": 50,
+   "komponenten": [
+    "CS5001 AW42",
+    "2x BP1000E",
+    "FF40",
+    "TH3500 24",
+    "BP500-7EM"
+   ],
+   "summe": 74800,
+   "geraet": "CS5001 AW42",
+   "n": 1,
+   "id": "B-mono-friwa-14"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "mono",
+   "ww": "hiu",
+   "we": 4,
+   "kw": 18,
+   "komponenten": [
+    "CS8800 AW15",
+    "BP500-7EM",
+    "TH3500 12",
+    "F7002 RSB"
+   ],
+   "summe": 40500,
+   "geraet": "CS8800iAW 15 O-T",
+   "n": 1,
+   "id": "B-mono-hiu-4"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "mono",
+   "ww": "hiu",
+   "we": 6,
+   "kw": 24,
+   "komponenten": [
+    "HPC800iC",
+    "2x CS8800 AW11",
+    "BP750-7EM",
+    "F7002 RSB",
+    "TH3500 12"
+   ],
+   "summe": 56000,
+   "geraet": "CS8800iAW 11 O-T",
+   "n": 2,
+   "id": "B-mono-hiu-6"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "mono",
+   "ww": "hiu",
+   "we": 8,
+   "kw": 31,
+   "komponenten": [
+    "CS5001 AW22",
+    "BP1000E",
+    "TH3500 12",
+    "F7002 RSB"
+   ],
+   "summe": 60200,
+   "geraet": "CS5001 AW22",
+   "n": 1,
+   "id": "B-mono-hiu-8"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "mono",
+   "ww": "hiu",
+   "we": 10,
+   "kw": 38,
+   "komponenten": [
+    "HPC800iC",
+    "2x CS8800 AW15",
+    "BP1000E",
+    "TH3500 18",
+    "F7002 RSB"
+   ],
+   "summe": 78200,
+   "geraet": "CS8800iAW 15 O-T",
+   "n": 2,
+   "id": "B-mono-hiu-10"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "mono",
+   "ww": "hiu",
+   "we": 12,
+   "kw": 44,
+   "komponenten": [
+    "HPC800iC",
+    "3x CS8800 AW13",
+    "BP1000E",
+    "TH3500 24",
+    "F7002 RSB"
+   ],
+   "summe": 96000,
+   "geraet": "CS8800iAW 13 O-T",
+   "n": 3,
+   "id": "B-mono-hiu-12"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "mono",
+   "ww": "hiu",
+   "we": 14,
+   "kw": 50,
+   "komponenten": [
+    "CS5001 AW42",
+    "2x BP750-7EM",
+    "TH3500 24",
+    "F7002 RSB"
+   ],
+   "summe": 99900,
+   "geraet": "CS5001 AW42",
+   "n": 1,
+   "id": "B-mono-hiu-14"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "mono",
+   "ww": "hiu",
+   "we": 16,
+   "kw": 58,
+   "komponenten": [
+    "2x CS5001 AW22",
+    "2x BP750-7EM",
+    "TH3500 24",
+    "F7002 RSB"
+   ],
+   "summe": 122300,
+   "geraet": "CS5001 AW22",
+   "n": 2,
+   "id": "B-mono-hiu-16"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "mono",
+   "ww": "dle",
+   "we": 4,
+   "kw": 15,
+   "komponenten": [
+    "CS8800 13",
+    "BH120-5"
+   ],
+   "summe": 22500,
+   "geraet": "CS8800iAW 13 O-T",
+   "n": 1,
+   "vorlage": "4000191953",
+   "id": "B-mono-dle-4"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "mono",
+   "ww": "dle",
+   "we": 6,
+   "kw": 22,
+   "komponenten": [
+    "HPC800iC",
+    "2x CS8800 AW11",
+    "BP500-7EM"
+   ],
+   "summe": 42500,
+   "geraet": "CS8800iAW 11 O-T",
+   "n": 2,
+   "id": "B-mono-dle-6"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "mono",
+   "ww": "dle",
+   "we": 8,
+   "kw": 29,
+   "komponenten": [
+    "CS5001 AW22",
+    "BP500E"
+   ],
+   "summe": 38400,
+   "geraet": "CS5001 AW22",
+   "n": 1,
+   "id": "B-mono-dle-8"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "mono",
+   "ww": "dle",
+   "we": 10,
+   "kw": 36,
+   "komponenten": [
+    "HPC800iC",
+    "2x CS8800 AW15",
+    "BP…-7EM",
+    "TH3500 18"
+   ],
+   "summe": 49200,
+   "geraet": "CS8800iAW 15 O-T",
+   "n": 2,
+   "id": "B-mono-dle-10"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "mono",
+   "ww": "dle",
+   "we": 12,
+   "kw": 44,
+   "komponenten": [
+    "HPC800iC",
+    "3x CS8800 AW13",
+    "BP…-7EM",
+    "TH3500 18"
+   ],
+   "summe": 60500,
+   "geraet": "CS8800iAW 13 O-T",
+   "n": 3,
+   "id": "B-mono-dle-12"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "mono",
+   "ww": "dle",
+   "we": 14,
+   "kw": 50,
+   "komponenten": [
+    "2x CS5001 AW22",
+    "BP1000E"
+   ],
+   "summe": 74500,
+   "geraet": "CS5001 AW22",
+   "n": 2,
+   "id": "B-mono-dle-14"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "mono",
+   "ww": "dle",
+   "we": 16,
+   "kw": 58,
+   "komponenten": [
+    "CS5001 AW42",
+    "BP1000E"
+   ],
+   "summe": 60870,
+   "geraet": "CS5001 AW42",
+   "n": 1,
+   "id": "B-mono-dle-16"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "mono",
+   "ww": "speicher",
+   "we": 4,
+   "kw": 15,
+   "komponenten": [
+    "CS8800 13",
+    "AWMB",
+    "WPS490 + E-Heater"
+   ],
+   "summe": 28600,
+   "geraet": "CS8800iAW 13 O-T",
+   "n": 1,
+   "vorlage": "4000191910",
+   "id": "B-mono-speicher-4"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "hybrid",
+   "ww": "friwa",
+   "we": 6,
+   "kw": 22,
+   "komponenten": [
+    "GC9800iW 30H",
+    "HW-Set",
+    "CS5800/6800 AW10 OR-T",
+    "BP500-7 EMR",
+    "FF27"
+   ],
+   "summe": 38500,
+   "geraet": "CS5800/6800iAW 10 OR-T",
+   "n": 1,
+   "erzeuger": "Hybrid MH200",
+   "id": "B-hybrid-friwa-6"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "hybrid",
+   "ww": "friwa",
+   "we": 8,
+   "kw": 29,
+   "komponenten": [
+    "GC9800iW 40H",
+    "HW-Set",
+    "CS5800/6800 AW12 OR-T",
+    "BP500-7EMR",
+    "FF27"
+   ],
+   "summe": 41100,
+   "geraet": "CS5800/6800iAW 12 OR-T",
+   "n": 1,
+   "erzeuger": "Hybrid MH200",
+   "id": "B-hybrid-friwa-8"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "hybrid",
+   "ww": "friwa",
+   "we": 14,
+   "kw": 50,
+   "komponenten": [
+    "GC7000 F 75",
+    "CS5001 AW22",
+    "FF40",
+    "BP1000-7ERZ / BP1000E",
+    "HIT / Load+"
+   ],
+   "summe": 75500,
+   "geraet": "CS5001 AW22",
+   "n": 1,
+   "variante": "Gas-Brennwert GC7000 F 75",
+   "erzeuger": "Bivalent CC8000",
+   "id": "B-hybrid-friwa-14-a"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "hybrid",
+   "ww": "friwa",
+   "we": 14,
+   "kw": 50,
+   "komponenten": [
+    "GC7000 WP 70",
+    "CS5001 AW22",
+    "FF40",
+    "BP1000-7ERZ / BP1000E",
+    "HIT / Load+"
+   ],
+   "summe": 73600,
+   "geraet": "CS5001 AW22",
+   "n": 1,
+   "variante": "Gas-Brennwert GC7000 WP 70",
+   "erzeuger": "Bivalent CC8000",
+   "id": "B-hybrid-friwa-14-b"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "hybrid",
+   "ww": "friwa",
+   "we": 16,
+   "kw": 58,
+   "komponenten": [
+    "GC7000 F 75",
+    "CS5001 AW22",
+    "FF40",
+    "2x SCI1000-3",
+    "HIT / Load+"
+   ],
+   "summe": 84200,
+   "geraet": "CS5001 AW22",
+   "n": 1,
+   "variante": "Gas-Brennwert GC7000 F 75",
+   "erzeuger": "Bivalent CC8000",
+   "id": "B-hybrid-friwa-16-a"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "hybrid",
+   "ww": "friwa",
+   "we": 16,
+   "kw": 58,
+   "komponenten": [
+    "GC7000 WP 70",
+    "CS5001 AW22",
+    "FF40",
+    "2x SCI1000-3",
+    "HIT / Load+"
+   ],
+   "summe": 81700,
+   "geraet": "CS5001 AW22",
+   "n": 1,
+   "variante": "Gas-Brennwert GC7000 WP 70",
+   "erzeuger": "Bivalent CC8000",
+   "id": "B-hybrid-friwa-16-b"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "hybrid",
+   "ww": "friwa",
+   "we": 18,
+   "kw": 65,
+   "komponenten": [
+    "GC7000 F 75",
+    "CS5001 AW22",
+    "2x FF27",
+    "2x SCI…-3",
+    "HIT / Load+"
+   ],
+   "summe": 90500,
+   "geraet": "CS5001 AW22",
+   "n": 1,
+   "erzeuger": "Bivalent CC8000",
+   "id": "B-hybrid-friwa-18"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "hybrid",
+   "ww": "hiu",
+   "we": 6,
+   "kw": 25,
+   "komponenten": [
+    "GC9800iWA 30P",
+    "HB-Set",
+    "CS5800/6800 AW10 OR-T",
+    "F7002 RSB",
+    "BP500-7EM"
+   ],
+   "summe": 47500,
+   "geraet": "CS5800/6800iAW 10 OR-T",
+   "n": 1,
+   "erzeuger": "Hybrid MH200",
+   "id": "B-hybrid-hiu-6"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "hybrid",
+   "ww": "hiu",
+   "we": 8,
+   "kw": 32,
+   "komponenten": [
+    "GC9800iWA 30P",
+    "HB-Set",
+    "CS5800/6800 AW12 OR-T",
+    "F7002 RS",
+    "2x BP…E"
+   ],
+   "summe": 55200,
+   "geraet": "CS5800/6800iAW 12 OR-T",
+   "n": 1,
+   "erzeuger": "Hybrid MH200",
+   "id": "B-hybrid-hiu-8"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "hybrid",
+   "ww": "hiu",
+   "we": 10,
+   "kw": 38,
+   "komponenten": [
+    "GC9800 40H",
+    "CS5001 AW22",
+    "2x BP500E",
+    "F7002 RSB",
+    "SWE"
+   ],
+   "summe": 83500,
+   "geraet": "CS5001 AW22",
+   "n": 1,
+   "erzeuger": "Bivalent CC8000",
+   "id": "B-hybrid-hiu-10"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "hybrid",
+   "ww": "hiu",
+   "we": 14,
+   "kw": 50,
+   "komponenten": [
+    "GC9800 50H",
+    "CS5001 AW22",
+    "2x BP500E",
+    "F7002 RSB",
+    "SWE"
+   ],
+   "summe": 96000,
+   "geraet": "CS5001 AW22",
+   "n": 1,
+   "erzeuger": "Bivalent CC8000",
+   "id": "B-hybrid-hiu-14"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "hybrid",
+   "ww": "hiu",
+   "we": 16,
+   "kw": 58,
+   "komponenten": [
+    "GC7000 F 75",
+    "CS5001 AW22",
+    "2x BP1000E",
+    "F7002 RSB",
+    "SWE"
+   ],
+   "summe": 108600,
+   "geraet": "CS5001 AW22",
+   "n": 1,
+   "variante": "Gas-Brennwert GC7000 F 75",
+   "erzeuger": "Bivalent CC8000",
+   "id": "B-hybrid-hiu-16-a"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "hybrid",
+   "ww": "hiu",
+   "we": 16,
+   "kw": 58,
+   "komponenten": [
+    "GC7000 WP 70",
+    "CS5001 AW22",
+    "2x BP1000E",
+    "F7002 RSB",
+    "SWE"
+   ],
+   "summe": 106200,
+   "geraet": "CS5001 AW22",
+   "n": 1,
+   "variante": "Gas-Brennwert GC7000 WP 70",
+   "erzeuger": "Bivalent CC8000",
+   "id": "B-hybrid-hiu-16-b"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "hybrid",
+   "ww": "dle",
+   "we": 6,
+   "kw": 22,
+   "komponenten": [
+    "GC9800iW 30H",
+    "HW-Set",
+    "CS5800/6800 AW10 OR-T"
+   ],
+   "summe": 27700,
+   "geraet": "CS5800/6800iAW 10 OR-T",
+   "n": 1,
+   "vorlage": "4000162196",
+   "erzeuger": "Hybrid MH200",
+   "id": "B-hybrid-dle-6"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "hybrid",
+   "ww": "dle",
+   "we": 8,
+   "kw": 29,
+   "komponenten": [
+    "GC9800iW 30H",
+    "HW-Set",
+    "CS5800/6800 AW10 OR-T"
+   ],
+   "summe": 27700,
+   "geraet": "CS5800/6800iAW 10 OR-T",
+   "n": 1,
+   "vorlage": "4000162204",
+   "erzeuger": "Hybrid MH200",
+   "id": "B-hybrid-dle-8"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "hybrid",
+   "ww": "dle",
+   "we": 12,
+   "kw": 44,
+   "komponenten": [
+    "GC9800 50H",
+    "CS5001 AW22",
+    "BP1000E",
+    "HIT"
+   ],
+   "summe": 59900,
+   "geraet": "CS5001 AW22",
+   "n": 1,
+   "erzeuger": "Bivalent CC8000",
+   "id": "B-hybrid-dle-12"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "hybrid",
+   "ww": "dle",
+   "we": 14,
+   "kw": 50,
+   "komponenten": [
+    "GC9800 50H",
+    "CS5001 AW22",
+    "BP1000E",
+    "HIT"
+   ],
+   "summe": 59900,
+   "geraet": "CS5001 AW22",
+   "n": 1,
+   "erzeuger": "Bivalent CC8000",
+   "id": "B-hybrid-dle-14"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "hybrid",
+   "ww": "dle",
+   "we": 16,
+   "kw": 58,
+   "komponenten": [
+    "GC7000 F 75",
+    "CS5001 AW22",
+    "1x BP1000E",
+    "HIT"
+   ],
+   "summe": 68700,
+   "geraet": "CS5001 AW22",
+   "n": 1,
+   "variante": "Gas-Brennwert GC7000 F 75",
+   "erzeuger": "Bivalent CC8000",
+   "id": "B-hybrid-dle-16-a"
+  },
+  {
+   "tabelle": "bestand",
+   "system": "hybrid",
+   "ww": "dle",
+   "we": 16,
+   "kw": 58,
+   "komponenten": [
+    "GC7000 WP 70",
+    "CS5001 AW22",
+    "1x BP1000E",
+    "HIT"
+   ],
+   "summe": 67500,
+   "geraet": "CS5001 AW22",
+   "n": 1,
+   "variante": "Gas-Brennwert GC7000 WP 70",
+   "erzeuger": "Bivalent CC8000",
+   "id": "B-hybrid-dle-16-b"
+  },
+  {
+   "tabelle": "neubau",
+   "system": "mono",
+   "ww": "friwa",
+   "we": 4,
+   "kw": 10,
+   "komponenten": [
+    "CS5800 AW10 AWMB",
+    "BP500-7ERZ",
+    "FF27",
+    "TH3500 12"
+   ],
+   "summe": 31800,
+   "geraet": "CS5800/6800iAW 10 OR-T",
+   "n": 1,
+   "id": "N-mono-friwa-4"
+  },
+  {
+   "tabelle": "neubau",
+   "system": "mono",
+   "ww": "friwa",
+   "we": 6,
+   "kw": 15,
+   "komponenten": [
+    "CS8800 AW15",
+    "BH120-5",
+    "BP500-7ERZ",
+    "FF27",
+    "TH3500 12"
+   ],
+   "summe": 36700,
+   "geraet": "CS8800iAW 15 O-T",
+   "n": 1,
+   "id": "N-mono-friwa-6"
+  },
+  {
+   "tabelle": "neubau",
+   "system": "mono",
+   "ww": "friwa",
+   "we": 8,
+   "kw": 20,
+   "komponenten": [
+    "CS5001 AW22",
+    "BP500E",
+    "FF27",
+    "TH3500 18",
+    "BP750-7ERZ"
+   ],
+   "summe": 52000,
+   "geraet": "CS5001 AW22",
+   "n": 1,
+   "id": "N-mono-friwa-8"
+  },
+  {
+   "tabelle": "neubau",
+   "system": "mono",
+   "ww": "friwa",
+   "we": 10,
+   "kw": 24,
+   "komponenten": [
+    "HPC800iC",
+    "2x CS8800 AW13",
+    "2x BP…-7EM",
+    "FF40",
+    "TH3500 18"
+   ],
+   "summe": 55900,
+   "geraet": "CS8800iAW 13 O-T",
+   "n": 2,
+   "id": "N-mono-friwa-10"
+  },
+  {
+   "tabelle": "neubau",
+   "system": "mono",
+   "ww": "friwa",
+   "we": 12,
+   "kw": 29,
+   "komponenten": [
+    "HPC800iC",
+    "2x CS8800 AW15",
+    "2x BP…-7EM",
+    "FF40",
+    "TH3500 18"
+   ],
+   "summe": 58800,
+   "geraet": "CS8800iAW 15 O-T",
+   "n": 2,
+   "id": "N-mono-friwa-12"
+  },
+  {
+   "tabelle": "neubau",
+   "system": "mono",
+   "ww": "friwa",
+   "we": 14,
+   "kw": 34,
+   "komponenten": [
+    "HPC800iC",
+    "3x CS8800 AW13",
+    "2x BP…-7EM",
+    "FF40",
+    "TH3500 18"
+   ],
+   "summe": 71800,
+   "geraet": "CS8800iAW 13 O-T",
+   "n": 3,
+   "id": "N-mono-friwa-14"
+  },
+  {
+   "tabelle": "neubau",
+   "system": "mono",
+   "ww": "friwa",
+   "we": 16,
+   "kw": 39,
+   "komponenten": [
+    "2x CS5001 AW22",
+    "2x BP1000E",
+    "FF40",
+    "TH3500 24",
+    "B500-6M"
+   ],
+   "summe": 92900,
+   "geraet": "CS5001 AW22",
+   "n": 2,
+   "id": "N-mono-friwa-16"
+  },
+  {
+   "tabelle": "neubau",
+   "system": "mono",
+   "ww": "hiu",
+   "we": 4,
+   "kw": 14,
+   "komponenten": [
+    "CS5800/6800 (Größe im Muster offen – AW12 OR-T angenommen)",
+    "BP500-7EM",
+    "F7002 45 MHPS"
+   ],
+   "summe": 40500,
+   "geraet": "CS5800/6800iAW 12 OR-T",
+   "n": 1,
+   "id": "N-mono-hiu-4"
+  },
+  {
+   "tabelle": "neubau",
+   "system": "mono",
+   "ww": "hiu",
+   "we": 6,
+   "kw": 19,
+   "komponenten": [
+    "CS5800 AW12",
+    "BP750-7EM",
+    "F7002 45 MHPS"
+   ],
+   "summe": 51300,
+   "geraet": "CS5800/6800iAW 12 OR-T",
+   "n": 1,
+   "id": "N-mono-hiu-6"
+  },
+  {
+   "tabelle": "neubau",
+   "system": "mono",
+   "ww": "hiu",
+   "we": 8,
+   "kw": 24,
+   "komponenten": [
+    "CS5001 AW22",
+    "BP1000E",
+    "F7002 45 MHPS"
+   ],
+   "summe": 70900,
+   "geraet": "CS5001 AW22",
+   "n": 1,
+   "id": "N-mono-hiu-8"
+  },
+  {
+   "tabelle": "neubau",
+   "system": "mono",
+   "ww": "hiu",
+   "we": 10,
+   "kw": 29,
+   "komponenten": [
+    "HPC800iC",
+    "2x CS8800 AW13",
+    "BP1000E",
+    "TH3500 18",
+    "F7002 45 MHPS"
+   ],
+   "summe": 90500,
+   "geraet": "CS8800iAW 13 O-T",
+   "n": 2,
+   "id": "N-mono-hiu-10"
+  },
+  {
+   "tabelle": "neubau",
+   "system": "mono",
+   "ww": "hiu",
+   "we": 12,
+   "kw": 34,
+   "komponenten": [
+    "HPC800iC",
+    "2x CS8800 AW15",
+    "BP1000E",
+    "TH3500 18",
+    "F7002 45 MHPS"
+   ],
+   "summe": 103600,
+   "geraet": "CS8800iAW 15 O-T",
+   "n": 2,
+   "id": "N-mono-hiu-12"
+  },
+  {
+   "tabelle": "neubau",
+   "system": "mono",
+   "ww": "hiu",
+   "we": 14,
+   "kw": 38,
+   "komponenten": [
+    "HPC800iC",
+    "3x CS8800 AW11",
+    "2x BP…-7EM",
+    "TH3500 18",
+    "F7002 45 MHPS"
+   ],
+   "summe": 123000,
+   "geraet": "CS8800iAW 11 O-T",
+   "n": 3,
+   "id": "N-mono-hiu-14"
+  },
+  {
+   "tabelle": "neubau",
+   "system": "mono",
+   "ww": "hiu",
+   "we": 16,
+   "kw": 43,
+   "komponenten": [
+    "2x CS5001 AW22",
+    "2x BP…-7EM",
+    "F7002 45 MHPS"
+   ],
+   "summe": 146800,
+   "geraet": "CS5001 AW22",
+   "n": 2,
+   "id": "N-mono-hiu-16"
+  },
+  {
+   "tabelle": "neubau",
+   "system": "mono",
+   "ww": "dle",
+   "we": 4,
+   "kw": 10,
+   "komponenten": [
+    "CS5800 AW7 AWMB"
+   ],
+   "summe": 19700,
+   "geraet": "CS5800/6800iAW 7 OR-S",
+   "n": 1,
+   "vorlage": "4000168226",
+   "id": "N-mono-dle-4"
+  },
+  {
+   "tabelle": "neubau",
+   "system": "mono",
+   "ww": "dle",
+   "we": 6,
+   "kw": 15,
+   "komponenten": [
+    "CS5800 AW12",
+    "BH120-5"
+   ],
+   "summe": 24900,
+   "geraet": "CS5800/6800iAW 12 OR-T",
+   "n": 1,
+   "id": "N-mono-dle-6"
+  },
+  {
+   "tabelle": "neubau",
+   "system": "mono",
+   "ww": "dle",
+   "we": 8,
+   "kw": 20,
+   "komponenten": [
+    "CS8800 AW15",
+    "BH120-5"
+   ],
+   "summe": 28900,
+   "geraet": "CS8800iAW 15 O-T",
+   "n": 1,
+   "vorlage": "4000179621",
+   "id": "N-mono-dle-8"
+  },
+  {
+   "tabelle": "neubau",
+   "system": "mono",
+   "ww": "dle",
+   "we": 10,
+   "kw": 24,
+   "komponenten": [
+    "HPC800iC",
+    "2x CS8800 AW11",
+    "BP500-7EM",
+    "TH3500 12"
+   ],
+   "summe": 47700,
+   "geraet": "CS8800iAW 11 O-T",
+   "n": 2,
+   "vorlage": "4000194338",
+   "id": "N-mono-dle-10"
+  },
+  {
+   "tabelle": "neubau",
+   "system": "mono",
+   "ww": "dle",
+   "we": 12,
+   "kw": 29,
+   "komponenten": [
+    "CS5001 AW22",
+    "BP500"
+   ],
+   "summe": 44900,
+   "geraet": "CS5001 AW22",
+   "n": 1,
+   "vorlage": "4000168127",
+   "id": "N-mono-dle-12"
+  },
+  {
+   "tabelle": "neubau",
+   "system": "mono",
+   "ww": "dle",
+   "we": 14,
+   "kw": 34,
+   "komponenten": [
+    "HPC800iC",
+    "2x CS8800 AW15",
+    "BP500-7EM",
+    "TH3500 18"
+   ],
+   "summe": 54700,
+   "geraet": "CS8800iAW 15 O-T",
+   "n": 2,
+   "vorlage": "4000194353",
+   "id": "N-mono-dle-14"
+  },
+  {
+   "tabelle": "neubau",
+   "system": "mono",
+   "ww": "dle",
+   "we": 16,
+   "kw": 39,
+   "komponenten": [
+    "HPC800iC",
+    "2x CS8800 AW15",
+    "BP500-7EM",
+    "TH3500 18"
+   ],
+   "summe": 55700,
+   "geraet": "CS8800iAW 15 O-T",
+   "n": 2,
+   "vorlage": "4000194358",
+   "id": "N-mono-dle-16"
+  }
+ ]
+}

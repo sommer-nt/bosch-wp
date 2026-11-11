@@ -436,10 +436,44 @@ def rechne(e: dict, daten: dict, katalog: dict | None = None) -> dict:
     else:
         r["gewaehlt"], r["kennlinien"], r["energie"] = None, None, None
     r["leitung"] = leitung(e, r)
+    r["heizkurve"] = heizkurve(e, r)
     r["erdreich"] = erdreich(e, r, katalog)
     r["eheizer"] = eheizer_baureihe(daten, r, katalog)
     r["vdi_bivalenz"] = vdi_bivalenz(r["gewaehlt"])
     return r
+
+
+# Heizkurve (DIN EN 442): Heizkörperexponent n und Auslegungsspreizung je Heizkreisart
+HK_EXPONENT = {"hk": 1.3, "fbh": 1.1, "konvektor": 1.4}
+HK_SPREIZUNG = {"hk": 10.0, "fbh": 5.0, "konvektor": 10.0}
+HK_NENN_VL = {"fbh": 35, "konvektor": 45, "hk": 55}
+
+
+def heizkurve(e: dict, r: dict) -> dict | None:
+    """Vorlauf-/Rücklauftemperatur über der Außentemperatur für den maßgebenden Heizkreis (höchster Vorlauf).
+
+    θVL(θa) = θi + Δθm · q^(1/n) + σ/2 · q,  θRL = θVL − σ · q,  q = (θi − θa) / (θi − θe)
+    mit Δθm = θVL,max − σ/2 − θi (mittlere Übertemperatur im Auslegungspunkt). Gilt von θe bis zur Heizgrenze.
+    """
+    ti, nat, thg, vl = r["innen"], r["nat"], r["heizgrenze"], r["vl"]
+    kreise = e.get("heizkreise") or [{"typ": "hk"}]
+    typ = max((h.get("typ", "hk") for h in kreise), key=lambda t: HK_NENN_VL.get(t, 55))
+    n, sigma = HK_EXPONENT.get(typ, 1.3), HK_SPREIZUNG.get(typ, 10.0)
+    sigma = min(sigma, max(0.0, (vl - ti) * 0.8))
+    dtm = vl - sigma / 2 - ti
+    if ti <= nat or dtm <= 0 or thg <= nat:
+        return None
+
+    def vl_bei(ta: float) -> float:
+        q = min(1.0, max(0.0, (ti - ta) / (ti - nat)))
+        return ti + dtm * q ** (1 / n) + sigma / 2 * q
+
+    ts = [nat] + [float(t) for t in range(math.floor(nat) + 1, math.ceil(thg))] + [thg]
+    q_ = [min(1.0, max(0.0, (ti - t) / (ti - nat))) for t in ts]
+    vls = [vl_bei(t) for t in ts]
+    return {"typ": typ, "exponent": n, "spreizung": sigma, "t": ts, "vl": vls,
+            "rl": [v - sigma * q for v, q in zip(vls, q_)],
+            "punkte": {str(t): vl_bei(float(t)) for t in (-7, 2, 7) if nat <= t <= thg}}
 
 
 def leitung(e: dict, r: dict) -> dict | None:

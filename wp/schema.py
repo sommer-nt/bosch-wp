@@ -160,8 +160,7 @@ def schema_svg(r: dict, ie: dict | None, kreise: list[dict], F: dict, W: int = 9
     # ---- 4 Pufferspeicher
     if mit_puffer:
         s += box(xP, yB - 20, 50, hB + 20, 10) + f'<rect x="{xP + 13}" y="{yB - 6}" width="24" height="{hB - 8}" rx="5" fill="none" stroke="{F["ink"]}" stroke-width="2"/>'
-        s += lab(xP + 25, "Trennpuffer" if kaskade else "Pufferspeicher",
-                 f"≥ {zahl(r['tww']['t_speicher'], 0)} °C für FriWa" if friwa else ("hydraulische Weiche" if kaskade else "Reihen-/Trennpuffer"), "")
+        s += lab(xP + 25, "Trennpuffer" if kaskade else "Pufferspeicher", "hydraulische Weiche" if kaskade else "Reihen-/Trennpuffer", "")
         if kaskade:
             s += ln(f"M{xP + 50},{yB - 4} L{xAE},{yB - 4}", F["vl"]) + ln(f"M{xP + 50},{yB + 70} L{xAE},{yB + 70}", F["rl"], True)
         else:
@@ -185,26 +184,35 @@ def schema_svg(r: dict, ie: dict | None, kreise: list[dict], F: dict, W: int = 9
     def kalt(y_in):
         return ln(f"M{xW},{y_in} L{xW - 34},{y_in} L{xW - 34},{H - 14}", F["kw"]) + t(xW - 30, H - 4, "Kaltwasser", f'font-size="10.5" fill="{F["soft"]}"')
 
-    if friwa and ww:
-        s += box(xW, yB, 80, 60, 8) + "".join(
-            f'<line x1="{xW + 15}" x2="{xW + 65}" y1="{yB + dy}" y2="{yB + dy}" stroke="{F["ink"]}" stroke-width="1.6"/>' for dy in (15, 30, 45))
-        s += lab(xW + 40, "Frischwasserstation", f"Zapftemperatur {zahl(r['tww']['t_zapf'], 0)} °C", "")
-        s += ln(f"M{xP},{yB + 10} L{xW + 80},{yB + 10}", F["vl"]) + ln(f"M{xP},{yB + 50} L{xW + 80},{yB + 50}", F["rl"], True)
-        s += dusche(xW + 20, yB, xW + 60) + kalt(yB + 45)
-    elif not integriert and ww:
-        s += box(xW, yB - 20, 80, hB + 20, 10)
-        zick = " ".join(f"L{xW + 18},{yB + 35 + j * 7} L{xW + 62},{yB + 39 + j * 7}" for j in range(4))
-        s += (f'<path d="M{xW + 80},{yB + 30} L{xW + 62},{yB + 30} {zick} L{xW + 62},{yB + 62} L{xW + 80},{yB + 62}" '
-              f'fill="none" stroke="{F["vl"]}" stroke-width="2"/>')
-        s += lab(xW + 40, "Warmwasserspeicher", ("WW-Modul · " if kaskade else "Heizwendel · ") + zahl(r["tww"]["t_speicher"], 0) + " °C", "")
+    def ladung():
+        """Ladeleitungen vom Wärmeerzeuger zum Speicher bzw. FriWa-Puffer links (über den Korridor yK1/yK2)."""
         if kaskade:
             qv, qr = f"L{xAE - 22},{yK1} L{xAE - 22},{yB - 4}", f"L{xAE - 36},{yK2} L{xAE - 36},{yB + 70}"
         elif sole:
             qv, qr = f"L{xP + 86},{yK1} L{xP + 86},{yB + 5}", f"L{xP + 100},{yK2} L{xP + 100},{yB + 70}"
         else:
             qv, qr = (f"L{xIE + wIE + 22},{yK1} L{xIE + wIE + 22},{yB + 25}", f"L{xIE + wIE + 36},{yK2} L{xIE + wIE + 36},{yB + 50}")
-        s += (ln(f"M{xW + 80},{yB + 30} L{xW + 100},{yB + 30} L{xW + 100},{yK1} {qv}", F["vl"]) +
-              ln(f"M{xW + 80},{yB + 62} L{xW + 114},{yB + 62} L{xW + 114},{yK2} {qr}", F["rl"], True))
+        return (ln(f"M{xW + 80},{yB + 30} L{xW + 100},{yB + 30} L{xW + 100},{yK1} {qv}", F["vl"]) +
+                ln(f"M{xW + 80},{yB + 62} L{xW + 114},{yB + 62} L{xW + 114},{yK2} {qr}", F["rl"], True))
+
+    if friwa and ww:
+        # Frischwasserstation am eigenen FriWa-Puffer (Schichtladung) – nicht am Trennpuffer der Heizung
+        yF = 170
+        s += box(xW, yB - 20, 80, hB + 20, 10) + f'<rect x="{xW + 28}" y="{yB - 6}" width="24" height="{hB - 8}" rx="5" fill="none" stroke="{F["ink"]}" stroke-width="2"/>'
+        s += lab(xW + 40, "FriWa-Puffer", f"eigener Puffer · {zahl(r['tww']['t_speicher'], 0)} °C", "") + ladung()
+        s += box(xW, yF, 80, 50, 8) + "".join(
+            f'<line x1="{xW + 15}" x2="{xW + 65}" y1="{yF + dy}" y2="{yF + dy}" stroke="{F["ink"]}" stroke-width="1.6"/>' for dy in (13, 25, 37))
+        s += (t(xW + 92, yF + 20, "Frischwasserstation", f'font-size="11.5" font-weight="700" fill="{F["ink"]}"') +
+              t(xW + 92, yF + 34, f"Zapftemperatur {zahl(r['tww']['t_zapf'], 0)} °C", f'font-size="10.5" fill="{F["soft"]}"'))
+        s += ln(f"M{xW + 30},{yB - 20} L{xW + 30},{yF + 50}", F["vl"]) + ln(f"M{xW + 50},{yF + 50} L{xW + 50},{yB - 20}", F["rl"], True)
+        s += dusche(xW + 20, yF, xW + 60) + kalt(yF + 40)
+    elif not integriert and ww:
+        s += box(xW, yB - 20, 80, hB + 20, 10)
+        zick = " ".join(f"L{xW + 18},{yB + 35 + j * 7} L{xW + 62},{yB + 39 + j * 7}" for j in range(4))
+        s += (f'<path d="M{xW + 80},{yB + 30} L{xW + 62},{yB + 30} {zick} L{xW + 62},{yB + 62} L{xW + 80},{yB + 62}" '
+              f'fill="none" stroke="{F["vl"]}" stroke-width="2"/>')
+        s += lab(xW + 40, "Warmwasserspeicher", ("WW-Modul · " if kaskade else "Heizwendel · ") + zahl(r["tww"]["t_speicher"], 0) + " °C", "")
+        s += ladung()
         s += dusche(xW + 20, yB - 20, xW + 60) + kalt(yB + hB - 6)
     elif integriert and ww:
         s += dusche(xIE + 10, yB - 10, xIE - 40)

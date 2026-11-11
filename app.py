@@ -17,6 +17,7 @@ st.set_page_config(page_title="Bosch WP-Schnellauslegung", page_icon="♨️", l
 
 from wp import bericht as B  # noqa: E402
 from wp import daten as D  # noqa: E402
+from wp import mfh as M  # noqa: E402
 from wp import projekt as P  # noqa: E402
 from wp import rechnen as R  # noqa: E402
 from wp import schema as S  # noqa: E402
@@ -85,6 +86,62 @@ def neu_setzen(*pfade):
         ss.pop("w_" + p_, None)
 
 
+def mfh_bereich(r: dict, e: dict) -> None:
+    v, MD = r["mfh"], D.mfh()
+    a_ = MD["annahmen"][v["tabelle"]]
+    st.markdown("**MFH-Bestellvorschlag** – Musterlösungen Bosch · Kostenübersicht 20.08.2026")
+    st.caption(f"{'Neubau' if v['tabelle'] == 'neubau' else 'Bestand'} · {MD['systeme'][v['system']]} · {M.WW_TEXT[v['ww']]} · "
+               f"{v['we']} WE · Heizlast QH {T.f(v['qh'], 1)} kW · Musterannahmen: {a_['flaeche_we']} m² und "
+               f"{T.f(a_['personen_we'], 1)} Personen je WE, {a_['spez_w_m2']} W/m²")
+    if not v["zellen"]:
+        st.info("Für diese Kombination gibt es noch keine Musterlösung – Anlage im SysCon planen.")
+        return
+    ids = [z_["id"] for z_ in v["zellen"]]
+    gew = {a["zelle"]["id"] for a in v["auswahl"]}
+    beschr = {z_["id"]: f"{z_['we']} WE · {z_['kw']} kW" + (f" · {z_['variante'].replace('Gas-Brennwert ', '')}" if z_.get("variante") else "")
+              for z_ in v["zellen"]}
+    wahl_ = st.radio("Musterlösung", ["auto"] + ids, horizontal=True, key="mfh_zelle",
+                     index=(ids.index(e["mfh"]["zelle"]) + 1) if e["mfh"].get("zelle") in ids else 0,
+                     format_func=lambda x: "automatisch (" + " / ".join(beschr[i_] for i_ in ids if i_ in gew) + ")" if x == "auto" else beschr[x])
+    if (wahl_ if wahl_ != "auto" else "") != (e["mfh"].get("zelle") or ""):
+        e["mfh"]["zelle"] = "" if wahl_ == "auto" else wahl_
+        st.rerun()
+    if v["ausserhalb"]:
+        st.warning("Heizlast bzw. Wohneinheiten liegen über den Musterlösungen – größte Musterlösung angezeigt, Anlage individuell planen (SysCon).")
+    g_ = r["gewaehlt"]
+    for a in v["auswahl"]:
+        z_ = a["zelle"]
+        st.markdown(f"<div style='font-size:12px;font-weight:700;color:#4a5866;text-transform:uppercase;margin-top:8px'>"
+                    f"{z_.get('erzeuger') or 'Monoenergetisch'} · {z_['we']} WE / {z_['kw']} kW{' · ' + z_['variante'] if z_.get('variante') else ''}</div>"
+                    f"<b>{' · '.join(z_['komponenten'])}</b> · Summe netto {T.euro(z_['summe'])}", unsafe_allow_html=True)
+        st.caption(f"Muster-Heizlast {z_['we']} WE · {a_['flaeche_we']} m² · {a_['spez_w_m2']} W/m² = {T.f(a['muster_qh'], 1)} kW · "
+                   f"Prüfung mit Ihren Eingaben: {M.pruef_text(a, r)}")
+        c1, c2, c3 = st.columns(3)
+        if g_ and g_["geraet"] == z_["geraet"] and g_["n"] == z_["n"]:
+            c1.caption("✓ als Wärmepumpe gewählt")
+        elif c1.button("Wärmepumpe übernehmen", key="mfh_ueb_" + z_["id"]):
+            e["auswahl"].update(geraet=z_["geraet"], anzahl=z_["n"], inneneinheit="")
+            st.rerun()
+        vo = MD["vorlagen"].get(z_.get("vorlage") or "")
+        if not vo:
+            st.caption("Für diese Musterlösung liegt noch kein GAEB-Bestellvorschlag vor – Komponenten siehe oben, Zubehör im SysCon ergänzen.")
+            continue
+        pos = M.positionen(vo, MD["langtexte"], v["we"])
+        dname = f"Bestellvorschlag_{vo['nr']}_" + ((e["projekt"]["name"] or "MFH").replace(" ", "_"))
+        c2.download_button("GAEB-Datei (.d83)", M.d83_bytes(vo, MD["langtexte"], v["we"]), dname + ".d83", "application/octet-stream",
+                           key="mfh_d83_" + z_["id"])
+        c3.download_button("CSV (Excel)", ("\ufeff" + M.csv_text(pos)).encode("utf-8"), dname + ".csv", "text/csv", key="mfh_csv_" + z_["id"])
+        wm = M.muster_we(vo)
+        st.caption(f"Bestellvorschlag {vo['nr']} ({vo['titel']}, {vo['datum']})"
+                   + (f" · Durchlauferhitzer von {wm} auf {v['we']} WE angepasst" if any(p_["menge"] != p_["menge_muster"] for p_ in pos) else ""))
+        st.dataframe([{"Pos.": f"{int(p_['oz'][:2])}.{int(p_['oz'][2:])}", "Gruppe": p_["gruppe"], "Menge": p_["menge"], "Einheit": p_["einheit"],
+                       "Bestell-Nr.": p_["artnr"] or "–", "Bezeichnung": p_["text"], "Art": M.art_text(p_), "EP [€]": p_["ep"], "GP [€]": p_["gp"],
+                       "in Summe": "ja" if p_["summe"] else "–"} for p_ in pos], hide_index=True, width="stretch", height=420)
+        st.markdown(f"**Summe Grund- und Normalpositionen: {T.euro2(M.summe(pos))}** (ohne Alternativen und Bedarfspositionen, Preise laut Bestellvorschlag)")
+    st.caption("Alternativen ersetzen die Grundposition darüber; Bedarfspositionen nur bei Bedarf. Musterlösungen ersetzen keine Fachplanung; "
+               "Hydraulik, Speicher und Sicherheitstechnik im SysCon prüfen.")
+
+
 kopf_l, kopf_r = st.columns([3, 1])
 with kopf_r:
     E["experte"] = st.toggle("Expertenmodus", E.get("experte", False),
@@ -113,8 +170,29 @@ with links:
             for k_ in [k_ for k_ in ss if str(k_).startswith("hk_")]:
                 del ss[k_]
             E["heizlast"]["spez_w_m2"] = float(T.SPEZ[E["gebaeude"]["typ"]][1][0])
-            neu_setzen("klima.heizgrenze", "vl", "heizlast.spez_w_m2")
+            M.eingaben_folgen(E, "gebaeude.typ")
+            neu_setzen("klima.heizgrenze", "vl", "heizlast.methode", "heizlast.spez_w_m2", "heizlast.flaeche_m2", "heizlast.gebaeudeart", "heizlast.vbh", "tww.personen", "tww.system")
             st.rerun()
+        # Mehrfamilienhaus: Wohneinheiten und Warmwasserbereitung gleich zu Beginn (MFH-Musterbestellvorschläge)
+        if wahl("Gebäudegröße", "mfh.art", {"efh": "Ein-/Zweifamilienhaus", "mfh": "Mehrfamilienhaus"}):
+            M.eingaben_folgen(E, "mfh.art")
+            neu_setzen("heizlast.methode", "heizlast.spez_w_m2", "heizlast.flaeche_m2", "heizlast.gebaeudeart", "heizlast.vbh", "tww.personen", "tww.system")
+            st.rerun()
+        if E["mfh"]["art"] == "mfh":
+            we_neu = st.number_input("Wohneinheiten [WE]", 2, 40, int(E["mfh"]["we"]), key="mfh_we")
+            if we_neu != E["mfh"]["we"]:
+                E["mfh"]["we"] = int(we_neu)
+                M.eingaben_folgen(E, "mfh.we")
+                neu_setzen("heizlast.methode", "heizlast.spez_w_m2", "heizlast.flaeche_m2", "heizlast.gebaeudeart", "heizlast.vbh", "tww.personen", "tww.system")
+                st.rerun()
+            if wahl("Warmwasserbereitung", "mfh.ww", {"friwa": "Zentral · FriWa", "hiu": "Dezentral · HIU", "dle": "Ohne · DLE",
+                                                      "speicher": "Speicher ≤ NL 4"}):
+                M.eingaben_folgen(E, "mfh.ww")
+                neu_setzen("heizlast.methode", "heizlast.spez_w_m2", "heizlast.flaeche_m2", "heizlast.gebaeudeart", "heizlast.vbh", "tww.personen", "tww.system")
+                st.rerun()
+            st.caption("MFH-Musterlösungen: je WE 80 m² und 3,5 Personen (Personen und Wohnfläche werden vorbelegt). "
+                       "Zentral = Frischwasserstation mit eigenem Puffer (> 60 °C), dezentral = Wohnungsstationen (HIU, 2-Leiter, "
+                       "< 60 °C), ohne = elektrische Durchlauferhitzer je Wohnung.")
         arten = {a: a for a in R.VOLLBENUTZUNGSSTUNDEN}
         if wahl("Gebäudeart", "heizlast.gebaeudeart", arten, radio=False):
             E["heizlast"]["vbh"] = float(R.VOLLBENUTZUNGSSTUNDEN[E["heizlast"]["gebaeudeart"]])
@@ -197,9 +275,15 @@ with links:
 
     with st.expander("④ Warmwasser", expanded=True):
         t = E["tww"]
-        t["aktiv"] = st.checkbox("Warmwasser über die Wärmepumpe", t["aktiv"])
+        ist_mfh = E["mfh"]["art"] == "mfh"
+        if ist_mfh:
+            st.caption(f"Mehrfamilienhaus: Warmwasserbereitung „{M.WW_TEXT[E['mfh']['ww']]}“ (Karte ①).")
+        t["aktiv"] = st.checkbox("Warmwasser über die Wärmepumpe", t["aktiv"], disabled=ist_mfh)
         zahl("Anzahl Personen", "tww.personen", min_value=0.0, step=1.0)
-        wahl("System", "tww.system", {"speicher": "Speichersystem", "friwa": "Frischwasserstation"})
+        if ist_mfh:
+            st.caption("System: " + ("Speichersystem" if t["system"] == "speicher" else "Frischwasserstation / Wohnungsstation mit Puffer"))
+        else:
+            wahl("System", "tww.system", {"speicher": "Speichersystem", "friwa": "Frischwasserstation"})
         zahl("Zapftemperatur [°C]", "tww.zapftemp", min_value=35.0, max_value=65.0, step=1.0)
         if t.get("bezug", "liter") == "liter":
             zahl("Warmwassermenge je Person bei 45 °C [l/(P·d)]", "tww.liter_p", min_value=0.0, step=5.0)
@@ -308,7 +392,8 @@ with links:
             st.error(str(fehler))
 
 # ================================================================== Ergebnisse
-r, g = R_, R_["gewaehlt"]
+r = M.rechne(E, DATEN, KAT, D.mfh())   # MFH: Wärmepumpe der Musterlösung bei „Beste Lösung“
+g = r["gewaehlt"]
 ie = T.inneneinheit(E, r, KAT)
 with rechts:
     for m in T.meldungen(E, r, KAT):
@@ -344,7 +429,7 @@ with rechts:
         if bilder:
             st.image([str(b_) for b_, _ in bilder], caption=[t_ for _, t_ in bilder], width=150)
         st.subheader(("{} × ".format(g["n"]) if g["n"] > 1 else "") + g["geraet"])
-        st.caption(f"{s['name']} · {s['bauart']} · {'Empfehlung' if not E['auswahl']['geraet'] else 'manuell gewählt'}"
+        st.caption(f"{s['name']} · {s['bauart']} · {('aus MFH-Musterlösung' if r.get('mfh_wp') else 'Empfehlung') if not E['auswahl']['geraet'] else 'manuell gewählt'}"
                    + (f" · mit {ie['typ']} ({ie['art']})" if ie else ""))
         d = st.columns(4)
         d[0].metric("Bestell-Nr. Außeneinheit", k.get("artnr") or "–")
@@ -355,8 +440,12 @@ with rechts:
                    f"{k.get('lw_db', '–')} dB(A) · {k.get('masse', '')} · UVP (intern): {T.euro(k['uvp'] * g['n']) if k.get('uvp') else '–'}"
                    + (f" + {T.euro(ie['uvp'])}" if ie and ie.get("uvp") else ""))
 
+    # ---- MFH-Bestellvorschlag (Musterlösungen) – wie mfhHtml() in index.html
+    if r["mfh"]:
+        mfh_bereich(r, E)
+
     # ---- Passende Systempakete (BOPA) – wie index.html
-    if g:
+    if g and not r["mfh"]:
         PK = D.pakete()
         st.markdown("**Passende Systempakete (BOPA)** – Komplettpaket mit Speicher und Zubehör · Preisvorteil 6 %")
         if g["n"] > 1:
@@ -417,6 +506,26 @@ with rechts:
                           yaxis_title="Heizleistung in kW", yaxis_rangemode="tozero", legend=dict(orientation="h", y=1.12), template="plotly_white")
         st.plotly_chart(fig, width="stretch")
         st.caption(T.min_hinweis(r))
+
+    hkv = r.get("heizkurve")
+    if hkv:
+        st.markdown("**Heizkurve** – Vorlauf- und Rücklauftemperatur über der Außentemperatur (DIN EN 442)")
+        fh = go.Figure()
+        fh.add_scatter(x=hkv["t"], y=hkv["vl"], name="Vorlauf", mode="lines", line=dict(color=ROT, width=3))
+        fh.add_scatter(x=hkv["t"], y=hkv["rl"], name="Rücklauf", mode="lines", line=dict(color=BLAU, width=2, dash="dash"))
+        pk = hkv["punkte"]
+        fh.add_scatter(x=[float(t_) for t_ in pk], y=list(pk.values()), mode="markers+text", showlegend=False,
+                       text=[f"A{t_}: {T.f(v_, 1)} °C" for t_, v_ in pk.items()], textposition="top right", marker=dict(size=9, color=ROT))
+        if g and g.get("vl_max_geraet"):
+            fh.add_hline(y=g["vl_max_geraet"], line_dash="dash", line_color="#78889a",
+                         annotation_text=f"max. Vorlauf WP {T.f(g['vl_max_geraet'], 0)} °C")
+        fh.update_layout(height=280, margin=dict(l=10, r=10, t=30, b=10), xaxis_title="Außentemperatur in °C",
+                         yaxis_title="Temperatur in °C", legend=dict(orientation="h", y=1.15), template="plotly_white")
+        st.plotly_chart(fh, width="stretch")
+        st.caption(f"Maßgebend: {T.HK_TYP.get(hkv['typ'], hkv['typ'])} (Exponent n = {T.f(hkv['exponent'], 1)}, Spreizung "
+                   f"{T.f(hkv['spreizung'], 0)} K bei θe) · {T.f(r['vl'], 0)} °C Vorlauf bei θe {T.ft(r['nat'])} °C bis zur Heizgrenze "
+                   f"{T.ft(r['heizgrenze'])} °C. Bei milderen Außentemperaturen sinkt der Vorlauf – die Wärmepumpe arbeitet dann effizienter "
+                   f"und mit mehr Leistung als im Diagramm oben (dort konstant {T.f(r['vl'], 0)} °C wie Excel-Werkzeug).")
 
     if r.get("eheizer"):
         st.markdown(f"**E-Heizer je Baugröße** – QGES {T.f(r['qges'], 2)} kW − Heizleistung bei θe {T.ft(r['nat'])} °C "
