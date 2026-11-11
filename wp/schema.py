@@ -45,7 +45,11 @@ def schema_svg(r: dict, ie: dict | None, kreise: list[dict], F: dict, W: int = 9
     kaskade = not sole and (g["n"] > 1 or g["serie"] == "CS5001")
     integriert = (not friwa) and bool(ie) and ie.get("speicher") == "integriert"
     puffermodul = bool(ie) and "Puffer" in ie.get("art", "")
-    mit_puffer = kaskade or friwa or not (integriert or puffermodul)
+    mfh = r.get("mfh") or {}
+    hiu = ww and mfh.get("ww") == "hiu"            # Wohnungsstationen (2-Leiter-Netz) am Puffer
+    dle = mfh.get("ww") == "dle"                   # Warmwasser je Wohnung elektrisch (Durchlauferhitzer)
+    hybrid = r.get("kriterium") == "hybrid" and not sole
+    mit_puffer = kaskade or friwa or hybrid or not (integriert or puffermodul)
     yB, hB, hkY, yK1, yK2 = 300, 80, 160, 228, 244
     yLab = yB + hB + 22
     xW, xP, xIE, wIE, xAE, xV0, xV1 = 50, W - 500, W - 330, 64, W - 150, W - 360, W - 20
@@ -195,7 +199,31 @@ def schema_svg(r: dict, ie: dict | None, kreise: list[dict], F: dict, W: int = 9
         return (ln(f"M{xW + 80},{yB + 30} L{xW + 100},{yB + 30} L{xW + 100},{yK1} {qv}", F["vl"]) +
                 ln(f"M{xW + 80},{yB + 62} L{xW + 114},{yB + 62} L{xW + 114},{yK2} {qr}", F["rl"], True))
 
-    if friwa and ww:
+    if hybrid:
+        # zweiter Wärmeerzeuger (Gas-Brennwertgerät) am Puffer
+        xG = 268
+        s += box(xG, yB, 70, 50, 8)
+        s += (f'<path d="M{xG + 35},{yB + 40} C{xG + 22},{yB + 34} {xG + 26},{yB + 22} {xG + 35},{yB + 10} '
+              f'C{xG + 44},{yB + 22} {xG + 48},{yB + 34} {xG + 35},{yB + 40} Z" fill="none" stroke="{F["ink"]}" stroke-width="2"/>')
+        s += lab(xG + 35, "Gas-Brennwertgerät", "Hybrid · 2. Wärmeerzeuger", "")
+        s += ln(f"M{xG + 70},{yB + 10} L{xP},{yB + 10}", F["vl"]) + ln(f"M{xG + 70},{yB + 40} L{xP},{yB + 40}", F["rl"], True)
+
+    if hiu:
+        # Wohnungsstationen (HIU) am Puffer – Heizung und Warmwasser je Wohnung über das 2-Leiter-Netz
+        yH = yB + 20
+        s += box(xW, yH, 80, 60, 8)
+        s += (f'<path d="M{xW + 22},{yH + 50} L{xW + 22},{yH + 28} L{xW + 40},{yH + 12} L{xW + 58},{yH + 28} L{xW + 58},{yH + 50} Z" '
+              f'fill="none" stroke="{F["ink"]}" stroke-width="2"/>')
+        s += lab(xW + 40, "Wohnungsstationen", (f"{mfh.get('we')} × HIU" if mfh.get("we") else "HIU") + " · 2-Leiter-Netz", "")
+        s += ln(f"M{xP},{yB + 62} L{xW + 80},{yB + 62}", F["vl"]) + ln(f"M{xP},{yB + 74} L{xW + 80},{yB + 74}", F["rl"], True)
+        s += dusche(xW + 20, yH, xW + 60) + kalt(yH + 40)
+    elif dle:
+        s += box(xW, yB, 80, 50, 8)
+        s += (f'<path d="M{xW + 44},{yB + 8} L{xW + 32},{yB + 27} L{xW + 42},{yB + 27} L{xW + 36},{yB + 43} L{xW + 50},{yB + 22} '
+              f'L{xW + 40},{yB + 22} Z" fill="none" stroke="{F["ink"]}" stroke-width="1.8"/>')
+        s += lab(xW + 40, "Durchlauferhitzer", "je Wohnung · elektrisch", "")
+        s += dusche(xW + 20, yB, xW + 60) + kalt(yB + 40)
+    elif friwa and ww:
         # Frischwasserstation am eigenen FriWa-Puffer (Schichtladung) – nicht am Trennpuffer der Heizung
         yF = 170
         s += box(xW, yB - 20, 80, hB + 20, 10) + f'<rect x="{xW + 28}" y="{yB - 6}" width="24" height="{hB - 8}" rx="5" fill="none" stroke="{F["ink"]}" stroke-width="2"/>'

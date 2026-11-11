@@ -27,6 +27,12 @@ Eigenes Projekt neben Bosch Flow (Netzrechner) und Bosch Speicher. Zwei Versione
 5. Wärmequelle Luft/Wasser (Außenaufstellung, Entfernung zum Gebäude) oder Sole/Wasser (Innenaufstellung)
 6. Beste Lösung oder Produkt wählen (Kaskade nur, wo die Baureihe es erlaubt)
 
+**Start, Zurücksetzen, Export:** Das Tool startet leer (keine vorbelegte Wärmepumpe); „Letztes Projekt“ holt die
+zuletzt im Browser bearbeitete Auslegung zurück, „Zurücksetzen“ leert alle Eingaben. Menü „Export“: Projektdatei
+(.json, auch in Streamlit zu öffnen), PDF (Drucken), Bestellvorschlag als GAEB (.d83) und CSV sowie die
+**Projektmappe (.zip)** mit Projektdatei, Kurzbericht (Klartext + Links der Hydraulikschemata) und Bestellvorschlag –
+in Streamlit zusätzlich mit dem PDF (`wp/export.py`).
+
 **Ergebnis in Reitern:** Überblick (Klartext „Auf einen Blick“, Kennzahlen, gewählte Wärmepumpe, Leistungsdiagramm) ·
 Leistung & Heizkurve · Geräteauswahl · Hydraulik & Warmwasser · Bestellvorschlag (MFH) bzw. Systempakete · Rechenweg
 (Schritte, Herleitung, Begriffe). Fachbegriffe sind über „?“ erklärt; Klartext und Glossar stehen in `wp/texte.py` und
@@ -82,7 +88,9 @@ alle Positionen (Grund-, Alternativ-, Bedarfspositionen, Bestell-Nr., EP/GP) und
 danach `python tools/excel_import.py --nur-einbetten`.
 
 Kaskaden: CS8800 mit Kaskadenregler HPC800i C bis 3 Geräte (wie Musterlösungen), CS5001 mit HPC 301 C bis 14.
-Im Schema hängt die Frischwasserstation an einem eigenen FriWa-Puffer, nicht am Trennpuffer der Heizung.
+Im Schema hängt die Frischwasserstation an einem eigenen FriWa-Puffer, nicht am Trennpuffer der Heizung;
+Wohnungsstationen (HIU) hängen über das 2-Leiter-Netz am Puffer, bei DLE zeigt das Schema die Durchlauferhitzer je
+Wohnung, bei GEG-Hybrid den Gas-Brennwertkessel als zweiten Wärmeerzeuger am Puffer.
 
 ## Bosch-Hydraulikschemata
 

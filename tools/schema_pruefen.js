@@ -14,6 +14,12 @@ const FALL=[
  ['ohne WW', {tww:{aktiv:false}}],
  ['Sole Speicher', {waermequelle:'sole', auslegung:'monovalent'}],
  ['Sole FriWa 2 HK', {waermequelle:'sole', auslegung:'monovalent', tww:{system:'friwa'}, heizkreise:[{typ:'hk'},{typ:'fbh'}]}],
+ ['Hybrid Speicher', {auslegung:'hybrid', heizlast:{vorgabe_kw:22}}],
+ ['Hybrid FriWa', {auslegung:'hybrid', heizlast:{vorgabe_kw:22}, tww:{system:'friwa'}}],
+ ['MFH HIU Kaskade', {mfh:{art:'mfh',we:12,ww:'hiu'}, heizlast:{vorgabe_kw:44}, tww:{system:'friwa',personen:42}}],
+ ['MFH HIU Hybrid', {mfh:{art:'mfh',we:8,ww:'hiu'}, auslegung:'hybrid', heizlast:{vorgabe_kw:29}, tww:{system:'friwa',personen:28}}],
+ ['MFH DLE', {mfh:{art:'mfh',we:10,ww:'dle'}, heizlast:{vorgabe_kw:24}, tww:{aktiv:false}}],
+ ['MFH FriWa', {mfh:{art:'mfh',we:8,ww:'friwa'}, heizlast:{vorgabe_kw:29}, tww:{system:'friwa',personen:28}}],
 ];
 (async()=>{
  const b=await chromium.launch(); const p=await b.newPage({viewport:{width:1500,height:1000}});
@@ -21,7 +27,9 @@ const FALL=[
  let fehler=0;
  for(const [name,ae] of FALL){
   const res=await p.evaluate(([ae])=>{
-    E=mische(JSON.parse(JSON.stringify(STANDARD)), JSON.parse(JSON.stringify(ae))); aktualisiere();
+    // Grundfall 10 kW / 4 Personen (das Tool startet leer); Reiter Hydraulik sichtbar, damit getBBox misst
+    E=mische(mische(JSON.parse(JSON.stringify(STANDARD)), {heizlast:{vorgabe_kw:10}, tww:{personen:4}}), JSON.parse(JSON.stringify(ae))); aktualisiere();
+    if (typeof zeigeTab === 'function') zeigeTab('hydraulik');
     const svg=document.querySelector('#schema svg'); if(!svg) return ['kein Schema'];
     const texte=[...svg.querySelectorAll('text')].map(t=>({t:t.textContent,b:t.getBBox()}));
     const rohre=[...svg.querySelectorAll('path.rohr')];

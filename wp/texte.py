@@ -325,6 +325,9 @@ def klartext(e: dict, r: dict, katalog: dict) -> list[dict]:
     def zt(x) -> str:
         return "–" if x is None else z(x, 1).replace("-", "−")
 
+    if not r["qges"] > 0:
+        return [{"text": "Noch keine Eingaben: Wärmebedarf in Karte ② eingeben (Heizlast, W/m² oder Jahresverbrauch) – "
+                         "dann schlägt das Tool die passende Wärmepumpe vor und erklärt das Ergebnis hier.", "status": ""}]
     out = []
     qs = f"**{z(r['qges'], 1)} kW**: {z(r['qh'], 1)} kW Heizung"
     if r["qtw"] > 0:

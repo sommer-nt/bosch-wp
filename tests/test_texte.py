@@ -20,7 +20,8 @@ ROOT = HIER.parent
 
 
 def faelle():
-    return [s["eingaben"] if "eingaben" in s else s for s in szenarien()] + [
+    from wp import projekt as P
+    return [P.neu()] + [s["eingaben"] if "eingaben" in s else s for s in szenarien()] + [
         mfh_eingabe("neubau", 10, "dle"), mfh_eingabe("sanierung", 12, "friwa"), mfh_eingabe("sanierung", 8, "friwa", "hybrid")]
 
 
@@ -72,3 +73,17 @@ def test_hydraulik_python_gleich_html(tmp_path):
                                    capture_output=True, text=True, check=True).stdout)
     for (e, _), j in zip(ein, js):
         assert schemata(e) == j
+
+
+def test_projektmappe():
+    import io
+    import zipfile
+    from wp import export as X
+    e = mfh_eingabe("neubau", 10, "dle")
+    e["projekt"]["name"] = "Muster MFH"
+    r = M.rechne(e, D.geraete(), D.katalog(), D.mfh())
+    z = zipfile.ZipFile(io.BytesIO(X.mappe_bytes(e, r, D.katalog(), b"%PDF-1.4")))
+    namen = set(z.namelist())
+    assert namen == {"WP-Auslegung_Muster_MFH.json", "Kurzbericht.txt", "Bestellvorschlag_4000194338.d83",
+                     "Bestellvorschlag_4000194338.csv", "WP-Auslegung_Muster_MFH.pdf"}
+    assert "Aus der MFH-Musterlösung" in z.read("Kurzbericht.txt").decode("utf-8")

@@ -17,6 +17,7 @@ st.set_page_config(page_title="Bosch WP-Schnellauslegung", page_icon="♨️", l
 
 from wp import bericht as B  # noqa: E402
 from wp import daten as D  # noqa: E402
+from wp import export as X  # noqa: E402
 from wp import hydraulik as HY  # noqa: E402
 from wp import mfh as M  # noqa: E402
 from wp import projekt as P  # noqa: E402
@@ -379,8 +380,14 @@ with links:
     if not E["projekt"]["datum"]:
         E["projekt"]["datum"] = date.today().isoformat()
     name = (E["projekt"]["name"] or "Projekt").replace(" ", "_")
-    st.download_button("💾 Projekt speichern (.json)", P.dumps(E), f"WP-Auslegung_{name}.json", "application/json",
-                       width="stretch")
+    c_s, c_r = st.columns(2)
+    c_s.download_button("💾 Projekt speichern (.json)", P.dumps(E), f"WP-Auslegung_{name}.json", "application/json",
+                        width="stretch")
+    if c_r.button("↺ Zurücksetzen", width="stretch", help="Alle Eingaben auf leer zurücksetzen (vorher speichern!)"):
+        ss.e = P.neu()
+        for k_ in [k_ for k_ in ss if str(k_).startswith(("n_", "w_", "hk_", "mfh_"))]:
+            del ss[k_]
+        st.rerun()
     datei = st.file_uploader("Projekt öffnen (.json, auch aus der HTML-Version)", type="json")
     if datei is not None and ss.get("geladen") != datei.file_id:
         try:
@@ -629,7 +636,12 @@ with rechts:
         if True:
             st.table([{"Größe": a, "Formel": b, "Wert": c} for a, b, c in T.herleitung(E, r)])
 
-    st.download_button("📄 Auslegung als PDF", B.pdf_bytes(E, r, DATEN, KAT),
-                       f"WP-Auslegung_{name}{'_intern' if E['preise_drucken'] else ''}.pdf", "application/pdf", type="primary")
+    pdf_ = B.pdf_bytes(E, r, DATEN, KAT)
+    c_p, c_m = st.columns(2)
+    c_p.download_button("📄 Auslegung als PDF", pdf_, f"WP-Auslegung_{name}{'_intern' if E['preise_drucken'] else ''}.pdf",
+                        "application/pdf", type="primary", width="stretch")
+    c_m.download_button("🗂 Projektmappe (.zip)", X.mappe_bytes(E, r, KAT, pdf_), f"WP-Auslegung_{X.dateiname(E)}.zip",
+                        "application/zip", width="stretch",
+                        help="Projektdatei, Kurzbericht, PDF und – bei MFH-Musterlösungen – Bestellvorschlag als GAEB (.d83) und CSV")
     st.caption(f"Entwickelt von Daniel Sommer · HC/SDE3-PSD · Leistungsdaten: {DATEN['quelle']} · Katalog: Gesamtkatalog März 2026 · "
                "Ergebnis ersetzt keine Fachplanung.")

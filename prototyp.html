@@ -178,6 +178,11 @@
   ol.rechenweg{margin:0;padding-left:20px} ol.rechenweg li{margin:4px 0;font-size:13.5px;line-height:1.45}
   dl.glossar{margin:0;display:grid;grid-template-columns:minmax(120px,180px) 1fr;gap:6px 14px;font-size:13px}
   dl.glossar dt{font-weight:700} dl.glossar dd{margin:0;color:var(--ink-soft)}
+  details.menu{position:relative;display:inline-block}
+  details.menu summary{list-style:none;cursor:pointer;border:1px solid var(--line);border-radius:18px;padding:6px 14px;font-size:13px;background:var(--paper);color:var(--ink)}
+  details.menu summary::-webkit-details-marker{display:none}
+  details.menu .menuliste{position:absolute;right:0;top:36px;z-index:30;background:var(--paper);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);padding:6px;display:grid;gap:4px;min-width:290px}
+  details.menu .menuliste button{text-align:left;border-radius:7px}
 
   /* ---- Prototyp: Vorführversion ---- */
   #bExperte, .exp, .preis, label.f.nur-intern, details { display:none !important }
@@ -195,9 +200,16 @@
   <div class="devbadge">Entwickelt von <b>Daniel Sommer</b> · HC/SDE3-PSD</div>
   <div class="actions">
     <button id="bExperte" title="Zusätzliche Eingaben: Gebäudehülle, Nutzungsgrad, Warmwasser nach DIN V 18599, Sperrzeit, Betriebsweise …">Expertenmodus</button>
-    <button id="bNeu" title="Neues Projekt">Neu</button>
+    <button id="bLetztes" title="Zuletzt bearbeitetes Projekt aus diesem Browser laden" hidden>Letztes Projekt</button>
+    <button id="bNeu" title="Alle Eingaben auf leer zurücksetzen">Zurücksetzen</button>
     <button id="bOeffnen" title="Projektdatei (.json) öffnen">Öffnen</button>
-    <button id="bSpeichern" title="Projektdatei (.json) speichern">Speichern</button>
+    <details class="menu" id="exportMenu"><summary>Export ▾</summary><div class="menuliste">
+      <button id="bSpeichern">Projektdatei (.json) – wieder öffnen</button>
+      <button id="bDruck2">Auslegung als PDF (Drucken)</button>
+      <button id="bExpD83">Bestellvorschlag GAEB (.d83)</button>
+      <button id="bExpCsv">Bestellvorschlag CSV (Excel)</button>
+      <button id="bExpZip">Projektmappe (.zip) – alles zusammen</button>
+    </div></details>
     <button id="bDruck" class="primary" title="Auslegung drucken / als PDF speichern">Drucken / PDF</button>
     <button id="bTheme" title="Hell/Dunkel">☾</button>
     <input type="file" id="datei" accept=".json,application/json" hidden>
@@ -824,7 +836,11 @@ function schemaSvg(r, ie, kreise, F, W) {
   const kaskade = !sole && (g.n > 1 || g.serie === 'CS5001');
   const integriert = !friwa && !!ie && ie.speicher === 'integriert';
   const puffermodul = !!ie && ie.art.indexOf('Puffer') >= 0;
-  const mitPuffer = kaskade || friwa || !(integriert || puffermodul);
+  const mfh = r.mfh || {};
+  const hiu = ww && mfh.ww === 'hiu';               // Wohnungsstationen (2-Leiter-Netz) am Puffer
+  const dle = mfh.ww === 'dle';                     // Warmwasser je Wohnung elektrisch (Durchlauferhitzer)
+  const hybrid = r.kriterium === 'hybrid' && !sole;
+  const mitPuffer = kaskade || friwa || hybrid || !(integriert || puffermodul);
   const yB = 300, hB = 80, yLab = yB + hB + 22, hkY = 160, yK1 = 228, yK2 = 244;
   const xW = 50, xP = W - 500, xIE = W - 330, wIE = 64, xAE = W - 150, xV0 = W - 360, xV1 = W - 20;
   const t = (x, y, s, a) => `<text x="${fz(x)}" y="${fz(y)}" ${a}>${schemaEsc(s)}</text>`;
@@ -925,7 +941,28 @@ function schemaSvg(r, ie, kreise, F, W) {
     else { qv = `L${xIE + wIE + 22},${yK1} L${xIE + wIE + 22},${yB + 25}`; qr = `L${xIE + wIE + 36},${yK2} L${xIE + wIE + 36},${yB + 50}`; }
     return ln(`M${xW + 80},${yB + 30} L${xW + 100},${yB + 30} L${xW + 100},${yK1} ${qv}`, F.vl) + ln(`M${xW + 80},${yB + 62} L${xW + 114},${yB + 62} L${xW + 114},${yK2} ${qr}`, F.rl, 1);
   };
-  if (friwa && ww) {
+  if (hybrid) {
+    // zweiter Wärmeerzeuger (Gas-Brennwertgerät) am Puffer
+    const xG = 268;
+    s += box(xG, yB, 70, 50, 8);
+    s += `<path d="M${xG + 35},${yB + 40} C${xG + 22},${yB + 34} ${xG + 26},${yB + 22} ${xG + 35},${yB + 10} C${xG + 44},${yB + 22} ${xG + 48},${yB + 34} ${xG + 35},${yB + 40} Z" fill="none" stroke="${F.ink}" stroke-width="2"/>`;
+    s += lab(xG + 35, 'Gas-Brennwertgerät', 'Hybrid · 2. Wärmeerzeuger', '');
+    s += ln(`M${xG + 70},${yB + 10} L${xP},${yB + 10}`, F.vl) + ln(`M${xG + 70},${yB + 40} L${xP},${yB + 40}`, F.rl, 1);
+  }
+  if (hiu) {
+    // Wohnungsstationen (HIU) am Puffer – Heizung und Warmwasser je Wohnung über das 2-Leiter-Netz
+    const yH = yB + 20;
+    s += box(xW, yH, 80, 60, 8);
+    s += `<path d="M${xW + 22},${yH + 50} L${xW + 22},${yH + 28} L${xW + 40},${yH + 12} L${xW + 58},${yH + 28} L${xW + 58},${yH + 50} Z" fill="none" stroke="${F.ink}" stroke-width="2"/>`;
+    s += lab(xW + 40, 'Wohnungsstationen', (mfh.we ? `${mfh.we} × HIU` : 'HIU') + ' · 2-Leiter-Netz', '');
+    s += ln(`M${xP},${yB + 62} L${xW + 80},${yB + 62}`, F.vl) + ln(`M${xP},${yB + 74} L${xW + 80},${yB + 74}`, F.rl, 1);
+    s += dusche(xW + 20, yH, xW + 60) + kalt(yH + 40);
+  } else if (dle) {
+    s += box(xW, yB, 80, 50, 8);
+    s += `<path d="M${xW + 44},${yB + 8} L${xW + 32},${yB + 27} L${xW + 42},${yB + 27} L${xW + 36},${yB + 43} L${xW + 50},${yB + 22} L${xW + 40},${yB + 22} Z" fill="none" stroke="${F.ink}" stroke-width="1.8"/>`;
+    s += lab(xW + 40, 'Durchlauferhitzer', 'je Wohnung · elektrisch', '');
+    s += dusche(xW + 20, yB, xW + 60) + kalt(yB + 40);
+  } else if (friwa && ww) {
     // Frischwasserstation am eigenen FriWa-Puffer (Schichtladung) – nicht am Trennpuffer der Heizung
     const yF = 170;
     s += box(xW, yB - 20, 80, hB + 20, 10) + `<rect x="${xW + 28}" y="${yB - 6}" width="24" height="${hB - 8}" rx="5" fill="none" stroke="${F.ink}" stroke-width="2"/>`;
@@ -1022,6 +1059,7 @@ const GLOSSAR = {
 function klartext(e, r, katalog) {
   const z = (x, d = 1) => (x === null || x === undefined) ? '–' : schemaZahl(x, d);
   const zt = x => (x === null || x === undefined) ? '–' : z(x, 1).replace('-', '−');
+  if (!(r.qges > 0)) return [{text: 'Noch keine Eingaben: Wärmebedarf in Karte ② eingeben (Heizlast, W/m² oder Jahresverbrauch) – dann schlägt das Tool die passende Wärmepumpe vor und erklärt das Ergebnis hier.', status: ''}];
   const out = [];
   let qs = `**${z(r.qges, 1)} kW**: ${z(r.qh, 1)} kW Heizung`;
   if (r.qtw > 0) qs += ` + ${z(r.qtw, 1)} kW Warmwasser`;
@@ -1100,17 +1138,18 @@ const STANDARD = {
   gebaeude: {typ: 'sanierung'},
   mfh: {art: 'efh', we: 8, ww: 'friwa', zelle: ''},
   klima: {nat: -12.0, heizgrenze: 15.0, innen: 20.0},
-  heizlast: {methode: 'vorgabe', vorgabe_kw: 10.0, flaeche_m2: 150.0, spez_w_m2: 60.0, huell_a_m2: 0.0, ht: 0.0, volumen_m3: 0.0, luftwechsel: 0.6,
+  heizlast: {methode: 'vorgabe', vorgabe_kw: 0.0, flaeche_m2: 0.0, spez_w_m2: 60.0, huell_a_m2: 0.0, ht: 0.0, volumen_m3: 0.0, luftwechsel: 0.6,
              energietraeger: 'gas', menge: 0.0, heizwert: 10.42, gebaeudeart: 'EFH', vbh: 2100, nutzungsgrad: 1.0, ww_im_verbrauch: true},
   verteilung: 'hk', heizkreise: [{typ: 'hk'}],
-  tww: {aktiv: true, personen: 4, system: 'speicher', zapftemp: 45.0, liter_p: 50.0, t_kw: 10.0, methode: 'auto', kw_person: 0.2, td: 4,
+  tww: {aktiv: true, personen: 0, system: 'speicher', zapftemp: 45.0, liter_p: 50.0, t_kw: 10.0, methode: 'auto', kw_person: 0.2, td: 4,
         nutzung: 'Wohngebäude', bezug: 'liter', qwb: 1.1, flaeche_m2: 0.0},
   sperrzeit_h: 0, waermequelle: 'luft', aufstellung: {entfernung_m: 5.0, spreizung: 5.0, entzug_w_m: 50.0},
   auslegung: 'monoenergetisch', vl: 55.0, serien: [],
   auswahl: {geraet: '', anzahl: 1, inneneinheit: ''}, preise_drucken: false
 };
 const SPEICHER_KEY = 'wp_auslegung_prototyp_v1';
-let E = mische(JSON.parse(JSON.stringify(STANDARD)), lade() || {});
+let E = JSON.parse(JSON.stringify(STANDARD));   // Start immer leer (keine vorbelegte Wärmepumpe)
+const LETZTES = lade();                          // letztes Projekt im Browser – nur auf Wunsch wiederherstellen
 let R = null;
 
 function mische(ziel, quelle) {
@@ -1121,7 +1160,8 @@ function mische(ziel, quelle) {
   return ziel;
 }
 function lade() { try { return JSON.parse(localStorage.getItem(SPEICHER_KEY)); } catch (e) { return null; } }
-function sichere() { try { localStorage.setItem(SPEICHER_KEY, JSON.stringify(E)); } catch (e) { /* privat */ } }
+function sichere() { if (istLeer(E)) return; try { localStorage.setItem(SPEICHER_KEY, JSON.stringify(E)); } catch (e) { /* privat */ } }
+function istLeer(e) { return !(+e.heizlast.vorgabe_kw || +e.heizlast.flaeche_m2 || +e.heizlast.menge || +e.heizlast.huell_a_m2 || e.projekt.name || e.projekt.plz); }
 const $ = s => document.querySelector(s), $$ = s => Array.from(document.querySelectorAll(s));
 const get = (o, p) => p.split('.').reduce((a, k) => a == null ? a : a[k], o);
 const set = (o, p, v) => { const ks = p.split('.'); let a = o; ks.slice(0, -1).forEach(k => a = a[k] = a[k] || {}); a[ks[ks.length - 1]] = v; };
@@ -1173,8 +1213,23 @@ function bindeEingaben() {
   $('#hkPlus').onclick = () => { E.heizkreise = heizkreisListe().map(h => ({typ: h.typ})); if (E.heizkreise.length < HK_MAX) E.heizkreise.push({typ: E.heizkreise.some(h => h.typ === 'fbh') ? 'hk' : 'fbh'}); folgen('heizkreise'); aktualisiere(); };
   $('#hkMinus').onclick = () => { E.heizkreise = heizkreisListe().map(h => ({typ: h.typ})); if (E.heizkreise.length > 1) E.heizkreise.pop(); folgen('heizkreise'); aktualisiere(); };
   $('#bExperte').onclick = () => { E.experte = !E.experte; aktualisiere(); };
-  $('#bNeu').onclick = () => { if (confirm('Neues Projekt beginnen? Nicht gespeicherte Eingaben gehen verloren.')) { const x = E.experte; E = JSON.parse(JSON.stringify(STANDARD)); E.experte = x; aktualisiere(); } };
-  $('#bSpeichern').onclick = speichern;
+  $('#bNeu').onclick = () => {
+    if (!confirm('Alle Eingaben zurücksetzen? Nicht gespeicherte Eingaben gehen verloren (vorher „Export → Projektdatei“).')) return;
+    const x = E.experte; E = JSON.parse(JSON.stringify(STANDARD)); E.experte = x;
+    try { localStorage.removeItem(SPEICHER_KEY); } catch (e) { /* */ }
+    $('#bLetztes').hidden = true; aktualisiere();
+  };
+  if (LETZTES && !istLeer(mische(JSON.parse(JSON.stringify(STANDARD)), LETZTES))) {
+    $('#bLetztes').hidden = false;
+    $('#bLetztes').title = 'Zuletzt bearbeitet: ' + (LETZTES.projekt && LETZTES.projekt.name ? LETZTES.projekt.name : 'Projekt ohne Namen');
+    $('#bLetztes').onclick = () => { E = mische(JSON.parse(JSON.stringify(STANDARD)), LETZTES); $('#bLetztes').hidden = true; aktualisiere(); };
+  }
+  const zu = () => $('#exportMenu').removeAttribute('open');
+  $('#bDruck2').onclick = () => { zu(); baueDruck(); window.print(); };
+  $('#bExpD83').onclick = () => { zu(); exportBestell('d83'); };
+  $('#bExpCsv').onclick = () => { zu(); exportBestell('csv'); };
+  $('#bExpZip').onclick = () => { zu(); exportMappe(); };
+  $('#bSpeichern').onclick = () => { $('#exportMenu').removeAttribute('open'); speichern(); };
   $('#bOeffnen').onclick = () => $('#datei').click();
   $('#datei').onchange = oeffnen;
   $('#bDruck').onclick = () => { baueDruck(); window.print(); };
@@ -1822,6 +1877,63 @@ function baueDruck() {
     <div class="dk-text">Die Schnellauslegung dient der Produktvor- und Systemauswahl und ersetzt nicht die fachtechnische Planung. Sie berücksichtigt nicht die individuellen Eigenschaften eines Bauvorhabens. Leistungsdaten nach Herstellerangaben (Excel-Werkzeug „WP-Auslegung_S“, Gesamtkatalog März 2026); Zwischenwerte linear interpoliert. Die Heizlast ist nach der im Land gültigen Norm (DIN EN 12831) zu berechnen; eine Auslegung über Vorjahresverbräuche oder Flächenkennwerte ist nur überschlägig und kann zu Unter- oder Überdimensionierung führen. Der Deckungsanteil nach VDI 4650 gilt für parallelen Betrieb. Energiewerte sind Näherungen ohne Gewähr; Schallimmissionen sind gesondert nachzuweisen (TA Lärm). Vor Ausführung sind Planung und Angaben durch den ausführenden Fachbetrieb oder ein Planungsbüro auf Plausibilität, Aktualität, Richtigkeit und Vollständigkeit zu prüfen. Aufstellbedingungen, Einsatzgrenzen, R290-Sicherheitsbereiche und die elektrischen Anschlussbedingungen des Netzbetreibers sind zu beachten.${preise ? ' Preise: unverbindliche Preisempfehlung ohne MwSt.' : ''}</div>
     ${fuss(n, n)}</div>`;
   $('#druck').innerHTML = h;
+}
+
+// ------------------------------------------------------------------ Export
+const dateiName = () => (E.projekt.name || 'Projekt').replace(/[^\wäöüÄÖÜß-]+/g, '_');
+function herunterladen(blob, name) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = name;
+  a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+function bestellVorlage() {
+  const v = R && R.mfh; if (!v || !v.auswahl.length) return null;
+  const a = v.auswahl.find(x => x.zelle.vorlage);
+  return a ? MFH_DATEN.vorlagen[a.zelle.vorlage] : null;
+}
+function exportBestell(art) {
+  const v = bestellVorlage();
+  if (!v) { alert('Für die aktuelle Auslegung gibt es keinen GAEB-Bestellvorschlag (nur bei Mehrfamilienhaus-Musterlösungen mit Bestellvorschlag).'); return; }
+  mfhExport(v.nr, art);
+}
+// Kurzbericht als Text (Klartext, Kennzahlen, Hydraulikschemata) – gleich wie wp/export.kurzbericht()
+function kurzbericht() {
+  const r = R, g = r.gewaehlt, z = [];
+  z.push('Bosch WP-Schnellauslegung – ' + (E.projekt.name || 'Projekt ohne Namen'), 'Entwickelt von Daniel Sommer · HC/SDE3-PSD', '');
+  z.push('Auf einen Blick');
+  for (const x of klartext(E, r, KAT)) z.push('- ' + x.text.replace(/\*\*/g, ''));
+  if (g) {
+    z.push('', 'Hydraulikschemata (Bosch-Hydraulikdatenbank)');
+    for (const s of HDB.schemata(E, r, HYDRAULIK_DATEN, innenEinheit())) z.push(`- ${s.nr} ${s.titel} (${s.stand}): ${HDB.link(HYDRAULIK_DATEN, s.nr, 'pdf')}`);
+  }
+  return z.join('\r\n') + '\r\n';
+}
+// ZIP (ohne Kompression) – Projektdatei, Kurzbericht, Bestellvorschlag (GAEB, CSV)
+function zip(dateien) {
+  const crcT = []; for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; crcT[n] = c >>> 0; }
+  const crc = b => { let c = 0xFFFFFFFF; for (const x of b) c = crcT[(c ^ x) & 0xFF] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; };
+  const enc = new TextEncoder(), teile = [], zentral = [];
+  let off = 0;
+  const u16 = v => [v & 255, (v >>> 8) & 255], u32 = v => [v & 255, (v >>> 8) & 255, (v >>> 16) & 255, (v >>> 24) & 255];
+  for (const [name, daten] of dateien) {
+    const nb = enc.encode(name), d = typeof daten === 'string' ? enc.encode(daten) : daten, c = crc(d);
+    const kopf = [...u32(0x04034b50), ...u16(20), ...u16(0x0800), ...u16(0), ...u16(0), ...u16(0x21), ...u32(c), ...u32(d.length), ...u32(d.length), ...u16(nb.length), ...u16(0)];
+    teile.push(new Uint8Array(kopf), nb, d);
+    zentral.push(new Uint8Array([...u32(0x02014b50), ...u16(20), ...u16(20), ...u16(0x0800), ...u16(0), ...u16(0), ...u16(0x21), ...u32(c), ...u32(d.length), ...u32(d.length), ...u16(nb.length), ...u16(0), ...u16(0), ...u16(0), ...u16(0), ...u32(0), ...u32(off)]), nb);
+    off += kopf.length + nb.length + d.length;
+  }
+  const zl = zentral.reduce((s, x) => s + x.length, 0);
+  return new Blob([...teile, ...zentral, new Uint8Array([...u32(0x06054b50), ...u16(0), ...u16(0), ...u16(dateien.length), ...u16(dateien.length), ...u32(zl), ...u32(off), ...u16(0)])], {type: 'application/zip'});
+}
+function exportMappe() {
+  const n = dateiName(), d = [['WP-Auslegung_' + n + '.json', JSON.stringify({format: 'wp_auslegung', version: 1, eingaben: E}, null, 1)], ['Kurzbericht.txt', kurzbericht()]];
+  const v = bestellVorlage(), we = R && R.mfh ? R.mfh.we : null;
+  if (v) {
+    d.push(['Bestellvorschlag_' + v.nr + '.d83', MFK.cp850(MFK.d83Text(v, MFH_DATEN.langtexte, we))]);
+    d.push(['Bestellvorschlag_' + v.nr + '.csv', '﻿' + MFK.csvText(MFK.positionen(v, MFH_DATEN.langtexte, we))]);
+  }
+  herunterladen(zip(d), 'WP-Auslegung_' + n + '.zip');
+  alert('Projektmappe gespeichert. Das PDF bitte zusätzlich über „Drucken / PDF“ erzeugen (der Browser kann es nicht direkt in die ZIP-Datei legen).');
 }
 
 // ------------------------------------------------------------------ Datei

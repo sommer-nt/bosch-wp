@@ -17,7 +17,9 @@ ROOT = HIER.parent
 
 
 def e_mit(**aend):
+    """Test-Grundfall: 10 kW Heizlast, 4 Personen (das Tool selbst startet leer)."""
     e = P.neu()
+    e["heizlast"]["vorgabe_kw"], e["heizlast"]["flaeche_m2"], e["tww"]["personen"] = 10.0, 150.0, 4
     for pfad, wert in aend.items():
         ziel = e
         teile = pfad.split("__")
@@ -248,6 +250,11 @@ SCHEMA_FAELLE = [
     {"auswahl": {"geraet": "CS5800/6800iAW 7 OR-S", "anzahl": 1, "inneneinheit": "CS6800iAW 12 MB"}},
     {"waermequelle": "sole", "auslegung": "monovalent"},
     {"waermequelle": "sole", "auslegung": "monovalent", "tww": {"system": "friwa"}, "heizkreise": [{"typ": "hk"}, {"typ": "fbh"}]},
+    {"auslegung": "hybrid", "heizlast": {"vorgabe_kw": 22.0}},
+    {"auslegung": "hybrid", "heizlast": {"vorgabe_kw": 22.0}, "tww": {"system": "friwa"}},
+    {"mfh": {"art": "mfh", "we": 12, "ww": "hiu"}, "heizlast": {"vorgabe_kw": 44.0}, "tww": {"system": "friwa", "personen": 42}},
+    {"mfh": {"art": "mfh", "we": 8, "ww": "hiu"}, "auslegung": "hybrid", "heizlast": {"vorgabe_kw": 29.0}, "tww": {"system": "friwa", "personen": 28}},
+    {"mfh": {"art": "mfh", "we": 10, "ww": "dle"}, "heizlast": {"vorgabe_kw": 24.0}, "tww": {"aktiv": False}}
 ]
 
 
@@ -262,17 +269,19 @@ def _mische(ziel, quelle):
 
 @pytest.mark.skipif(shutil.which("node") is None, reason="node nicht installiert")
 def test_schema_python_gleich_html(tmp_path):
+    from wp import mfh as M
     from wp import schema as S
     from wp import texte as T
     faelle = []
     for aend in SCHEMA_FAELLE:
-        e = _mische(P.neu(), aend)
-        r = json.loads(json.dumps(rechne(e)))
+        e = _mische(_mische(P.neu(), {"heizlast": {"vorgabe_kw": 10.0}, "tww": {"personen": 4}}), aend)
+        r = json.loads(json.dumps(M.rechne(e, D.geraete(), D.katalog(), D.mfh())))
         faelle.append({"r": r, "ie": T.inneneinheit(e, r, D.katalog()), "kreise": T.heizkreis_liste(e), "farben": S.FARBEN_DRUCK})
     datei = tmp_path / "f.json"
     datei.write_text(json.dumps(faelle, ensure_ascii=False), encoding="utf-8")
     js = json.loads(subprocess.run(["node", str(HIER / "schema_html.js"), str(ROOT / "index.html"), str(datei)],
                                    capture_output=True, text=True, check=True).stdout)
+    assert all(j.startswith("<svg") for j in js), "jeder Fall muss ein Schema ergeben"
     for f_, j in zip(faelle, js):
         py = S.schema_svg(f_["r"], f_["ie"], f_["kreise"], S.FARBEN_DRUCK)
         assert py == j
@@ -300,7 +309,7 @@ def test_pakete_python_gleich_html(tmp_path):
     for aend in ({}, {"heizlast": {"vorgabe_kw": 6.3}}, {"auswahl": {"geraet": "CS8800iAW 13 O-T", "anzahl": 1, "inneneinheit": "AWMBi D"}},
                  {"auswahl": {"geraet": "CS5800/6800iAW 7 OR-S", "anzahl": 1, "inneneinheit": "CS6800iAW 12 M"}},
                  {"waermequelle": "sole", "auslegung": "monovalent"}, {"heizlast": {"vorgabe_kw": 95}}):
-        e = _mische(P.neu(), aend)
+        e = _mische(_mische(P.neu(), {"heizlast": {"vorgabe_kw": 10.0}, "tww": {"personen": 4}}), aend)
         r = json.loads(json.dumps(rechne(e)))
         ie = T.inneneinheit(e, r, D.katalog())
         faelle.append({"r": r, "ie": ie, "py": [p["paket"] + str(p["passt"]) for p in T.pakete_fuer(r, ie, D.pakete())]})
