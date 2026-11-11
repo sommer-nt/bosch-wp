@@ -28,6 +28,13 @@ Eigenes Projekt neben Bosch Flow (Netzrechner) und Bosch Speicher. Zwei Versione
 **Expertenmodus:** Gebäudehülle, Heizwert, Vollbenutzungsstunden, Nutzungsgrad, Warmwasser nach DIN V 18599-10,
 Lastprofil/Nachheizzeit, Kaltwassertemperatur, Sperrzeit, Betriebsweise, Spreizung, Entzugsleistung, Baureihen.
 
+## Prototyp (Vorführversion)
+
+`prototyp.html` ist eine abgespeckte Fassung zum Zeigen: gleicher Rechenweg und gleiche Darstellung, aber ohne
+Preise (auch nicht im Ausdruck), ohne Expertenmodus, ohne VDI-Vergleichstabelle und Zubehörliste, überall als
+„Prototyp“ gekennzeichnet und mit eigener Browser-Sicherung. Erzeugt mit `python tools/prototyp.py` aus
+`index.html` – nach jeder Änderung neu erzeugen (Test prüft das).
+
 ## Rechenweg
 
 1. **Heizlast QH** – Vorgabe (DIN EN 12831), Wohnfläche × W/m², Gebäudehülle (Transmission + Lüftung) oder

@@ -20,4 +20,5 @@
   Klima-/Lüftungs-/WP-Sortiment); danach `python tools/excel_import.py --nur-einbetten`.
 - Eigenes Projekt neben Bosch Flow und Bosch Speicher; „Entwickelt von Daniel Sommer · HC/SDE3-PSD“ bleibt sichtbar.
 - Betrieb: eigener Ubuntu-Server mit Docker und nginx, siehe `deploy/ANLEITUNG.md` (wp.sommer-nt.de).
+- `prototyp.html` (Vorführversion ohne Preise) nie von Hand ändern, sondern mit `python tools/prototyp.py` erzeugen.
 - Vor jedem Push: `python -m pytest -q` muss grün sein.

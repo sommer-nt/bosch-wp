@@ -321,3 +321,14 @@ process.stdout.write(JSON.stringify(f.map(x => ctx.paketeFuer(x.r, x.ie).map(p =
     for f_, j in zip(faelle, js):
         assert f_["py"] == j
     assert any(faelle[1]["py"]) and not faelle[5]["py"]          # EFH mit Paketen, Kaskade ohne
+
+
+def test_prototyp_aktuell_und_ohne_preise():
+    """prototyp.html = tools/prototyp.py aus index.html, enthält keine Preise."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("prototyp", ROOT / "tools" / "prototyp.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    soll = mod.baue()
+    assert (ROOT / "prototyp.html").read_text(encoding="utf-8") == soll, "python tools/prototyp.py ausführen"
+    assert '"uvp":null' in soll and not __import__("re").search(r'"uvp":\s*\d', soll)
