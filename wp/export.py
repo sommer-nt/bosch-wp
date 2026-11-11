@@ -17,7 +17,10 @@ from . import texte as T
 
 def dateiname(e: dict) -> str:
     import re
-    return re.sub(r"[^\wäöüÄÖÜß-]+", "_", e["projekt"].get("name") or "Projekt")
+    name = e["projekt"].get("name") or "Projekt"
+    for a, b in (("ä", "ae"), ("ö", "oe"), ("ü", "ue"), ("Ä", "Ae"), ("Ö", "Oe"), ("Ü", "Ue"), ("ß", "ss")):
+        name = name.replace(a, b)
+    return re.sub(r"[^\w-]+", "_", name, flags=re.ASCII)   # Dateinamen ohne Umlaute
 
 
 def bestell_vorlage(r: dict) -> dict | None:
@@ -96,7 +99,9 @@ def mappe_bytes(e: dict, r: dict, katalog: dict, pdf: bytes | None = None, schem
         if v:
             md, we = D.mfh(), r["mfh"]["we"]
             z.writestr(f"Bestellvorschlag_{v['nr']}.d83", M.d83_bytes(v, md["langtexte"], we))
-            z.writestr(f"Bestellvorschlag_{v['nr']}.csv", ("﻿" + M.csv_text(M.positionen(v, md["langtexte"], we))).encode("utf-8"))
+            z.writestr(f"Bestellvorschlag_{v['nr']}.csv", ("\ufeff" + M.csv_text(M.positionen(v, md["langtexte"], we))).encode("utf-8"))
+            zl = next(c for c in md["zellen"] if c.get("vorlage") == v["nr"])
+            z.writestr(f"Rapida-Import_{v['nr']}.csv", M.rapida_bytes(v, md["langtexte"], we, e["projekt"], M.rapida_hinweis(v, zl)))
         d = dokumentation(e, r, katalog)
         if d:
             z.writestr("Dokumentation_Bestellvorschlag.txt", dokumentation_text(d))

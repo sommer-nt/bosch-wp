@@ -9,7 +9,8 @@ VERSION = 1
 
 STANDARD: dict = {
     "experte": False,
-    "projekt": {"name": "", "kunde": "", "plz": "", "ort": "", "bearbeiter": "", "datum": "", "notiz": ""},
+    "projekt": {"name": "", "kunde": "", "strasse": "", "hausnr": "", "plz": "", "ort": "", "kundennr": "", "crm_id": "",
+                "bearbeiter": "", "datum": "", "notiz": ""},
     "gebaeude": {"typ": "sanierung"},
     "mfh": {"art": "efh", "we": 8, "ww": "friwa", "zelle": ""},
     "klima": {"nat": -12.0, "heizgrenze": 15.0, "innen": 20.0},

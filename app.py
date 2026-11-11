@@ -155,9 +155,12 @@ def mfh_bereich(r: dict, e: dict) -> None:
             continue
         pos = M.positionen(vo, MD["langtexte"], v["we"])
         dname = f"Bestellvorschlag_{vo['nr']}_" + ((e["projekt"]["name"] or "MFH").replace(" ", "_"))
-        c2.download_button("GAEB-Datei (.d83)", M.d83_bytes(vo, MD["langtexte"], v["we"]), dname + ".d83", "application/octet-stream",
+        c1.download_button("Rapida-Import (CSV)", M.rapida_bytes(vo, MD["langtexte"], v["we"], e["projekt"], M.rapida_hinweis(vo, z_)),
+                           f"Rapida-Import_{vo['nr']}_{X.dateiname(e)}.csv", "text/csv", key="mfh_rap_" + z_["id"], type="primary",
+                           help="CSV-Import für Rapida – Rapida erzeugt daraus den Bestellvorschlag (PDF, GAEB, XLS)")
+        c2.download_button("GAEB (.d83) – Großhandel", M.d83_bytes(vo, MD["langtexte"], v["we"]), dname + ".d83", "application/octet-stream",
                            key="mfh_d83_" + z_["id"])
-        c3.download_button("CSV (Excel)", ("\ufeff" + M.csv_text(pos)).encode("utf-8"), dname + ".csv", "text/csv", key="mfh_csv_" + z_["id"])
+        c3.download_button("Positionsliste CSV", ("\ufeff" + M.csv_text(pos)).encode("utf-8"), dname + ".csv", "text/csv", key="mfh_csv_" + z_["id"])
         wm = M.muster_we(vo)
         st.caption(f"Bestellvorschlag {vo['nr']} ({vo['titel']}, {vo['datum']})"
                    + (f" · Durchlauferhitzer von {wm} auf {v['we']} WE angepasst" if any(p_["menge"] != p_["menge_muster"] for p_ in pos) else ""))
@@ -187,6 +190,12 @@ with links:
     with st.expander("① Projekt, Gebäude & Standort", expanded=True):
         E["projekt"]["name"] = st.text_input("Projekt / Bauvorhaben", E["projekt"]["name"])
         E["projekt"]["kunde"] = st.text_input("Kunde / Interessent", E["projekt"]["kunde"])
+        c_s1, c_s2 = st.columns([3, 1])
+        E["projekt"]["strasse"] = c_s1.text_input("Straße", E["projekt"].get("strasse", ""))
+        E["projekt"]["hausnr"] = c_s2.text_input("Nr.", E["projekt"].get("hausnr", ""))
+        c_k1, c_k2 = st.columns(2)
+        E["projekt"]["kundennr"] = c_k1.text_input("Kundennummer", E["projekt"].get("kundennr", ""))
+        E["projekt"]["crm_id"] = c_k2.text_input("CRM-ID", E["projekt"].get("crm_id", ""), help="Vorgangsnummer – für den Rapida-Import")
         if EX:
             E["projekt"]["bearbeiter"] = st.text_input("Bearbeiter", E["projekt"]["bearbeiter"])
         if wahl("Gebäude", "gebaeude.typ", {"neubau": "Neubau", "sanierung": "Sanierung / Bestand"}):

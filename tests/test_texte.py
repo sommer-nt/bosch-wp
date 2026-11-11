@@ -84,7 +84,7 @@ def test_projektmappe():
     r = M.rechne(e, D.geraete(), D.katalog(), D.mfh())
     z = zipfile.ZipFile(io.BytesIO(X.mappe_bytes(e, r, D.katalog(), b"%PDF-1.4")))
     namen = set(z.namelist())
-    assert namen == {"WP-Auslegung_Muster_MFH.json", "Kurzbericht.txt", "Dokumentation_Bestellvorschlag.txt", "Bestellvorschlag_4000194338.d83",
+    assert namen == {"WP-Auslegung_Muster_MFH.json", "Kurzbericht.txt", "Dokumentation_Bestellvorschlag.txt", "Rapida-Import_4000194338.csv", "Bestellvorschlag_4000194338.d83",
                      "Bestellvorschlag_4000194338.csv", "WP-Auslegung_Muster_MFH.pdf"}
     assert "Aus der MFH-Musterlösung" in z.read("Kurzbericht.txt").decode("utf-8")
 

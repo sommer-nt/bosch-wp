@@ -210,8 +210,9 @@
     <details class="menu" id="exportMenu"><summary>Export ▾</summary><div class="menuliste">
       <button id="bSpeichern">Projektdatei (.json) – wieder öffnen</button>
       <button id="bDruck2">Auslegung als PDF (Drucken)</button>
-      <button id="bExpD83">Bestellvorschlag GAEB (.d83)</button>
-      <button id="bExpCsv">Bestellvorschlag CSV (Excel)</button>
+      <button id="bExpRapida">Rapida-Import (CSV) – Bestellvorschlag in Rapida erzeugen</button>
+      <button id="bExpD83">Bestellvorschlag GAEB (.d83) – für den Großhandel</button>
+      <button id="bExpCsv">Positionsliste CSV (Excel)</button>
       <button id="bExpZip">Projektmappe (.zip) – alles zusammen</button>
     </div></details>
     <button id="bDruck" class="primary" title="Auslegung drucken / als PDF speichern">Drucken / PDF</button>
@@ -227,6 +228,8 @@
   <div class="card"><h2><span class="nr">1</span>Projekt, Gebäude &amp; Standort</h2><div class="in">
     <label class="f">Projekt / Bauvorhaben<span class="e"><input data-k="projekt.name" type="text"></span></label>
     <label class="f">Kunde / Interessent<span class="e"><input data-k="projekt.kunde" type="text"></span></label>
+    <label class="f">Straße / Hausnummer<span class="e"><input data-k="projekt.strasse" type="text" style="flex:3"><input data-k="projekt.hausnr" type="text" style="flex:1;min-width:0"></span></label>
+    <label class="f">Kundennummer / CRM-ID<span class="e"><input data-k="projekt.kundennr" type="text" inputmode="numeric" placeholder="Kunden-Nr."><input data-k="projekt.crm_id" type="text" inputmode="numeric" placeholder="CRM-ID"></span></label>
     <label class="f exp">Bearbeiter<span class="e"><input data-k="projekt.bearbeiter" type="text"></span></label>
     <div class="seg" data-seg="gebaeude.typ"><button data-v="neubau">Neubau</button><button data-v="sanierung">Sanierung / Bestand</button></div>
     <div class="seg" data-seg="mfh.art"><button data-v="efh">Ein-/Zweifamilienhaus</button><button data-v="mfh">Mehrfamilienhaus</button></div>
@@ -864,7 +867,36 @@ const MFK = (() => {
     p.push({text: `Preisstand: ${vo ? 'Bestellvorschlag ' + vo.datum + ', ' : ''}Kostenübersicht ${matrix.stand}.`, status: ''});
     return {pruefungen: p, schema: s, vorlage: vo ? vo.nr : null, valide: !p.some(x => x.status === 'warn' || x.status === 'bad')};
   }
-  return {WW_TEXT, eingabenFolgen, rechneMitMuster, schemaZurLoesung, dokumentation, zeile, musterHeizlast, vorschlag, positionen, summe, artText, musterWe, d83Text, cp850, csvText};
+  // Rapida-Import (CSV, Format wie Mercura-Export) – wie wp/mfh.rapida_csv()
+  const RAPIDA_KOPF = ['Name / Betreff des Bauvorhabens', 'Straße des Bauvorhabens', 'Hausnummer des Bauvorhabens', 'PLZ des Bauvorhabens',
+    'Ort des Bauvorhabens', 'Kundennummer', 'CRM ID', 'Kapitel Bezeichnung', 'LV Referenz', 'Positionstyp', 'Anzahl', 'TTN Nr.', 'Text'];
+  const zahlG = x => String(Number.isInteger(x) ? x : x).replace('.', ',');
+  function rapidaZeilen(v, langtexte, we, p, hinweis = '') {
+    const basis = [(p.name || 'WP-Schnellauslegung').replace(/;/g, ','), p.strasse || '', p.hausnr || '', p.plz || '', p.ort || '', p.kundennr || '', p.crm_id || ''];
+    const out = [];
+    if (hinweis) out.push([...basis, 'Hinweis', '', 'Hinweis', '', '', hinweis.replace(/;/g, ',')]);
+    positionen(v, langtexte, we).forEach((x, i) => {
+      const text = x.text.replace(/ – /g, ' ').replace(/;/g, ',');
+      if (!x.artnr) { out.push([...basis, x.gruppe, String(i + 1), 'Hinweis', '', '', `${zahlG(x.menge)} ${x.einheit} ${text}`]); return; }
+      out.push([...basis, x.gruppe, String(i + 1), x.summe ? 'Normal' : 'Alternativ', zahlG(x.menge), x.artnr, text]);
+    });
+    return out;
+  }
+  const rapidaCsv = (v, langtexte, we, p, hinweis = '') => [RAPIDA_KOPF, ...rapidaZeilen(v, langtexte, we, p, hinweis)].map(z => z.join(';')).join('\r\n') + '\r\n';
+  const rapidaHinweis = (v, zl) => `Erstellt mit der WP-Schnellauslegung (Entwickelt von Daniel Sommer, HC/SDE3-PSD) aus dem Musterbestellvorschlag ${v.nr} (${zl.we} WE / ${zl.kw} kW). Planungsvorschlag – mit den bauseitigen Gegebenheiten abstimmen.`;
+  // Windows-1252 (wie Mercura-/Rapida-Export)
+  const CP1252 = {0x20AC: 0x80, 0x201A: 0x82, 0x0192: 0x83, 0x201E: 0x84, 0x2026: 0x85, 0x2020: 0x86, 0x2021: 0x87, 0x02C6: 0x88, 0x2030: 0x89,
+    0x0160: 0x8A, 0x2039: 0x8B, 0x0152: 0x8C, 0x017D: 0x8E, 0x2018: 0x91, 0x2019: 0x92, 0x201C: 0x93, 0x201D: 0x94, 0x2022: 0x95, 0x2013: 0x96,
+    0x2014: 0x97, 0x02DC: 0x98, 0x2122: 0x99, 0x0161: 0x9A, 0x203A: 0x9B, 0x0153: 0x9C, 0x017E: 0x9E, 0x0178: 0x9F};
+  function cp1252(text) {
+    const b = new Uint8Array(text.length);
+    for (let i = 0; i < text.length; i++) {
+      const c = text.charCodeAt(i);
+      b[i] = c < 0x80 || (c >= 0xA0 && c <= 0xFF) ? c : (CP1252[c] || 63);
+    }
+    return b;
+  }
+  return {WW_TEXT, eingabenFolgen, rechneMitMuster, schemaZurLoesung, dokumentation, rapidaCsv, rapidaHinweis, cp1252, zeile, musterHeizlast, vorschlag, positionen, summe, artText, musterWe, d83Text, cp850, csvText};
 })();
 </script>
 
@@ -1189,7 +1221,7 @@ function verteilungAusKreisen() {
 }
 const STANDARD = {
   experte: false,
-  projekt: {name: '', kunde: '', plz: '', ort: '', bearbeiter: '', datum: '', notiz: ''},
+  projekt: {name: '', kunde: '', strasse: '', hausnr: '', plz: '', ort: '', kundennr: '', crm_id: '', bearbeiter: '', datum: '', notiz: ''},
   gebaeude: {typ: 'sanierung'},
   mfh: {art: 'efh', we: 8, ww: 'friwa', zelle: ''},
   klima: {nat: -12.0, heizgrenze: 15.0, innen: 20.0},
@@ -1282,6 +1314,7 @@ function bindeEingaben() {
   const zu = () => $('#exportMenu').removeAttribute('open');
   $('#bDruck2').onclick = () => { zu(); baueDruck(); window.print(); };
   $('#bExpD83').onclick = () => { zu(); exportBestell('d83'); };
+  $('#bExpRapida').onclick = () => { zu(); exportBestell('rapida'); };
   $('#bExpCsv').onclick = () => { zu(); exportBestell('csv'); };
   $('#bExpZip').onclick = () => { zu(); exportMappe(); };
   $('#bSpeichern').onclick = () => { $('#exportMenu').removeAttribute('open'); speichern(); };
@@ -1463,8 +1496,10 @@ function zeichne() {
   // Export-Menü: GAEB nur, wenn ein Bestellvorschlag vorhanden ist; CSV sonst als Komponentenliste
   const bv = bestellVorlage();
   $('#bExpD83').disabled = !bv;
-  $('#bExpD83').textContent = bv ? `Bestellvorschlag GAEB (.d83) – Nr. ${bv.nr}` : 'Bestellvorschlag GAEB (.d83) – für diese Auslegung nicht vorhanden';
-  $('#bExpCsv').textContent = bv ? `Bestellvorschlag CSV (Excel) – Nr. ${bv.nr}` : (r.mfh && r.mfh.auswahl.length ? 'Komponentenliste CSV (Excel)' : 'Bestellvorschlag CSV – nur bei Mehrfamilienhaus');
+  $('#bExpRapida').disabled = !bv;
+  $('#bExpRapida').textContent = bv ? `Rapida-Import (CSV) – Musterbestellvorschlag ${bv.nr}` : 'Rapida-Import (CSV) – für diese Auslegung kein Musterbestellvorschlag';
+  $('#bExpD83').textContent = bv ? `GAEB (.d83) für den Großhandel – Nr. ${bv.nr}` : 'GAEB (.d83) für den Großhandel – für diese Auslegung nicht vorhanden';
+  $('#bExpCsv').textContent = bv ? `Positionsliste CSV (Excel) – Nr. ${bv.nr}` : (r.mfh && r.mfh.auswahl.length ? 'Komponentenliste CSV (Excel)' : 'Positionsliste CSV – nur bei Mehrfamilienhaus');
   $('#bExpCsv').disabled = !bv && !(r.mfh && r.mfh.auswahl.length);
   $('#legende').innerHTML = legende(r) + minHinweis(r);
   $('#diagramm').innerHTML = diagramm(r, {breite: 900, hoehe: 380});
@@ -1586,7 +1621,7 @@ function mfhHtml(r, preise, druck) {
     h += `<div class="sub" style="margin-top:12px">${esc(z.erzeuger || 'Monoenergetisch')} · ${z.we} WE / ${z.kw} kW${z.variante ? ' · ' + esc(z.variante) : ''}</div>
       <p style="margin:4px 0"><b>${esc(z.komponenten.join(' · '))}</b>${druck ? ' <span class="hint">· grau = Alternative / bei Bedarf, nicht in der Summe</span>' : ''}${preise ? ` <span class="preis">· Summe netto ${euro(z.summe)}</span>` : ''}</p>
       <p class="hint" style="margin:2px 0">Muster-Heizlast ${z.we} WE · ${A.flaeche_we} m² · ${A.spez_w_m2} W/m² = ${f(a.muster_qh, 1)} kW · Prüfung mit Ihren Eingaben: ${mfhPruefText(a, r)}</p>`;
-    if (!druck) h += `<div style="display:flex;gap:6px;flex-wrap:wrap;margin:6px 0">${istGew ? '<span class="hint">✓ als Wärmepumpe gewählt</span>' : `<button data-uebernehmen="${esc(z.geraet)}|${z.n}">Wärmepumpe übernehmen</button>`}${vo ? `<button data-d83="${vo.nr}" data-art="d83">GAEB-Datei (.d83)</button><button data-d83="${vo.nr}" data-art="csv">CSV (Excel)</button>` : ''}</div>`;
+    if (!druck) h += `<div style="display:flex;gap:6px;flex-wrap:wrap;margin:6px 0">${istGew ? '<span class="hint">✓ als Wärmepumpe gewählt</span>' : `<button data-uebernehmen="${esc(z.geraet)}|${z.n}">Wärmepumpe übernehmen</button>`}${vo ? `<button class="primary" data-d83="${vo.nr}" data-art="rapida" title="CSV-Import für Rapida – Rapida erzeugt daraus den Bestellvorschlag (PDF, GAEB, XLS)">Rapida-Import (CSV)</button><button data-d83="${vo.nr}" data-art="d83" title="GAEB DA 1990 für den Großhandel">GAEB (.d83)</button><button data-d83="${vo.nr}" data-art="csv">Positionsliste CSV</button>` : ''}</div>`;
     if (!vo) {
       const mit = v.zellen.filter(c => c.vorlage);
       h += `<div class="meldung"><b>Kein GAEB-Bestellvorschlag für diese Musterlösung vorhanden.</b> Bosch hat dafür (noch) keinen Musterbestellvorschlag –
@@ -1639,6 +1674,12 @@ async function schemaZeigen(nr) {
 function mfhExport(nr, art) {
   const v = MFH_DATEN.vorlagen[nr], we = R && R.mfh ? R.mfh.we : null;
   const name = 'Bestellvorschlag_' + nr + '_' + ((E.projekt.name || 'MFH').replace(/[^\wäöüÄÖÜß-]+/g, '_'));
+  if (art === 'rapida') {
+    const zl = MFH_DATEN.zellen.find(c => c.vorlage === nr);
+    herunterladen(new Blob([MFK.cp1252(MFK.rapidaCsv(v, MFH_DATEN.langtexte, we, E.projekt, MFK.rapidaHinweis(v, zl)))], {type: 'text/csv'}),
+      `Rapida-Import_${nr}_${dateiName()}.csv`);
+    return;
+  }
   const blob = art === 'csv'
     ? new Blob(['﻿' + MFK.csvText(MFK.positionen(v, MFH_DATEN.langtexte, we))], {type: 'text/csv;charset=utf-8'})
     : new Blob([MFK.cp850(MFK.d83Text(v, MFH_DATEN.langtexte, we))], {type: 'application/octet-stream'});
@@ -1985,7 +2026,7 @@ function baueDruck() {
 }
 
 // ------------------------------------------------------------------ Export
-const dateiName = () => (E.projekt.name || 'Projekt').replace(/[^\wäöüÄÖÜß-]+/g, '_');
+const dateiName = () => (E.projekt.name || 'Projekt').replace(/[äöüÄÖÜß]/g, c => ({ä: 'ae', ö: 'oe', ü: 'ue', Ä: 'Ae', Ö: 'Oe', Ü: 'Ue', ß: 'ss'}[c])).replace(/[^\w-]+/g, '_');   // Dateinamen ohne Umlaute
 function herunterladen(blob, name) {
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob); a.download = name;
@@ -2060,6 +2101,7 @@ async function exportMappe() {
   if (v) {
     d.push(['Bestellvorschlag_' + v.nr + '.d83', MFK.cp850(MFK.d83Text(v, MFH_DATEN.langtexte, we))]);
     d.push(['Bestellvorschlag_' + v.nr + '.csv', '﻿' + MFK.csvText(MFK.positionen(v, MFH_DATEN.langtexte, we))]);
+    d.push(['Rapida-Import_' + v.nr + '.csv', MFK.cp1252(MFK.rapidaCsv(v, MFH_DATEN.langtexte, we, E.projekt, MFK.rapidaHinweis(v, MFH_DATEN.zellen.find(c => c.vorlage === v.nr))))]);
   }
   herunterladen(zip(d), 'WP-Auslegung_' + n + '.zip');
   alert('Projektmappe gespeichert.' + fehlt + ' Das PDF der Auslegung bitte zusätzlich über „Drucken / PDF“ erzeugen (der Browser kann es nicht direkt in die ZIP-Datei legen).');

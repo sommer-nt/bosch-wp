@@ -33,6 +33,12 @@ zuletzt im Browser bearbeitete Auslegung zurück, „Zurücksetzen“ leert alle
 **Projektmappe (.zip)** mit Projektdatei, Kurzbericht (Klartext + Links der Hydraulikschemata) und Bestellvorschlag –
 in Streamlit zusätzlich mit dem PDF (`wp/export.py`).
 
+**Bestellweg:** Hauptweg ist der **Rapida-Import (CSV)** – gleiche Spalten wie der Mercura-Export (Bauvorhaben, Straße,
+PLZ, Ort, Kundennummer, CRM-ID, Kapitel, LV-Referenz, Positionstyp Normal/Alternativ/Hinweis, Anzahl, TTN-Nr., Text;
+Semikolon, Windows-1252). Rapida erzeugt daraus den offiziellen Bestellvorschlag (PDF für den Kunden, GAEB D83 für den
+Großhandel, XLS). Zusätzlich direkt: GAEB (.d83) und Positionsliste (CSV). Grund-/Normalpositionen → Normal,
+Alternativ- und Bedarfspositionen → Alternativ, Positionen ohne TTN-Nr. → Hinweis.
+
 **Ergebnis in Reitern:** Überblick (Klartext „Auf einen Blick“, Kennzahlen, gewählte Wärmepumpe, Leistungsdiagramm) ·
 Leistung & Heizkurve · Geräteauswahl · Hydraulik & Warmwasser · Bestellvorschlag (MFH) bzw. Systempakete · Rechenweg
 (Schritte, Herleitung, Begriffe). Fachbegriffe sind über „?“ erklärt; Klartext und Glossar stehen in `wp/texte.py` und

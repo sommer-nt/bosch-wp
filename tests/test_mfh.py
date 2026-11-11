@@ -138,7 +138,8 @@ def test_mfh_python_gleich_html(tmp_path):
         folgen.append([e, k])
     vorlagen = [[nr, we] for nr in MD["vorlagen"] for we in (None, 9)]
     datei = tmp_path / "faelle.json"
-    datei.write_text(json.dumps({"eingaben": ein, "folgen": folgen, "vorlagen": vorlagen}, ensure_ascii=False), encoding="utf-8")
+    projekt = {"name": "BV Müller; Haus", "strasse": "Hauptstraße", "hausnr": "1a", "plz": "88521", "ort": "Ertingen", "kundennr": "4711", "crm_id": "30341506"}
+    datei.write_text(json.dumps({"eingaben": ein, "folgen": folgen, "vorlagen": vorlagen, "projekt": projekt}, ensure_ascii=False), encoding="utf-8")
     js = json.loads(subprocess.run(["node", str(HIER / "mfh_html.js"), str(ROOT / "index.html"), str(datei)],
                                    capture_output=True, text=True, check=True).stdout)
     from test_rechnen import gleich
@@ -152,6 +153,8 @@ def test_mfh_python_gleich_html(tmp_path):
         e = copy.deepcopy(e)
         M.eingaben_folgen(e, k)
         gleich(e, j)
+    for (nr, we), r_js in zip(vorlagen, js["rapida"]):
+        assert M.rapida_bytes(MD["vorlagen"][nr], MD["langtexte"], we, projekt, "Hinweis äöü – Test") == base64.b64decode(r_js)
     for (nr, we), p_js, d_js, b_js, c_js in zip(vorlagen, js["positionen"], js["d83"], js["cp850"], js["csv"]):
         v = MD["vorlagen"][nr]
         gleich(M.positionen(v, MD["langtexte"], we), p_js)

@@ -20,6 +20,7 @@ const out = {
   positionen: f.vorlagen.map(([nr, we]) => ctx.MFK.positionen(M.vorlagen[nr], M.langtexte, we)),
   d83: f.vorlagen.map(([nr, we]) => ctx.MFK.d83Text(M.vorlagen[nr], M.langtexte, we)),
   cp850: f.vorlagen.map(([nr, we]) => Buffer.from(ctx.MFK.cp850(ctx.MFK.d83Text(M.vorlagen[nr], M.langtexte, we))).toString('base64')),
+  rapida: f.vorlagen.map(([nr, we]) => Buffer.from(ctx.MFK.cp1252(ctx.MFK.rapidaCsv(M.vorlagen[nr], M.langtexte, we, f.projekt, 'Hinweis äöü – Test'))).toString('base64')),
   csv: f.vorlagen.map(([nr, we]) => ctx.MFK.csvText(ctx.MFK.positionen(M.vorlagen[nr], M.langtexte, we))),
 };
 process.stdout.write(JSON.stringify(out));

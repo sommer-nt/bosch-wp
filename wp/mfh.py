@@ -286,3 +286,46 @@ def T_biv(g: dict) -> str:
     if g["bivalenz_art"] == "nicht":
         return "nicht erreicht"
     return ("≤ " if g["bivalenz_art"] == "unter" else "") + zahl(g["bivalenz"], 1).replace("-", "−") + " °C"
+
+
+# ------------------------------------------------------------------------------------------------ Rapida-Import (CSV)
+RAPIDA_KOPF = ["Name / Betreff des Bauvorhabens", "Straße des Bauvorhabens", "Hausnummer des Bauvorhabens", "PLZ des Bauvorhabens",
+               "Ort des Bauvorhabens", "Kundennummer", "CRM ID", "Kapitel Bezeichnung", "LV Referenz", "Positionstyp", "Anzahl",
+               "TTN Nr.", "Text"]
+
+
+def rapida_zeilen(vorlage: dict, langtexte: dict, we: int | None, projekt: dict, hinweis: str = "") -> list[list[str]]:
+    """Positionen im Importformat für Rapida (wie Mercura-Export): Positionstyp Normal/Alternativ/Hinweis, Anzahl, TTN-Nr.
+
+    Grund- und Normalpositionen → „Normal“, Alternativ- und Bedarfspositionen → „Alternativ“ (nicht in der Summe),
+    Positionen ohne TTN-Nr. (z. B. Fundament-Service) → „Hinweis“ mit Text. LV-Referenz = laufende Position.
+    """
+    p = projekt
+    basis = [(p.get("name") or "WP-Schnellauslegung").replace(";", ","), p.get("strasse") or "", p.get("hausnr") or "",
+             p.get("plz") or "", p.get("ort") or "", p.get("kundennr") or "", p.get("crm_id") or ""]
+    out = []
+    if hinweis:
+        out.append(basis + ["Hinweis", "", "Hinweis", "", "", hinweis.replace(";", ",")])
+    for i, x in enumerate(positionen(vorlage, langtexte, we), 1):
+        text = x["text"].replace(" – ", " ").replace(";", ",")
+        if not x["artnr"]:
+            out.append(basis + [x["gruppe"], str(i), "Hinweis", "", "", f"{x['menge']:g} {x['einheit']} {text}"])
+            continue
+        typ = "Normal" if x["summe"] else "Alternativ"
+        out.append(basis + [x["gruppe"], str(i), typ, f"{x['menge']:g}".replace(".", ","), x["artnr"], text])
+    return out
+
+
+def rapida_csv(vorlage: dict, langtexte: dict, we: int | None, projekt: dict, hinweis: str = "") -> str:
+    zeilen = [RAPIDA_KOPF] + rapida_zeilen(vorlage, langtexte, we, projekt, hinweis)
+    return "\r\n".join(";".join(z) for z in zeilen) + "\r\n"
+
+
+def rapida_bytes(vorlage: dict, langtexte: dict, we: int | None, projekt: dict, hinweis: str = "") -> bytes:
+    """Windows-1252 wie der Mercura-/Rapida-Export."""
+    return rapida_csv(vorlage, langtexte, we, projekt, hinweis).encode("cp1252", errors="replace")
+
+
+def rapida_hinweis(vorlage: dict, zelle: dict) -> str:
+    return (f"Erstellt mit der WP-Schnellauslegung (Entwickelt von Daniel Sommer, HC/SDE3-PSD) aus dem Musterbestellvorschlag "
+            f"{vorlage['nr']} ({zelle['we']} WE / {zelle['kw']} kW). Planungsvorschlag – mit den bauseitigen Gegebenheiten abstimmen.")
