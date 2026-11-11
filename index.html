@@ -411,8 +411,11 @@ const RK = (() => {
     return {d, hinweise};
   }
   function last(t, qhs, qtw, nat, thg) {
-    if (thg <= nat || t <= nat) return qhs + qtw;
-    return qhs * Math.max(0.0, (thg - t) / (thg - nat)) + qtw;
+    // unterhalb θe konstant QGES, darüber linear bis auf 0 kW an der Heizgrenze – endet immer bei null
+    const qges = qhs + qtw;
+    if (t <= nat) return qges;
+    if (thg <= nat || t >= thg) return 0.0;
+    return qges * (thg - t) / (thg - nat);
   }
   function bewerte(g, n, vl, r, daten, katalog) {
     const nat = r.nat, thg = r.heizgrenze, qges = r.qges, qhs = r.qh + r.qsperr, qtw = r.qtw;

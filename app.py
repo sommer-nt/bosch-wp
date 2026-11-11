@@ -414,7 +414,7 @@ with rechts:
         if g["bivalenz_art"] == "punkt":
             fig.add_vrect(x0=g["bivalenz"] - 0.8, x1=g["bivalenz"] + 0.8, fillcolor="#f28c28", opacity=0.14, line_width=0)
         fig.update_layout(height=420, margin=dict(l=10, r=10, t=30, b=10), xaxis_title="Außentemperatur in °C",
-                          yaxis_title="Heizleistung in kW", legend=dict(orientation="h", y=1.12), template="plotly_white")
+                          yaxis_title="Heizleistung in kW", yaxis_rangemode="tozero", legend=dict(orientation="h", y=1.12), template="plotly_white")
         st.plotly_chart(fig, width="stretch")
         st.caption(T.min_hinweis(r))
 

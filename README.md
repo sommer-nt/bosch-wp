@@ -49,7 +49,7 @@ Preise (auch nicht im Ausdruck), ohne Expertenmodus, ohne VDI-Vergleichstabelle 
 4. **Kriterium**: monoenergetisch 0,7 · QGES bei A-7, monovalent QGES bei θe (Standard bei Sole), GEG-Hybrid 0,3 · QH.
 5. Je Gerät und Kaskade (CS3800 und CS7400 nicht kaskadierbar, CS5800/6800, CS8800, CS7000 2er, CS5001 bis 14):
    max. Heizleistung beim Auslegungsvorlauf (zwischen 35/45/55/65 °C interpoliert), Bivalenzpunkt mit der
-   Gebäudekennlinie (Heizung linear bis Heizgrenze, Warmwasser konstant), Heizstab-Bedarf bei θe, Deckungsanteil nach
+   Gebäudekennlinie (QGES linear bis 0 kW an der Heizgrenze), Heizstab-Bedarf bei θe, Deckungsanteil nach
    VDI 4650 (Luft- bzw. Sole/Wasser, parallel), Taktgrenze über die Mindestleistung. Kurven werden nur im Bereich der
    Herstellerdaten gezeichnet. Sole/Wasser: Leistung konstant (B0), Entzugsleistung und Sondenlänge als Richtwert.
 6. Luft/Wasser: Verbindungsleitung Außeneinheit – Gebäude (kleinstes Rohr mit v ≤ 1 m/s und R ≤ 200 Pa/m, Δp mit 30 %

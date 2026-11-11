@@ -202,11 +202,14 @@ def tww_temperaturen(e: dict) -> dict:
 
 # ------------------------------------------------------------------------------------------------ Auslegung
 def last(t: float, qh_sperr: float, qtw: float, nat: float, thg: float) -> float:
-    """Gebäudekennlinie wie Excel-Diagramm: unterhalb θe konstant QGES, dann linear auf 0 an der Heizgrenze
-    (Warmwasser konstant)."""
-    if thg <= nat or t <= nat:
-        return qh_sperr + qtw
-    return qh_sperr * max(0.0, (thg - t) / (thg - nat)) + qtw
+    """Gebäudekennlinie: unterhalb θe konstant QGES (inkl. Warmwasser- und Sperrzeitzuschlag), darüber linear
+    bis auf 0 kW an der Heizgrenze, oberhalb der Heizgrenze 0 kW – die Kennlinie endet immer bei null."""
+    qges = qh_sperr + qtw
+    if t <= nat:
+        return qges
+    if thg <= nat or t >= thg:
+        return 0.0
+    return qges * (thg - t) / (thg - nat)
 
 
 # DIN V 4701-10 / VDI 4650 (Bild im Excel-Werkzeug): Bivalenzpunkt -> Leistungsanteil μ, Deckungsanteil α
