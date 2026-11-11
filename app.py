@@ -17,6 +17,7 @@ st.set_page_config(page_title="Bosch WP-Schnellauslegung", page_icon="♨️", l
 
 from wp import bericht as B  # noqa: E402
 from wp import daten as D  # noqa: E402
+from wp import hydraulik as HY  # noqa: E402
 from wp import mfh as M  # noqa: E402
 from wp import projekt as P  # noqa: E402
 from wp import rechnen as R  # noqa: E402
@@ -566,6 +567,17 @@ with rechts:
             for i_, (a_, b_, c_) in enumerate(kacheln):
                 sp_[i_ % len(sp_)].markdown(f"<div class='kpi'><div class='t'>{a_}</div><div class='v'>{b_}</div><div class='s'>{c_}</div></div>",
                                             unsafe_allow_html=True)
+        hs_ = HY.schemata(E, r, D.hydraulik(), ie)
+        if hs_:
+            st.markdown("**Bosch-Hydraulikschemata** – Hydraulikdatenbank, passend zur Auslegung (PDF/DWG online)")
+            hd_ = D.hydraulik()
+            for i_, x_ in enumerate(hs_):
+                c_b, c_t = st.columns([1, 4])
+                c_b.image(HY.link(hd_, x_["nr"], "bild"), width=130)
+                c_t.markdown(("**am besten passend:** " if i_ == 0 else "") + f"**{x_['titel']}** · Nr. {x_['nr']} · Stand {x_['stand']}"
+                             + (f" · {x_['bopa']}" if x_["bopa"] else "") + f"  \n{x_['komponenten']}  \n"
+                             f"[PDF]({HY.link(hd_, x_['nr'], 'pdf')})" + (f" · [DWG]({HY.link(hd_, x_['nr'], 'dwg')})" if x_["dwg"] else "")
+                             + f" · [in der Datenbank]({HY.link(hd_, x_['nr'], 'suche')})")
     with t_best:
         # ---- MFH-Bestellvorschlag (Musterlösungen) – wie mfhHtml() in index.html
         if r["mfh"]:

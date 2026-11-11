@@ -67,3 +67,10 @@ def mfh() -> dict:
     schl = {p["lang"] for x in m["vorlagen"].values() for g in x["gruppen"] for p in g["elemente"] if p.get("lang")}
     m["langtexte"] = {k: t for k, t in v["langtexte"].items() if k in schl}
     return m
+
+
+@lru_cache(maxsize=None)
+def hydraulik() -> dict:
+    """Index der Bosch-Hydraulikdatenbank (Wärmepumpen-Schemata), erzeugt mit tools/hdb_import.py."""
+    datei = DATEN / "hydraulik.json"
+    return json.loads(datei.read_text(encoding="utf-8")) if datei.exists() else {"basis": "", "schemata": []}

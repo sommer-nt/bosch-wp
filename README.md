@@ -84,6 +84,15 @@ danach `python tools/excel_import.py --nur-einbetten`.
 Kaskaden: CS8800 mit Kaskadenregler HPC800i C bis 3 Geräte (wie Musterlösungen), CS5001 mit HPC 301 C bis 14.
 Im Schema hängt die Frischwasserstation an einem eigenen FriWa-Puffer, nicht am Trennpuffer der Heizung.
 
+## Bosch-Hydraulikschemata
+
+Im Reiter „Hydraulik & Warmwasser“ zeigt das Tool die passenden Schemata aus der Bosch-Hydraulikdatenbank
+(bosch-de-de.boschhc-documents.com/hdb) – ausgewählt nach Baureihe, Kaskade (Anzahl), Warmwasser (Speicher,
+Frischwasserstation, Wohnungsstationen/HIU, ohne), Hybrid und Inneneinheit, mit Vorschaubild, PDF, DWG und Link in
+die Datenbank (online). Der Index (330 Wärmepumpen-Schemata) steht in `daten/hydraulik.json`; aktualisieren mit
+`python tools/hdb_import.py`, danach `python tools/excel_import.py --nur-einbetten`. Logik in `wp/hydraulik.py` und
+`<script id="hdbkern">` (Test vergleicht beide).
+
 ## Heizkurve
 
 Vorlauf-/Rücklauftemperatur über der Außentemperatur nach DIN EN 442 für den maßgebenden Heizkreis (Heizkörper n = 1,3,

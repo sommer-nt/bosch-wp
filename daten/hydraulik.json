@@ -1,0 +1,5986 @@
+{
+"quelle": "Bosch Hydraulikdatenbank (bosch-de-de.boschhc-documents.com/hdb)",
+"basis": "https://bosch-de-de.boschhc-documents.com",
+"schemata": [
+{
+"nr": "6720878187",
+"titel": "STM..-1/BH../2HK/SEC10",
+"stand": "2019/01",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"waermepumpesolewasser_kompakt",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6720878188",
+"titel": "STE..-1/BH../WH..LP/HK",
+"stand": "2019/01",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6720878189",
+"titel": "STE..-1/BH../WPS../Sol/HK",
+"stand": "2019/01",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_waermepumpen_regelung",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6720878190",
+"titel": "STE..-1/BH../HK/SEC10-1",
+"stand": "2019/01",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_ohne",
+"waermepumpesolewasser_alle",
+"waermepumpesolewasser_kompakt",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6720878191",
+"titel": "STE..-1/BH../WH../HK/HKm",
+"stand": "2019/01",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6720878192",
+"titel": "STE..-1/BH../WPS../Sol/2HK",
+"stand": "2019/01",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_waermepumpen_regelung",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6720878447",
+"titel": "CS7800iLW MB (F)",
+"stand": "2021/12",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"waermepumpesolewasser_kompakt",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6720878601",
+"titel": "STE...-1",
+"stand": "2021/04",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6720878611",
+"titel": "CS7800iLW MB (F)",
+"stand": "2023/06",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"waermepumpesolewasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6720878672",
+"titel": "CS5800i/6800i AW 12 M",
+"stand": "2026/02",
+"komponenten": "CS5800iAW, CS6800iAW, AW4OR-5, AW5OR-S, AW7OR-S, AWS10OR-T, AWS12OR-T",
+"bopa": "BOPA-CS761, BOPA-CS762, BOPA-CS763, BOPA-CS764, BOPA-CS765, BOPA-CS766, BOPA-CS788, BOPA-CS789, BOPA-CS790, BOPA-CS791",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_kompakt",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6720878674",
+"titel": "CS5800i/6800i AW 12 E",
+"stand": "2026/02",
+"komponenten": "CS5800iAW, CS6800iAW, AW4OR-S, AW5OR-S, AW7OR-S, BH, BST, Wh, HR, WPS, AWS10OR-T, AWS12OR-T, AW .. OR-S/T",
+"bopa": "BOPA-CS794, BOPA-CS795",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6720878698",
+"titel": "CS7800i LW M (F)",
+"stand": "2024/02",
+"komponenten": "CS7800",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6720878699",
+"titel": "CS7800i LW MB (F)",
+"stand": "2024/02",
+"komponenten": "CS7800,WH...,SWDP",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6720878700",
+"titel": "CS7800i LW (F)",
+"stand": "2024/02",
+"komponenten": "CS7800,BH...,WH...",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6720878718",
+"titel": "GC9800iW..P/HW-Set/CS7001i",
+"stand": "2023/05",
+"komponenten": "Hybridbox,HW-Set,HYC25",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6720878720",
+"titel": "GC5800iW..P/HY-Set/CS7...i",
+"stand": "2023/05",
+"komponenten": "GC5800,HW-Set-HYc25,HW-Set,GCH7",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6720878723",
+"titel": "GC5800iW..P/HW-Set/CS7...i",
+"stand": "2023/05",
+"komponenten": "Hybridbox,HW-Set,HYC25",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6720878731",
+"titel": "Compress 7001/7400i AWMB",
+"stand": "2021/11",
+"komponenten": "6720878136",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_kompakt",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": false
+},
+{
+"nr": "6721127317",
+"titel": "Compress 7801i LW M",
+"stand": "2026/10",
+"komponenten": "CS7801i LW M 6/8",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_systemtrennung",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"waermepumpesolewasser_kompakt",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721127318",
+"titel": "Compress 7801i LW M",
+"stand": "2026/10",
+"komponenten": "CS7801i LW M, BH120",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"waermepumpesolewasser_kompakt",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721127319",
+"titel": "Compress 7801i LW",
+"stand": "2026/10",
+"komponenten": "CS7801i LW 6/8, WP..., SWDP...",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721127320",
+"titel": "Compress 7801i LW MB",
+"stand": "2026/10",
+"komponenten": "CS7801i LW MB, WP..., SWDP...",
+"bopa": "BOPA CS781LW, BOPA CS782LW, BOPA CS783LW, BOPA CS784LW, BOPA CS785LW, BOPA CS786LW, BOPA CS787LW, BOPA CS780LW",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721127321",
+"titel": "Compress 7801i LW",
+"stand": "2026/10",
+"komponenten": "CS7801i LW, BH120, WP..., SWDP...",
+"bopa": "BOPA CS788LW, BOPA CS789LW, BOPA CS790LW, BOPA CS791LW",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721127322",
+"titel": "Compress 7801i LW",
+"stand": "2026/10",
+"komponenten": "CS7801i LW 6/8",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721127323",
+"titel": "Compress 7801i LW",
+"stand": "2026/10",
+"komponenten": "CS7801i LW, BH120",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721127324",
+"titel": "Compress 7801i LW M",
+"stand": "2026/10",
+"komponenten": "CS7801i LW M 6/8, HP-PCU-1, MP100",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"waermepumpesolewasser_kompakt",
+"waermepumpesolewasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721127325",
+"titel": "Compress 7801i LW MB",
+"stand": "2026/10",
+"komponenten": "CS7801i LW MB, WP..., SWDP..., MP100",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"waermepumpesolewasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721127326",
+"titel": "Compress 7801i LW",
+"stand": "2026/10",
+"komponenten": "CS7801i LW, BH120, WP...",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"waermepumpesolewasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833616",
+"titel": "2xGC7000F",
+"stand": "2021/02",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"gas_alle",
+"gas_boden",
+"gas_kaskade",
+"leistungsgroesse_mittel_gross",
+"regelung_emsplus",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_ohne",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833632",
+"titel": "CS7800iLWM",
+"stand": "2021/02",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"waermepumpesolewasser_kompakt",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833634",
+"titel": "CS7800iLW(F)",
+"stand": "2021/02",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833635",
+"titel": "CS7800iLW(F)",
+"stand": "2021/02",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833636",
+"titel": "CS7800iLW",
+"stand": "2023/11",
+"komponenten": "FF20,BSH,CS7800",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_heizungsunterstuetzung",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833637",
+"titel": "CS7800iLWMB(F)",
+"stand": "2024/07",
+"komponenten": "CS7800LW-MB, SWDP",
+"bopa": "BOPA CS7L09, BOPA CS7L10, BOPA CS7L11, BOPA CS7L12",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833638",
+"titel": "CS7800iLWMB(F)",
+"stand": "2023/02",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833639",
+"titel": "GC5300iW...P/SUPRAECO STE",
+"stand": "2023/10",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833640",
+"titel": "SUPRAECO STE..-1",
+"stand": "2021/02",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_ohne",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833641",
+"titel": "SUPRAECO STE..-1",
+"stand": "2021/02",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833642",
+"titel": "SUPRAECO STE..-1",
+"stand": "2021/02",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833643",
+"titel": "NKS-1/SUPRAECO STE..-1",
+"stand": "2021/02",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833644",
+"titel": "NKS-1/SUPRAECO STE..-1",
+"stand": "2021/02",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833645",
+"titel": "NKS-1/SUPRAECO STE..-1",
+"stand": "2021/02",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833646",
+"titel": "SUPRAECO STE..-1",
+"stand": "2021/02",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_waermepumpen_regelung",
+"solar_alle",
+"solar_zur_heizungsunterstuetzung",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833647",
+"titel": "SUPRAECO STE..-1",
+"stand": "2021/02",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_waermepumpen_regelung",
+"solar_alle",
+"solar_zur_heizungsunterstuetzung",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833648",
+"titel": "SUPRAECO STE..-1",
+"stand": "2021/02",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_waermepumpen_regelung",
+"solar_alle",
+"solar_zur_heizungsunterstuetzung",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833651",
+"titel": "SUPRAECO STM..-1",
+"stand": "2021/02",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"waermepumpesolewasser_kompakt",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833652",
+"titel": "NKS-1/SUPRAECO STM..-1",
+"stand": "2021/02",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"einbindungwaermeerzeuger_systemtrennung",
+"heat_distribution_pool",
+"leistungsgroesse_klein",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"waermepumpesolewasser_kompakt",
+"waermepumpesolewasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833661",
+"titel": "CS7...iAW/AWM../FSK",
+"stand": "2021/02",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"festbrennstoff_alle",
+"festbrennstoff_pelletkessel",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_kompakt",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833667",
+"titel": "CS7...iAW/AWE..",
+"stand": "2024/04",
+"komponenten": "CS7001iAW, AWE, BH120, BH200",
+"bopa": "BOPA CS724, BOPA CS725, BOPA CS726, BOPA CS727, BOPA CS728",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833683",
+"titel": "CS7...iAW/AWE...",
+"stand": "2024/04",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"festbrennstoff_alle",
+"festbrennstoff_scheitholzkessel",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"regelung_pelletkessel_regelung",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833685",
+"titel": "CS7...iAW/AWE...",
+"stand": "2024/04",
+"komponenten": "CS7000iAW,CS7001iAW,AWE,FF20,BSH",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_heizungsunterstuetzung",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833686",
+"titel": "CS7...iAW/AWE...",
+"stand": "2023/07",
+"komponenten": "AWE,CS7...iAW,BSH...-6,FF20",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_heizungsunterstuetzung",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833687",
+"titel": "CS7...iAW/AWE...",
+"stand": "2023/07",
+"komponenten": "AWE,CS7...iAW,BSH...-6,FF20",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"einbindungwaermeerzeuger_systemtrennung",
+"heat_distribution_pool",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_heizungsunterstuetzung",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833688",
+"titel": "CS7...iAW/AWE...",
+"stand": "2023/07",
+"komponenten": "AWE,CS7...iAW,BSH,FF20",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_heizungsunterstuetzung",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833747",
+"titel": "CS7....iAW/AWMB",
+"stand": "2021/02",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_heizungsunterstuetzung",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833753",
+"titel": "CS7...iAW/AWE.../FSK",
+"stand": "2021/02",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"einbindungwaermeerzeuger_systemtrennung",
+"festbrennstoff_alle",
+"festbrennstoff_pelletkessel",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_heizungsunterstuetzung",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833757",
+"titel": "CS7...iAW/AWMB...",
+"stand": "2021/02",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833758",
+"titel": "CS7...iAW/AWMB...",
+"stand": "2021/03",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"einbindungwaermeerzeuger_systemtrennung",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833759",
+"titel": "CS7...iAW/AWMB...",
+"stand": "2021/03",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833761",
+"titel": "CS7...iAW/AWMS...",
+"stand": "2021/03",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_kompakt",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833762",
+"titel": "CS7...iAW/AWMB...",
+"stand": "2021/03",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833766",
+"titel": "CS7...iAW/AWMB",
+"stand": "2021/03",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"einbindungwaermeerzeuger_systemtrennung",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833843",
+"titel": "SUPRAECO STE...-1",
+"stand": "2021/03",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833844",
+"titel": "SUPRAECO STE...-1",
+"stand": "2021/03",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833845",
+"titel": "SUPRAECO STE...-1",
+"stand": "2021/03",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833846",
+"titel": "SUPRAECO STE...-1",
+"stand": "2021/03",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833855",
+"titel": "SUPRAECO STE...-1",
+"stand": "2021/03",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833856",
+"titel": "SUPRAECO STE...-1",
+"stand": "2021/03",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833857",
+"titel": "SUPRAECO STE...-1",
+"stand": "2021/03",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833859",
+"titel": "SUPRAECO STE...-1",
+"stand": "2021/03",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833860",
+"titel": "CS7800i LWM",
+"stand": "2021/03",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"waermepumpesolewasser_kompakt",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833861",
+"titel": "CS7800i LWM",
+"stand": "2021/03",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"waermepumpesolewasser_kompakt",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833931",
+"titel": "CS7...iAW/AWB/GC/OC7/8...",
+"stand": "2021/03",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"gas_alle",
+"gas_boden",
+"leistungsgroesse_klein",
+"leistungsgroesse_mittel_gross",
+"oel_alle",
+"oel_boden",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833932",
+"titel": "CS7...iAW/AWB/GC/OC7/8...",
+"stand": "2021/03",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"gas_alle",
+"gas_boden",
+"leistungsgroesse_klein",
+"leistungsgroesse_mittel_gross",
+"oel_alle",
+"oel_boden",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833933",
+"titel": "CS7...iAW/AWB/GC/OC7/8...",
+"stand": "2021/03",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"gas_alle",
+"gas_boden",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"leistungsgroesse_mittel_gross",
+"oel_alle",
+"oel_boden",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833934",
+"titel": "CS7...iAW/AWB/GC/OC7000F",
+"stand": "2021/03",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"gas_alle",
+"gas_boden",
+"leistungsgroesse_klein",
+"leistungsgroesse_mittel_gross",
+"oel_alle",
+"oel_boden",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_heizungsunterstuetzung",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833935",
+"titel": "CS7...iAW/AWB/GC/OC7000F",
+"stand": "2021/03",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"gas_alle",
+"gas_boden",
+"leistungsgroesse_klein",
+"leistungsgroesse_mittel_gross",
+"oel_alle",
+"oel_boden",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_heizungsunterstuetzung",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833956",
+"titel": "CS7...iAW/AWB.../OC/GC7000F",
+"stand": "2021/03",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"gas_alle",
+"gas_boden",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"leistungsgroesse_mittel_gross",
+"oel_alle",
+"oel_boden",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_heizungsunterstuetzung",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721833966",
+"titel": "CS7800i LW(F)",
+"stand": "2024/07",
+"komponenten": "CS7800iLW, BH120, WH290",
+"bopa": "BOPA CS7L13, BOPA CS7L14, BOPA CS7L15, BOPA CS7L16",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834097",
+"titel": "CS7800i LW(F)",
+"stand": "2021/03",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834098",
+"titel": "CS7800i LW(F)",
+"stand": "2023/11",
+"komponenten": "BSH...,BSH,BS...,CS7800,TH3500",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"elektrokessel_alle",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834099",
+"titel": "CS7800i LW(F)",
+"stand": "2021/03",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834100",
+"titel": "CS7800i LW(F)",
+"stand": "2021/03",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834111",
+"titel": "GC/OC7000F/GC/OC8000iF",
+"stand": "2021/04",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"gas_alle",
+"gas_boden",
+"leistungsgroesse_klein",
+"leistungsgroesse_mittel_gross",
+"oel_alle",
+"oel_boden",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834118",
+"titel": "GC/OC7000F/GC/OC8000iF",
+"stand": "2021/04",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"gas_alle",
+"gas_boden",
+"leistungsgroesse_klein",
+"leistungsgroesse_mittel_gross",
+"oel_alle",
+"oel_boden",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_heizungsunterstuetzung",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834119",
+"titel": "GC/OC7000F/GC/OC8000iF",
+"stand": "2021/04",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"gas_alle",
+"gas_boden",
+"leistungsgroesse_klein",
+"leistungsgroesse_mittel_gross",
+"oel_alle",
+"oel_boden",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_heizungsunterstuetzung",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834132",
+"titel": "T380/480-2",
+"stand": "2021/04",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834133",
+"titel": "T220/280-2",
+"stand": "2021/04",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834134",
+"titel": "GC9001iWE/SUPRAECO STE...-1",
+"stand": "2021/04",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"gas_alle",
+"gas_wand",
+"heat_distribution_heat_exchanger",
+"heat_distribution_pool",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834138",
+"titel": "T280-2",
+"stand": "2021/04",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834139",
+"titel": "T480-2",
+"stand": "2021/04",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834157",
+"titel": "T280-2",
+"stand": "2021/05",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834176",
+"titel": "GC7000WP",
+"stand": "2021/05",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"einbindungwaermeerzeuger_systemtrennung",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_mittel_gross",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834213",
+"titel": "SUPRAECO STE...-1/FSK",
+"stand": "2021/05",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"festbrennstoff_alle",
+"festbrennstoff_pelletkessel",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834219",
+"titel": "T220/280-2",
+"stand": "2021/05",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834220",
+"titel": "T220/280-2",
+"stand": "2021/05",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834233",
+"titel": "CS7800i LW MB(F)",
+"stand": "2021/05",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834234",
+"titel": "CS7800i LW(F)",
+"stand": "2021/05",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834235",
+"titel": "CS7800i LW MB(F)",
+"stand": "2021/05",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834237",
+"titel": "SUPRAECO STE...-1",
+"stand": "2021/05",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834238",
+"titel": "SUPRAECO STM..-1",
+"stand": "2021/05",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834239",
+"titel": "CS7800i LW(F)",
+"stand": "2021/05",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"heat_distribution_heat_exchanger",
+"heat_distribution_pool",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834241",
+"titel": "2xT550...800-2",
+"stand": "2021/05",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_mittel_gross",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpesolewasser_alle",
+"waermepumpesolewasser_kaskade",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834245",
+"titel": "T540-2",
+"stand": "2021/05",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_mittel_gross",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834246",
+"titel": "T540-2",
+"stand": "2021/05",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_mittel_gross",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_ohne",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834247",
+"titel": "CS7800i LW(F)",
+"stand": "2021/05",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834248",
+"titel": "CS7800i LW(F)",
+"stand": "2021/05",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834249",
+"titel": "T220/280-2",
+"stand": "2021/05",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"heat_distribution_heat_exchanger",
+"heat_distribution_pool",
+"leistungsgroesse_klein",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_ohne",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834250",
+"titel": "T220/280-2",
+"stand": "2021/05",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_frischwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834251",
+"titel": "T220/280-2",
+"stand": "2021/05",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_frischwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834252",
+"titel": "T220/280-2",
+"stand": "2021/05",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"heat_distribution_heat_exchanger",
+"heat_distribution_pool",
+"leistungsgroesse_klein",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_frischwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834254",
+"titel": "2xT280-2",
+"stand": "2021/05",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_frischwasserspeicher",
+"waermepumpesolewasser_alle",
+"waermepumpesolewasser_kaskade",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834255",
+"titel": "T220-2/FSK",
+"stand": "2021/05",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"festbrennstoff_alle",
+"festbrennstoff_pelletkessel",
+"leistungsgroesse_klein",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_ohne",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834259",
+"titel": "T540...800-2",
+"stand": "2021/05",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_mittel_gross",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834260",
+"titel": "T540...800-2",
+"stand": "2021/05",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_mittel_gross",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_ohne",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834261",
+"titel": "T540...800-2",
+"stand": "2021/05",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_mittel_gross",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_ohne",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834262",
+"titel": "T540-2",
+"stand": "2021/05",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_mittel_gross",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_frischwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834263",
+"titel": "T540-2",
+"stand": "2021/05",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_mittel_gross",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_frischwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834264",
+"titel": "T540-2",
+"stand": "2021/05",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_mittel_gross",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_frischwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834265",
+"titel": "T380/480-2",
+"stand": "2021/05",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_frischwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834266",
+"titel": "T380/480-2",
+"stand": "2021/05",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834267",
+"titel": "T380/480-2",
+"stand": "2021/05",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_waermepumpen_regelung",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_frischwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834268",
+"titel": "T380/480-2",
+"stand": "2021/05",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_waermepumpen_regelung",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_frischwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834269",
+"titel": "T380/480-2",
+"stand": "2021/05",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"regelung_waermepumpen_regelung",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_frischwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834284",
+"titel": "CS7800iLW(F)",
+"stand": "2021/06",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834285",
+"titel": "CS7800iLW(F)",
+"stand": "2023/11",
+"komponenten": "FF20,BH...,CS7800",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834286",
+"titel": "CS7800iLW(F)",
+"stand": "2023/11",
+"komponenten": "FF20,BH...,CS7800",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"kaminofen",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834294",
+"titel": "T220/280-2",
+"stand": "2021/06",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_ohne",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834295",
+"titel": "T280-2",
+"stand": "2021/06",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_frischwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834296",
+"titel": "T220/280-2",
+"stand": "2021/06",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_waermepumpen_regelung",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834309",
+"titel": "CS7800iLWMB(F)",
+"stand": "2023/02",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834310",
+"titel": "CS7800iLWMB(F)",
+"stand": "2023/02",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834311",
+"titel": "CS7800iLWMB(F)",
+"stand": "2023/02",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834312",
+"titel": "CS7800iLWMB(F)",
+"stand": "2023/02",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834319",
+"titel": "T220/280-2",
+"stand": "2021/06",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834344",
+"titel": "CS7800iLW(F)",
+"stand": "2021/06",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_heizungsunterstuetzung",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834345",
+"titel": "CS7800iLW(F)",
+"stand": "2021/06",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_heizungsunterstuetzung",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834346",
+"titel": "CS7800iLW(F)",
+"stand": "2021/06",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_heizungsunterstuetzung",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834363",
+"titel": "SUPRAECO STM...-1",
+"stand": "2021/06",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834364",
+"titel": "T380/480-2",
+"stand": "2021/06",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834541",
+"titel": "AWE",
+"stand": "2024/04",
+"komponenten": "CS7000iAW, CS7400iAW, AWE, WH290, WH370",
+"bopa": "BOPA CS745, BOPA CS746",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834542",
+"titel": "AWMB",
+"stand": "2024/04",
+"komponenten": "CS7000iAW, CS7400iAW, AWMB, WH290, WH370",
+"bopa": "BOPA CS701, BOPA CS702, BOPA CS703, BOPA CS704, BOPA CS705, BOPA CS741, BOPA CS742",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834546",
+"titel": "CS7800iLW(F)",
+"stand": "2024/07",
+"komponenten": "CS7800iLW, SWDP300",
+"bopa": "BOPA CS7L05, BOPA CS7L06, BOPA CS7L07",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834547",
+"titel": "CS7800iLWM(F)",
+"stand": "2024/07",
+"komponenten": "CS7800iLW-M",
+"bopa": "BOPA CS7L01, BOPA CS7L02, BOPA CS7L03",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834553",
+"titel": "AWMB",
+"stand": "2024/07",
+"komponenten": "CS7400iAW, CS7000iAW, AWMB, HR300",
+"bopa": "BOPA CS729, BOPA CS730, BOPA CS731, BOPA CS747, BOPA CS748",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834554",
+"titel": "AWE",
+"stand": "2024/07",
+"komponenten": "CS7400iAW, CS7000iAW, AWE, BPU, Hydraulikbox",
+"bopa": "BOPA-CS749, BOPA-CS750, BOPA-CS752, BOPA-CS753",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834555",
+"titel": "CA7...iAW/AWE/BH...-5/WH...",
+"stand": "2024/05",
+"komponenten": "CS7000iAW, AWE, BH120, BH200, WH290, WH370, Hydraulikbox",
+"bopa": "BOPA CS732, BOPA CS733, BOPA CS734, BOPA CS735, BOPA CS736",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834591",
+"titel": "GC7000WP/AWB/CS7...iAW",
+"stand": "2021/12",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_mittel_gross",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_heizungsunterstuetzung",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834592",
+"titel": "GC7000WP/AWB/CS7...iAW",
+"stand": "2021/12",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_mittel_gross",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_heizungsunterstuetzung",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834668",
+"titel": "GC5300iW /AWB/CS7...iAW",
+"stand": "2023/10",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_heizungsunterstuetzung",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834669",
+"titel": "GC5300iW /AWB/CS7...iAW",
+"stand": "2023/10",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"gas_alle",
+"gas_wand",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_heizungsunterstuetzung",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834673",
+"titel": "GC5300iW /AWB/CS7...iAW",
+"stand": "2023/10",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834674",
+"titel": "GC5300iW /AWB/CS7...iAW",
+"stand": "2023/10",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"gas_alle",
+"gas_wand",
+"heat_distribution_pool",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834675",
+"titel": "GC5300iW /AWB/CS7...iAW",
+"stand": "2023/10",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"gas_alle",
+"gas_wand",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721834677",
+"titel": "GC5300iW-.. P/CS7 ...i AW",
+"stand": "2024/03",
+"komponenten": "GC5300iW, AWB, CS7, Hybrid, WH290, BH200",
+"bopa": "BOPA CS722, BOPA CS723",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721847063",
+"titel": "CS5800i/6800i AW 12 MB",
+"stand": "2026/02",
+"komponenten": "CS5800iAW-12-MB, CS6800iAW-12-MB, AW4OR-S, AW5OR-S, AW7OR-S, WH, HR, WPS, SWDP, AWS10OR-T, AWS12OR-T",
+"bopa": "BOPA-CS773, BOPA-CS774, BOPA-CS775, BOPA-CS776, BOPA-CS777, BOPA-CS778, BOPA-CS779, BOPA-CS780, BOPA-CS781, BOPA-CS782, BOPA-CS783, BOPA-CS784, BOPA-CS796, BOPA-CS797, BOPA-CS798, BOPA-CS799, BOPA-CS800, BOPA-CS801, BOPA CS802, BOPA CS803, BOPA CS804, BOPA CS805, BOPA CS806, BOPA CS807, BOPA CS808",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721847064",
+"titel": "CS5800i/6800i AW 12 MB",
+"stand": "2026/02",
+"komponenten": "CS5800iAW-12-MB, CS6800iAW-12-MB, AW4OR-S, AW5OR-S, AW7OR-S, WH, HR, WPS, AWS10OR-T, AWS12OR-T",
+"bopa": "BOPA CS773, BOPA CS774, BOPA CS775, BOPA CS776, BOPA CS777, BOPA CS778, BOPA CS779, BOPA CS780, BOPA CS781, BOPA CS782, BOPA CS783, BOPA CS784, BOPA CS796, BOPA CS797, BOPA CS798, BOPA CS799, BOPA CS800, BOPA CS801, BOPA CS802, BOPA CS803, BOPA CS804, BOPA CS805, BOPA CS806, BOPA CS807, BOPA CS808",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721847145",
+"titel": "CS7001i/7400i/GC9800iW..H",
+"stand": "2022/07",
+"komponenten": "",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721847230",
+"titel": "CS 5001 DW",
+"stand": "2023/01",
+"komponenten": "CS-5001-DW,Solar,PV",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserwaermepumpe",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721847267",
+"titel": "CS5800i/6800i AW 12 E",
+"stand": "2026/02",
+"komponenten": "CS5800,CS6800,CS5800iAW-12-E,CS6800iAW-12-E,AW-4/5/7-OR-S,BH...-5,WPS...-1-EP-C,AWS10OR-T,AWS12OR-T",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721847268",
+"titel": "CS5800i/6800i AW 12 E",
+"stand": "2026/02",
+"komponenten": "CS5800,CS6800,CS5800iAW-12-E,CS6800iAW-12-E,AW4/5/7-OR-S,BH...-5,B...-6-ER,FF20,AWS10OR-T,AWS12OR-T",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721847269",
+"titel": "CS5800i/6800i AW 12 E",
+"stand": "2026/02",
+"komponenten": "CS5800,CS6800,CS5800iAW-12E,CS6800iAW-12-E,AW-4/5/7-OR-S,BS...-6-ER,WPS...-1-EP-C,Feststoffkessel,AWS10OR-T,AWS12OR-T",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"festbrennstoff_alle",
+"festbrennstoff_pelletkessel",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721847271",
+"titel": "CS5800i/6800i AW 12 E",
+"stand": "2026/09",
+"komponenten": "CS5800,CS6800,CS5800iAW-12-E,CS6800iAW-12-E,AW-4/5/7-OR-S,TH-3500,BH...-5,BH...-6-ERZ,FF27/40-S,AWS10OR-T,AWS12OR-T",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_wasserhygiene",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721863799",
+"titel": "CS5800/6800/V5001C/V4000CC",
+"stand": "2026/02",
+"komponenten": "CS5800,CS6800,CS6800iAW12M,CS5800iAW12M,V5001C,V4000CC",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"ventilation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_kompakt",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721863820",
+"titel": "CS5800i/6800iAW 12 E/TH350",
+"stand": "2026/02",
+"komponenten": "CS5800,CS6800,Feststoffkessel,BS...,FF20,AW...-OR-S/T",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"festbrennstoff_alle",
+"festbrennstoff_pelletkessel",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721863824",
+"titel": "CS7800/TH3500/BH...-6/FS",
+"stand": "2023/11",
+"komponenten": "CS7800,TH3500,FS27/40,BH...-6",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"elektrokessel_alle",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpesolewasser_alle",
+"waermepumpesolewasser_wasserhygiene",
+"wohnungsstation_ohne"
+],
+"dwg": false
+},
+{
+"nr": "6721863825",
+"titel": "CS7800/BH...-6/FS",
+"stand": "2023/11",
+"komponenten": "CS7800,BH...-6,FF20",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": false
+},
+{
+"nr": "6721863826",
+"titel": "CS7800/BH...-6/Flow7000/HK/HKm",
+"stand": "2023/11",
+"komponenten": "CS7800,Flow7000,BH...-6",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpesolewasser_alle",
+"wohnungsstation_vier_leiter"
+],
+"dwg": false
+},
+{
+"nr": "6721863830",
+"titel": "CS7800/GC.800/BH...-5/WH../2023/12",
+"stand": "2023/12",
+"komponenten": "CS7800,GC5800,GC7800,GC9800,WH...,BH..",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721863831",
+"titel": "CS7800/GC.800/WH../HK/HKm /2023/12",
+"stand": "2023/12",
+"komponenten": "CS7800,GC5800,GC7800,GC9800",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721863832",
+"titel": "CS7800/GC.800/HP-PCU/BH../2023/12",
+"stand": "2023/12",
+"komponenten": "CS7800,GC9800,GC7800,GC5800,WH...,BH...-5",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"waermepumpesolewasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721863833",
+"titel": "CS5800i/6800i AW 12 MB",
+"stand": "2026/02",
+"komponenten": "CS5800i AW 12 MB, CS6800i AW 12 MB, AW... OR-S/T, WH..., HR..., WPS..., SWDP, 8738214755, Erweiterungs-Set 2HK intern",
+"bopa": "BOPA CS773, BOPA CS774, BOPA CS775, BOPA CS776, BOPA CS777, BOPA CS778, BOPA CS779, BOPA CS780, BOPA CS781, BOPA CS782, BOPA CS783, BOPA CS784, BOPA CS796, BOPA CS797, BOPA CS798, BOPA CS799, BOPA CS800, BOPA CS801, BOPA CS802, BOPA CS803, BOPA CS804, BOPA CS805, BOPA CS806, BOPA CS807, BOPA CS808",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721863834",
+"titel": "GC9800/7800/5800iW-..P",
+"stand": "2026/02",
+"komponenten": "GC9800,Gc7800,GC5800,HW-Set,CS6800,HR...,WP...,WH...",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_wasserhygiene",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721863835",
+"titel": "GC9800iW-..H",
+"stand": "2026/02",
+"komponenten": "GC9800iW...H,HW-Set,CS6800,HR...,WP...,WH...",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_wasserhygiene",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721863867",
+"titel": "CS5800i/6800i AW 12 E",
+"stand": "2026/02",
+"komponenten": "CS5800,CS6800,BPU,AW...,CS5800iAW12E,CS6800iAW12E",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721863868",
+"titel": "CS5800i/6800i AW 12 E",
+"stand": "2026/02",
+"komponenten": "CS5800iAW12E, CS6800iAW12E, AW..., BH..., WH.., HR.., WPS, SWDP",
+"bopa": "BOPA-CS770, BOPA-CS771, BOPA-CS772, BOPA-CS785, BOPA-CS786, BOPA-CS787, BOPA-CS792, BOPA-CS793",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721863869",
+"titel": "CS5800/6800iAW 12MB/2026/02",
+"stand": "2026/02",
+"komponenten": "FF20,B...,CS5800,CS6800,AWMB,AW..OR",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_kompakt",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721863870",
+"titel": "CS5800/6800iAW 12MB/2026/02",
+"stand": "2026/02",
+"komponenten": "FF20,BSH,CS5800,CS6800,AWMB,AWOR",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_kompakt",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721863871",
+"titel": "CS5800/6800iAW 12MB/2026/02",
+"stand": "2026/02",
+"komponenten": "WPS,CS5800,CS6800,AWMB,AWOR",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_kompakt",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721863872",
+"titel": "CS5800/6800iAW 12MB/2026/02",
+"stand": "2026/02",
+"komponenten": "WPS,CS5800,CS6800,AWOR",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_kompakt",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721863877",
+"titel": "Supraeco T220...280-2",
+"stand": "2024/05",
+"komponenten": "BH...-6,FF27/40,BH...-6ERZ,TH3500,T220,T280",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"elektrokessel_alle",
+"leistungsgroesse_klein",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpesolewasser_alle",
+"waermepumpesolewasser_wasserhygiene",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721863878",
+"titel": "Supraeco T380...480-2",
+"stand": "2024/04",
+"komponenten": "BH...-6,FF27,TH3500,B...-6,B1000-6M,T380,T480",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"elektrokessel_alle",
+"leistungsgroesse_klein",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpesolewasser_alle",
+"waermepumpesolewasser_wasserhygiene",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721863879",
+"titel": "Supraeco T540...T800-2",
+"stand": "2024/04",
+"komponenten": "BP1000E,FF27/40,TH3500,B...-6M,B1000-6M,T540,T640,Z720,T800",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"elektrokessel_alle",
+"leistungsgroesse_mittel_gross",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpesolewasser_alle",
+"waermepumpesolewasser_wasserhygiene",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721863880",
+"titel": "Supraeco T540...T800-2",
+"stand": "2024/04",
+"komponenten": "FF27/40,B...-6,TH3500,BP1000E,T540,T600,T720,T800",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"elektrokessel_alle",
+"leistungsgroesse_mittel_gross",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpesolewasser_alle",
+"waermepumpesolewasser_kaskade",
+"waermepumpesolewasser_wasserhygiene",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721863893",
+"titel": "CS5800i/6800i AW 12 E",
+"stand": "2026/02",
+"komponenten": "CS6800,AWE,AW..OR,BSH,FF20,CS5800,CS200",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_heizungsunterstuetzung",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721863894",
+"titel": "CS5800i/6800i AW 12 E",
+"stand": "2026/02",
+"komponenten": "CS5800,CS6800,AWE,AW..OR,BSH,FF20",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"kaminofen",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_heizungsunterstuetzung",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721863895",
+"titel": "CS5800i/6800i AW 12 E",
+"stand": "2026/02",
+"komponenten": "CS5800,CS6800,AWE,AW..OR,FSK,FF20,BH..,Feststoffkessel",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"festbrennstoff_alle",
+"festbrennstoff_pelletkessel",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721863937",
+"titel": "GC7000F/OC7000F/OC8000iF",
+"stand": "2026/01",
+"komponenten": "CS5800,CS6800,GC7000,OC7000,OC8000,HF-SET,MH200,Hybrid,PF...Solar",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"gas_alle",
+"gas_boden",
+"kaminofen",
+"leistungsgroesse_klein",
+"oel_alle",
+"oel_boden",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_heizungsunterstuetzung",
+"trinkwassererwaermung_frischwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721863940",
+"titel": "CS7800i LW (F)/BH...-5/WH... LP",
+"stand": "2024/05",
+"komponenten": "CS7800LW,BH...-5,WH...LP,HP-PCU",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"waermepumpesolewasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721863941",
+"titel": "CS7800i LW M (F)/BST50",
+"stand": "2024/05",
+"komponenten": "CS7800,BST50",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721863946",
+"titel": "CS5800i/6800i AW 12 MB",
+"stand": "2026/02",
+"komponenten": "CS5800iAW 12 MB,CS6800i AW 12 MB,AW...OR",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721863948",
+"titel": "CS7800iLWM (F)-BH-HK",
+"stand": "2024/08",
+"komponenten": "CS7800i LW M, BH...-5",
+"bopa": "BOPA CS7L17, BOPA CS7L18, BOPA CS7L19, BOPA CS7L20",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": false
+},
+{
+"nr": "6721863949",
+"titel": "CS5800i/6800i AW 12 E",
+"stand": "2026/02",
+"komponenten": "CS5800,CS6800,BH...-5,AW..OR",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721863959",
+"titel": "CS5800i/6800i AW 12 E",
+"stand": "2026/02",
+"komponenten": "CS5800 i AW 12 E,CS6800i AW 12 E,AW...OR,B...-6,Flow,Flow 7002,Flow 7002 HPS",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_zwei_leiter"
+],
+"dwg": true
+},
+{
+"nr": "6721863960",
+"titel": "CS5800i/6800i AW 12 E",
+"stand": "2026/01",
+"komponenten": "CS5800i AW 12 E,CS6800i AW12 E,AW...OR,TH3500,BH...-6,Flow 7000,Flow8000,Flow7002",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_elektrische_nachheizung",
+"wohnungsstation_zwei_leiter"
+],
+"dwg": true
+},
+{
+"nr": "6721863961",
+"titel": "CS5800i/6800i AW 12 E",
+"stand": "2026/02",
+"komponenten": "CS5800i AW 12 E,CS6800i AW 12 E,AW...OR,BH...-5,TH3500,BH...-6,Flow 7000,Flow 8000",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_vier_leiter"
+],
+"dwg": true
+},
+{
+"nr": "6721863962",
+"titel": "CS5800i/6800i AW 12 E",
+"stand": "2026/02",
+"komponenten": "AW...OR,CS5800i AW 12 E,CS6800i AW 12 W,BH...-5,B...-6,Flow 7000,Flow 8000",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_vier_leiter"
+],
+"dwg": true
+},
+{
+"nr": "6721863972",
+"titel": "CS5800i/6800i AW",
+"stand": "2026/02",
+"komponenten": "CS5800, CS6800, AW4/5/7 OR-S, CS5800i AW 12 E, CS6800i AW 12 E, BST50, WH..., HR..., WPS..., SWDP...",
+"bopa": "BOPA CS767, BOPA CS768, BOPA CS769",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721864002",
+"titel": "GC9800iW...H/HW-Set HYC25",
+"stand": "2024/11",
+"komponenten": "GC9800iW...H,HR...,WH...,WP...,HW-Set,AW..OR-S/T,CS7...iAW,Hybrid",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"leistungsgroesse_klein",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721864006",
+"titel": "CS7800i LW MB (F)/Flow 7002...FWM",
+"stand": "2025/02",
+"komponenten": "B...-6,CS7800i LW MB (F),Flow 7002...FWM",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpesolewasser_alle",
+"waermepumpesolewasser_wasserhygiene",
+"wohnungsstation_vier_leiter"
+],
+"dwg": true
+},
+{
+"nr": "6721864015",
+"titel": "T220/280-2/Flow 7002 FWM",
+"stand": "2025/02",
+"komponenten": "T220,T280,BH...-6,Flow7000,Flow7002",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_waermepumpen_regelung",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpesolewasser_alle",
+"waermepumpesolewasser_wasserhygiene",
+"wohnungsstation_vier_leiter"
+],
+"dwg": true
+},
+{
+"nr": "6721864019",
+"titel": "CS5800i/6800i AW 12 E",
+"stand": "2026/02",
+"komponenten": "Bypass,CS5800i AW 12 E,CS6800i AW 12 E,AW... OR-S/T,WH...,HR...,WPS...,SWDP,B...-6 ER,FF20",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721864020",
+"titel": "CSH5800iG...P 23/AW.OR-S/T",
+"stand": "2026/01",
+"komponenten": "HR..., WP..., WH..., CSH5800iG...P, AW...OR, CS6800",
+"bopa": "BOPA ST CSH001, BOPA ST CSH002",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721864021",
+"titel": "CSH5800iG...P 23/AW.OR-S/T",
+"stand": "2026/01",
+"komponenten": "CSH5800iG,CS6800,AW...OR",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721864022",
+"titel": "CSH5800iG...P 23/AW.OR-S/T",
+"stand": "2026/01",
+"komponenten": "HR..., WP..., WH..., CSH58000iG...P, AW...OR, CS6800",
+"bopa": "BOPA ST CSH001, BOPA ST CSH002",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721864023",
+"titel": "CSH5800iG...P 23/AW.OR-S/T",
+"stand": "2026/01",
+"komponenten": "HR..., WP..., WH..., CSH5800iG...P, AW...OR, CS6800",
+"bopa": "BOPA ST CSH001, BOPA ST CSH002",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721864024",
+"titel": "CSH5800iG...P 23/AW.OR-S/T",
+"stand": "2026/01",
+"komponenten": "HR..., WP..., WH..., CSH5800iG...P, AW...OR, CS6800",
+"bopa": "BOPA ST CSH001, BOPA ST CSH002",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721864025",
+"titel": "CSH5800iG...P 23/AW.OR-S/T",
+"stand": "2026/01",
+"komponenten": "WPS...,WS...,CSH5800iG...P,AW...OR,CS6800",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721864026",
+"titel": "CSH5800iG...P 23/AW.OR-S/T",
+"stand": "2026/01",
+"komponenten": "WPS...,WS...,CSH5800iG...P,AW...OR,CS6800",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721864029",
+"titel": "CSH5800iG...P 23/AW.OR-S/T",
+"stand": "2026/01",
+"komponenten": "SP...-1 solar,CSH5800iG...P,AW...OR,CS6800",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_heizungsunterstuetzung",
+"trinkwassererwaermung_kombispeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721864030",
+"titel": "CSH5800iG...P 23/AW.OR-S/T",
+"stand": "2026/01",
+"komponenten": "BS...-6ER,WPS...,WS...,CSH58000iG...P,AW...OR,CS6800",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_heizungsunterstuetzung",
+"trinkwassererwaermung_kombispeicher",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721864034",
+"titel": "CSH5800iG...P 23/AW.OR-S/T",
+"stand": "2026/01",
+"komponenten": "HR...,WP...,WH...,Feststoffkessel,FSK,B...-6 ER,CSH58000iG...P,AW...OR,CS6800",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"gas_alle",
+"gas_wand",
+"kaminofen",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721864089",
+"titel": "Compress CS5800i/6800i AW",
+"stand": "2026/02",
+"komponenten": "WPS,AW.. OR,CS6800,CS5800,AW12MB",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721864090",
+"titel": "Compress CS5800i/6800i AW",
+"stand": "2026/02",
+"komponenten": "CS5800,CS6800,AW12MB,AW..OR",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_kompakt",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721864091",
+"titel": "Compress CS5800i/6800i AW",
+"stand": "2026/02",
+"komponenten": "BSH...-6,CS5800,CS6800,AW12MB,AW..OR",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_wasserhygiene",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721864092",
+"titel": "Compress CS7800i LW MB (F)",
+"stand": "2025/04",
+"komponenten": "WPS...,CS7800i LW MB",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpesolewasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721864098",
+"titel": "Condens 7000-8800(i)F Hybr",
+"stand": "2024/05",
+"komponenten": "GC7000,GC7800,GC8800,OC7000,OC8800,HF-Set,AW.. OR,SP..-1",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"gas_alle",
+"gas_boden",
+"leistungsgroesse_klein",
+"oel_alle",
+"oel_boden",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_heizungsunterstuetzung",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": false
+},
+{
+"nr": "6721864116",
+"titel": "Compress 3800i AW AWEi",
+"stand": "2026/11",
+"komponenten": "AWEi, BST 50, BH120, CS3800iAW, WH..., HR..., SWDP, FF20, B...-6",
+"bopa": "BOPA CS390, BOPA CS391, BOPA CS392, BOPA CS393, BOPA CS394",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721864117",
+"titel": "Compress 3800i AW AWEi",
+"stand": "2026/11",
+"komponenten": "CS3800iAW O-S/T, AWEi, BH...-5, WH..., HR..., SWDP, B...-6",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721864125",
+"titel": "CS5800i/6800i AW 12 MB",
+"stand": "2026/02",
+"komponenten": "CS5800,CS6800,AW...OR-S/T,TH3500,BH...-6,FF27",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_wasserhygiene",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721864135",
+"titel": "Compress CS5001 AW-...",
+"stand": "2026/03",
+"komponenten": "CS5001AW-..., BP... E, BTHC1000, WP...",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_wasserhygiene",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721864136",
+"titel": "Compress CS5001 AW-...",
+"stand": "2026/03",
+"komponenten": "CS5001AW-22, BP... E, BTHC1000, BH... ERZ, FF27/40",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_wasserhygiene",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721864137",
+"titel": "Compress CS5001 AW-...",
+"stand": "2026/03",
+"komponenten": "CS5001AW-22, BP... E, BTHC1000, TH3500-..., BH... ERZ, FF27/40",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_wasserhygiene",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721864138",
+"titel": "2x Compress CS5001 AW-...",
+"stand": "2026/03",
+"komponenten": "CS5001AW-..., CS5001AW-22, BP... E, BTHC1000, BH... ERZ, FF27/40",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"leistungsgroesse_mittel_gross",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_kaskade",
+"waermepumpeluftwasser_wasserhygiene",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721864139",
+"titel": "2x Compress CS5001 AW-...",
+"stand": "2026/03",
+"komponenten": "CS5001AW-22, CS5001AW-..., BP... E, BTHC1000, BH... ERZ, TH3500-..., FF27/40",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"leistungsgroesse_mittel_gross",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_kaskade",
+"waermepumpeluftwasser_wasserhygiene",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721864140",
+"titel": "Compress CS5001 AW-...",
+"stand": "2026/03",
+"komponenten": "CS5001AW-..., BP... E, BTHC1000, GC7000WP ..., B...-6 M, FF27/40",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_mittel_gross",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_wasserhygiene",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721864141",
+"titel": "Compress CS5001 AW-...",
+"stand": "2026/03",
+"komponenten": "CS5001AW-..., BP... E, BTHC1000, GC7000/8800(i)F ..., OC7000/8800(i)F ..., B...-6 M, FF27/40",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"gas_alle",
+"gas_boden",
+"leistungsgroesse_klein",
+"leistungsgroesse_mittel_gross",
+"oel_alle",
+"oel_boden",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_wasserhygiene",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721864142",
+"titel": "4x Compress CS5001 AW-...",
+"stand": "2026/03",
+"komponenten": "CS5001AW-..., BP... E, BTHC1000, WP...",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"leistungsgroesse_mittel_gross",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_kaskade",
+"waermepumpeluftwasser_wasserhygiene",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721864143",
+"titel": "Compress CS5001 AW-...",
+"stand": "2026/03",
+"komponenten": "CS5001AW-..., BP... E, BTHC1000",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"trinkwassererwaermung_ohne",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721864144",
+"titel": "Compress CS5001 AW-...",
+"stand": "2026/03",
+"komponenten": "CS5001AW-..., BP... E",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_wasserhygiene",
+"wohnungsstation_elektrische_nachheizung",
+"wohnungsstation_zwei_leiter"
+],
+"dwg": true
+},
+{
+"nr": "6721864145",
+"titel": "Compress CS5001 AW-...",
+"stand": "2026/03",
+"komponenten": "CS5001AW-..., BP... E, CC8313",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"trinkwassererwaermung_ohne",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721864146",
+"titel": "Compress CS5001 AW-...",
+"stand": "2026/03",
+"komponenten": "CS5001AW-..., BP... E, BTHC1000",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"trinkwassererwaermung_ohne",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721864148",
+"titel": "2x Compress CS5001 AW-...",
+"stand": "2026/03",
+"komponenten": "CS5001AW-..., BP... E, BTHC1000",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"leistungsgroesse_mittel_gross",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_kaskade",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896636",
+"titel": "Condens 9800iWA.. P Hybrid",
+"stand": "2026/01",
+"komponenten": "GC9800iWA...P, BH...-5, AW...OR-S, HB-Set, HR..., WP..., W..., WH..., CS6800",
+"bopa": "BOPA HYB-RDY-901, BOPA HYB-RDY-902",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896637",
+"titel": "Condens GC9800iW...H Hyb.",
+"stand": "2026/01",
+"komponenten": "WPS,GC9800iW...H,HW-Set,AW...OR,CS6800",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"gas_alle",
+"gas_wand",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"leistungsgroesse_mittel_gross",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_wasserhygiene",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896638",
+"titel": "Condens 7000-8800(i) F Hyb",
+"stand": "2026/01",
+"komponenten": "GC7000,GC7800,GC8800,OC7000,OC8800,WPS,HF-Set,AW...OR,CS6800",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"gas_alle",
+"gas_boden",
+"leistungsgroesse_klein",
+"oel_alle",
+"oel_boden",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896639",
+"titel": "GC5300i WMA Hybridsystem",
+"stand": "2026/02",
+"komponenten": "GC5300i-WMA, HB-Set, AW...OR-S, BH...-5, CS6800",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"gas_alle",
+"gas_boden",
+"gas_kompakt",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896640",
+"titel": "GC5800iWT 24/42 Hybridsys.",
+"stand": "2026/02",
+"komponenten": "GC5800iWT, HW-Set, AW...OR, CS6800, Hybrid",
+"bopa": "BOPA ST BEG581",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896641",
+"titel": "7000-8800(i) F Hybridsyst.",
+"stand": "2026/02",
+"komponenten": "GC8000iF, GC7000F, OC8000iF, HF-Set, WH..., WP..., AW...-OR-S, CS6800, OC7000F, Hybrid, GC8800, OC8800",
+"bopa": "BOPA WP101, BOPA WP102",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"gas_alle",
+"gas_boden",
+"leistungsgroesse_klein",
+"oel_alle",
+"oel_boden",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896642",
+"titel": "7000-8800(i) F Hybridsyst.",
+"stand": "2026/02",
+"komponenten": "GC8000iF, GC7000F, OC8000iF, WH-160, WH-200, WST-160, WST-200, HF-Set, AW...OR-S, CS6800, Hybrid, GC8800, OC8800",
+"bopa": "BOPA WH101, BOPA WH102, BOPA WH103, BOPA WH104, BOPA WST103, BOPA WST104",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"gas_alle",
+"gas_boden",
+"gas_kompakt",
+"leistungsgroesse_klein",
+"oel_alle",
+"oel_boden",
+"oel_kompakt",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896643",
+"titel": "GC9800iW...H Hybridsystem",
+"stand": "2026/02",
+"komponenten": "GC9800iW...H, HR..., WP..., WH..., HW-Set, AW...OR-S, CS6800",
+"bopa": "BOPA ST BEG007, BOPA ST BEG008, BOPA ST BEG009, BOPA ST VM 001",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896644",
+"titel": "GC9800/7800/5800iW..P Hyb.",
+"stand": "2026/02",
+"komponenten": "GC9800, GC7800, GC5800, HR..., WP..., WH..., HW-Set, AW...OR-S, CS6800",
+"bopa": "BOPA ST VM 001",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896645",
+"titel": "GC9800iW...H Hybridsystem",
+"stand": "2026/02",
+"komponenten": "WP..., WH..., HR..., GC9800iW...H, HW-Set, AW...OR, CS6800, PV",
+"bopa": "BOPA ST GL001",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"gas_alle",
+"gas_wand",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896647",
+"titel": "GC9800/7800/5800iW..P Hyb.",
+"stand": "2026/02",
+"komponenten": "GC9800iW...P, GC7800iw...P, GC5800iW...P, HW-Set, S6800iAW, Hybrid, AW...OR",
+"bopa": "BOPA ST BEG301",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896648",
+"titel": "GC9800iW...H Hybridsystem",
+"stand": "2026/02",
+"komponenten": "GC9800iW...H, HW-Set, CS6800, Hybrid, AW...OR",
+"bopa": "BOPA ST BEG301",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896650",
+"titel": "7000-8800(i) F Hybridsyst.",
+"stand": "2026/02",
+"komponenten": "GC8000iF, OC8000iF, HF-Set, CS6800, OC8800, AW...OR",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"gas_alle",
+"gas_boden",
+"leistungsgroesse_klein",
+"oel_alle",
+"oel_boden",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896651",
+"titel": "7000-8800(i) F Hybridsyst.",
+"stand": "2026/02",
+"komponenten": "GC8000iF, GC7000, OC8000iF, HF-Set, AW...OR, CS6800, GC8800, OC8800",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"gas_alle",
+"gas_boden",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"oel_alle",
+"oel_boden",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896652",
+"titel": "7000-8800(i) F Hybridsyst.",
+"stand": "2026/02",
+"komponenten": "GC8000iF, GC7000F, OC8000iF, HF-Set, CS6800, AW...OR, GC8800, OC8800",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"gas_alle",
+"gas_boden",
+"leistungsgroesse_klein",
+"oel_alle",
+"oel_boden",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896653",
+"titel": "7000-8800(i) F Hybridsyst.",
+"stand": "2026/02",
+"komponenten": "CS6800, C7000,OC7000, OC8000, FF20, B...-6, Hybrid, MH200, HF-Set, GC8800, OC8800",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"gas_alle",
+"gas_boden",
+"leistungsgroesse_klein",
+"oel_alle",
+"oel_boden",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896654",
+"titel": "GC9800iW...H Hybridsystem",
+"stand": "2026/02",
+"komponenten": "GC9800iW...H,HW-Set,AW...OR,CS6800,PV",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"gas_alle",
+"gas_wand",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"leistungsgroesse_mittel_gross",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_wasserhygiene",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896655",
+"titel": "GC9800iW...H Hybridsystem",
+"stand": "2026/02",
+"komponenten": "BH...-6,GC98000iW...H,HW-Set,AW...OR,CS6800,FF27/40,PV",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"gas_alle",
+"gas_wand",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"leistungsgroesse_mittel_gross",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_wasserhygiene",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896656",
+"titel": "GC9800iW...H Hybridsystem",
+"stand": "2026/02",
+"komponenten": "GC9800...H,HW-Set,AW...OR,CS7...,CS68000,FF20,PV,B...-6",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"gas_alle",
+"gas_wand",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"leistungsgroesse_mittel_gross",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_wasserhygiene",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896657",
+"titel": "GC9800iW...H Hybridsystem",
+"stand": "2026/02",
+"komponenten": "CS6800,AW...OR,HW-Set,GC9800iW...H, AW...",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896658",
+"titel": "Condens GC9800/7800/5800iW",
+"stand": "2026/02",
+"komponenten": "GC9800, GC7800, GC5800, HW-Set, Hybrid, CS6800, AW...OR",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896659",
+"titel": "GC9800/7800/5800iW..P Hyb.",
+"stand": "2026/02",
+"komponenten": "FF20,BH...,GC9800,GC7800,GC5800,HW-Set,Hybrid,AW...OR,CS6800,PV.",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"einbindungwaermeerzeuger_pufferspeicher",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896660",
+"titel": "GC9800iW...H Hybridsystem",
+"stand": "2026/02",
+"komponenten": "HR...,WH...,WP...,GC9800,GC7800,GC5800,HW-Set,Hybrid,AW...OR,CS6800",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896661",
+"titel": "GC9800/7800/5800iW..P Hyb.",
+"stand": "2026/02",
+"komponenten": "HR...,WH...,WP...,GC9800,GC7800,GC5800,HW-Set,Hybrid,AW...OR,CS6800",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896662",
+"titel": "GC9800iW...H Hybridsystem",
+"stand": "2026/02",
+"komponenten": "HR...,WH...,GC9800iW...H,HW-Set,Hybrid,AW...OR,CS6800",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896663",
+"titel": "GC9800/7800/5800iW..P Hyb.",
+"stand": "2026/02",
+"komponenten": "GC9800,GC7800,GC5800,WH290,WH...,HW-Set,Hybrid,CS6800,AW...OR",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896664",
+"titel": "GC9800/7800/5800iW..P Hyb.",
+"stand": "2026/02",
+"komponenten": "GC9800iw,HW-Set,CS6800,GC7800,GC5800,Hybrid, AW...OR",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896665",
+"titel": "GC9800iW...H Hybridsystem",
+"stand": "2026/02",
+"komponenten": "GH9800iWH,HW-Set,CS6800,Hybrid, AW...OR",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896667",
+"titel": "GC9800/7800/5800iW..P Hyb.",
+"stand": "2026/02",
+"komponenten": "WPS...,GC9800,GC7800,GC5800,HW-Set,Hybrid,CS6800,AW...OR",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896668",
+"titel": "GC9800/7800/5800iW..P Hyb.",
+"stand": "2026/02",
+"komponenten": "WPS...,GC9800,GC7800,GC5800,HW-Set,CS6800,AW...OR,Hybrid",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896669",
+"titel": "GC9800/7800/5800iW..P Hyb.",
+"stand": "2026/02",
+"komponenten": "WPS...,GC9800,GC7800,GC5800,HE-Set,Hybrid,CS6800,AW...OR",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896670",
+"titel": "GC5300iWMA Hybridsystem",
+"stand": "2026/02",
+"komponenten": "GC5300iWM, HW-Set, AW...OR, Hybrid",
+"bopa": "BOPA ST BEG220",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"gas_alle",
+"gas_boden",
+"gas_kompakt",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896671",
+"titel": "GC9800/7800/5800iW..P Hyb.",
+"stand": "2026/02",
+"komponenten": "GC9800iW,GC7800iW,GC5800iW,HW-Set,HR...,WH...,WP...,AW..OR-S/T,Hybrid",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896682",
+"titel": "Compress 3800i AW AWEi",
+"stand": "2026/11",
+"komponenten": "CS3800iAW O-S/T, AWEi, BST 50 Ehp, BH 120-5 1 A",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896683",
+"titel": "Compress 3800i AW AWEi",
+"stand": "2026/11",
+"komponenten": "CS3800iAW O-S/T, AWEi, BH...-5",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896684",
+"titel": "Compress 3800i AW AWEi",
+"stand": "2026/11",
+"komponenten": "Cs3800iAW, AWEi, BPU",
+"bopa": "BOPA CS385, BOPA CS386, BOPA CS387, BOPA CS388 BOPA CS389",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896685",
+"titel": "Compress 3800i AW AWEi",
+"stand": "2026/11",
+"komponenten": "CS3800iAW O-S/T, AWEi, BST50, BH 20-5, WPS...",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896763",
+"titel": "Compress 5800i AW 12 M",
+"stand": "2026/05",
+"komponenten": "CS5800iAW12M, AW...OR-S, V5001C, VH160-4Z",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"heat_distribution_air_based",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"ventilation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_kompakt",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896764",
+"titel": "Compress 5800i AW 12 MB",
+"stand": "2026/05",
+"komponenten": "CS 5800i AW 12 MB, AW .. OR-S, WH.../HR.../WPS, SWDP..., V5001C, VH160-4Z",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"heat_distribution_air_based",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"ventilation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_kompakt",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896767",
+"titel": "Compress 3800i AW AWEi",
+"stand": "2026/11",
+"komponenten": "CS3800iAW O-S/T, AWEi, BH...-5, WPS..",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896768",
+"titel": "Compress 3800i AW AWEi",
+"stand": "2026/11",
+"komponenten": "CS3800iAW O-S/T, AWEi, WH..., HR..., SWDP, FF20, B...-6",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896769",
+"titel": "Compress 3800i AW AWEi",
+"stand": "2026/11",
+"komponenten": "CS3800iAW O-S/T, AWEi, WPS...",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896770",
+"titel": "Compress 3800i AW AWMi",
+"stand": "2026/11",
+"komponenten": "CS3800iAW, AWMi, BST50, BH120",
+"bopa": "BOPA CS380, BOPA CS381, BOPA CS382, BOPA CS383, BOPA CS384",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_kompakt",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896809",
+"titel": "Condens 7000-8800(i) F Hyb",
+"stand": "2026/03",
+"komponenten": "CS6800, HF-Set, Hybrid, GC7000, OC8000, GC8000, MH200, B...-6, W...-5, AW...OR",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"gas_alle",
+"gas_boden",
+"kaminofen",
+"leistungsgroesse_klein",
+"oel_alle",
+"oel_boden",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896810",
+"titel": "Condens 7000-8800(i) F Hyb",
+"stand": "2026/03",
+"komponenten": "CS5800, CS6800, Hybrid, MH200, HF-Set, GC7000, OC7000, OC8000, SP...Solar, WWKG",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"gas_alle",
+"gas_boden",
+"leistungsgroesse_klein",
+"oel_alle",
+"oel_boden",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_heizungsunterstuetzung",
+"trinkwassererwaermung_kombispeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896811",
+"titel": "Compress 3800i AW AWMi",
+"stand": "2026/11",
+"komponenten": "CS3800iAW O-S/T, AWMi, BH...-5",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_kompakt",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896812",
+"titel": "Compress 3800i AW AWMi",
+"stand": "2026/11",
+"komponenten": "CS3800iAW O-S/T, AWMi",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_kompakt",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896817",
+"titel": "GC5300iWMA Hybridsystem",
+"stand": "2026/02",
+"komponenten": "GC5300iWMA, BH...-5, VB-Set, AW...OR",
+"bopa": "BOPA ST BEG203",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"gas_alle",
+"gas_boden",
+"gas_kompakt",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896827",
+"titel": "Compress Hybrid 5800iG...P",
+"stand": "2026/03",
+"komponenten": "CSH5800iG...P 23, AW .. OR-S/T, B...-6 ER, FF..., FF20, FF27/40",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896828",
+"titel": "Compress Hybrid 5800iG...P",
+"stand": "2026/03",
+"komponenten": "CSH5800iG...P 23, AW .. OR-S/T, B...-6 ER, FF20, FF27/40",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896829",
+"titel": "Compress Hybrid 5800iG...P",
+"stand": "2026/09",
+"komponenten": "CSH5800iG...P 23, AW .. OR-S/T, B...-6 ER, FF.., FF20, FF27/40",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"gas_alle",
+"gas_wand",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896882",
+"titel": "Compress CS8800iAW AWMBi D",
+"stand": "2026/04",
+"komponenten": "CS8800iAW... O-T, AWMBi D, WH..., SWDP 300",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896883",
+"titel": "Compress CS8800iAW AWEi D",
+"stand": "2026/04",
+"komponenten": "CS8800iAW... O-T, AWEi D, BH120-5, WH..., SWDP 300",
+"bopa": "BOPA CS809, BOPA CS8010, BOPA CS811, BOPA CS812, BOPA CS813, BOPA CS814",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896884",
+"titel": "Compress CS8800iAW AWMBi D",
+"stand": "2026/04",
+"komponenten": "CS8800iAW... O-T, AWMBi D, WH..., SWDP 300",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896885",
+"titel": "Compress CS8800iAW AWEi D",
+"stand": "2026/04",
+"komponenten": "Bypass,CS8800iAW...O-T,AWEi D,WH...,B...-6 ER,FF20",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_mit_hydraulischer_weiche",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896886",
+"titel": "Compress CS8800iAW AWEi D",
+"stand": "2026/04",
+"komponenten": "CS8800iAW... O-T, AWEi D, BH200-5, BH300-5, BH...-5, WH..., SWDP 300",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896887",
+"titel": "Compress CS8800iAW AWMBi D",
+"stand": "2026/04",
+"komponenten": "CS8800iAW... O-T, AWMBi D, B...-6ER, FF20",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896888",
+"titel": "Compress CS8800iAW AWEi D",
+"stand": "2026/04",
+"komponenten": "CS8800iAW... O-T, AWEi D, BH200-5, BH300-5, BH...-5, BH-6ERZ, TH3500, FF27/40, FF...",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_wasserhygiene",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896889",
+"titel": "Compress CS8800iAW AWEi D",
+"stand": "2026/04",
+"komponenten": "CS8800iAW... O-T, AWEi D, BH200-5, BH300-5, BH...-5, B...-6ER, FF20",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896890",
+"titel": "Compress CS8800iAW AWMBi D",
+"stand": "2026/04",
+"komponenten": "CS8800iAW... O-T, AWMBi D, WH..., SWDP 300",
+"bopa": "BOPA CS815, BOPA CS816, BOPA CS817, BOPA CS818, BOPA CS819, BOPA CS820, BOPA CS821, BOPA CS822, BOPA CS823, BOPA CS824, BOPA CS825, BOPA CS826",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896891",
+"titel": "Compress CS8800iAW AWEi D",
+"stand": "2026/04",
+"komponenten": "CS8800iAW... O-T, AWEi D, BH120-5, BH-6ERZ, TH3500, FF27/40, FF...",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_wasserhygiene",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896892",
+"titel": "Compress CS8800iAW AWEi D",
+"stand": "2026/04",
+"komponenten": "CS8800iAW... O-T, AWEi D, BH120-5, BH...-5, B...-6ER, FF20",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896897",
+"titel": "Compress CS8800iAW AWEi D",
+"stand": "2026/06",
+"komponenten": "CS8800iAW .. O-T, AWEi D, BH...-5, WPS...",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896901",
+"titel": "HYCompress CS8800iAW AWEi D",
+"stand": "2026/07",
+"komponenten": "CS8800iAW .. O-T, AWEi D, BH120-5, WPS...",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896904",
+"titel": "Compress CS8800iAW",
+"stand": "2026/06",
+"komponenten": "CS8800iAW .. O-T, AWEi D, B...-6 M, F7002...HPS",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_wasserhygiene",
+"wohnungsstation_elektrische_nachheizung",
+"wohnungsstation_zwei_leiter"
+],
+"dwg": true
+},
+{
+"nr": "6721896905",
+"titel": "Compress CS8800iAW AWEi D",
+"stand": "2026/06",
+"komponenten": "CS8800iAW .. O-T, AWEi D, TH3500-..., BH...-6 ERZ, Flow 7000, Flow 8000",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"elektrokessel_alle",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_wasserhygiene",
+"wohnungsstation_zwei_leiter"
+],
+"dwg": true
+},
+{
+"nr": "6721896906",
+"titel": "Compress CS8800iAW AWEi D",
+"stand": "2026/06",
+"komponenten": "CS8800iAW .. O-T, AWEi D, BH...-5, TH3500-..., BH...-6 ERZ, Flow 7000",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"elektrokessel_alle",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_wasserhygiene",
+"wohnungsstation_vier_leiter"
+],
+"dwg": true
+},
+{
+"nr": "6721896907",
+"titel": "Compress CS8800iAW AWMBi D",
+"stand": "2026/10",
+"komponenten": "CS8800iAW .. O-T, AWEi D, BH...-5, B...-6 ER, Flow 7000",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_wasserhygiene",
+"wohnungsstation_vier_leiter"
+],
+"dwg": true
+},
+{
+"nr": "6721896908",
+"titel": "Compress CS8800iAW AWMBi D",
+"stand": "2026/10",
+"komponenten": "CS8800iAW .. O-T, AWEi D, BS...-6 ER, WPS...",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_heizungsunterstuetzung",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896925",
+"titel": "Compress CS5800i/6800i AW",
+"stand": "2026/05",
+"komponenten": "CS5800i/6800i AW 12 M, AW .. OR-S/T, V5001C, DWF",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"ventilation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_kompakt",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896926",
+"titel": "Compress CS5800i/6800i AW",
+"stand": "2026/05",
+"komponenten": "CS 5800i/6800i AW 12 MB, AW .. OR-S/T, WH.../HR.../WPS, SWDP, V5001C, DWF",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"ventilation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_kompakt",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896965",
+"titel": "Compress CS8800iAW AWEi D",
+"stand": "2026/07",
+"komponenten": "CS8800iAW .. O-T, AWEi D, BH120-5",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896966",
+"titel": "Compress CS8800iAW AWEi D",
+"stand": "2026/07",
+"komponenten": "CS8800iAW .. O-T, AWEi D, BH...-5",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896978",
+"titel": "Compress CS8800iAW AWMBi D mit Solarthermie",
+"stand": "2026/07",
+"komponenten": "CS8800iAW .. O-T, AWMBi D, WPS...",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_kompakt",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896979",
+"titel": "Compress CS8800iAW AWEi D",
+"stand": "2026/07",
+"komponenten": "CS8800iAW .. O-T, AWEi D, BPU...",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_zur_heizung_und_kuehlung",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896981",
+"titel": "Compress CS8800iAW AWEi D mit Scheiholz Kaminofen",
+"stand": "2026/09",
+"komponenten": "CS8800iAW .. O-T, AWEi D, Scheitholz, Kaminofen, BP...-7 ERZ, FF20",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"festbrennstoff_alle",
+"festbrennstoff_scheitholzkessel",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"regelung_pelletkessel_regelung",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_wasserhygiene",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896983",
+"titel": "Compress CS8800iAW AWEi D mit Frischwasserstation",
+"stand": "2026/09",
+"komponenten": "CS8800iAW .. O-T, AWEi D, BPS...-7 ERZ, FF20",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_heizungsunterstuetzung",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_wasserhygiene",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896986",
+"titel": "Compress CS8800iAW AWEi D mit Pelletkaminofen",
+"stand": "2026/07",
+"komponenten": "Festbrennstoffkesse, CS8800iAW O-T, AWEi D, BPS500-7 ER, WPS...",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"kaminofen",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896996",
+"titel": "3x Compress 8800iAW",
+"stand": "2026/07",
+"komponenten": "CS8800iAW-.. O-T, TH3500-.., BP500-7 EM, BP...-7 EM, HPC800iC, Kaskade",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_kaskade",
+"waermepumpeluftwasser_wasserhygiene",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896997",
+"titel": "3x Compress 8800iAW",
+"stand": "2026/07",
+"komponenten": "CS8800iAW-.. O-T, TH3500-.., BP500-7 EM, BP...-7 EM, HPC800iC, Kaskade",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_kaskade",
+"waermepumpeluftwasser_wasserhygiene",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721896998",
+"titel": "3x Compress 8800iAW",
+"stand": "2026/07",
+"komponenten": "CS8800iAW-.. O-T, TH3500-..., BP...-7 EM, Flow 7002 HPS, HPC800iC, Kaskade",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_kaskade",
+"waermepumpeluftwasser_wasserhygiene",
+"wohnungsstation_zwei_leiter"
+],
+"dwg": true
+},
+{
+"nr": "6721896999",
+"titel": "3x Compress 8800iAW",
+"stand": "2026/07",
+"komponenten": "CS8800iAW-.. O-T, TH3500-..., BP500-7 EM, BP...-7 EM, FF27, HPC800iC, Kaskade",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_kaskade",
+"waermepumpeluftwasser_wasserhygiene",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721897000",
+"titel": "3x Compress 8800iAW",
+"stand": "2026/07",
+"komponenten": "CS8800iAW-.. O-T, GC7000WP ..., BP500-7 EM, BP...-7 EM, FF27, HPC800iC, Kaskade",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_mittel_gross",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_kaskade",
+"waermepumpeluftwasser_wasserhygiene",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721897001",
+"titel": "3x Compress 8800iAW",
+"stand": "2026/07",
+"komponenten": "CS8800iAW-.. O-T, TH3500-..., BP500-7 EM, HPC800iC, Kaskade",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_kaskade",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721897006",
+"titel": "Condens 7800F und 8801iF H",
+"stand": "2026/08",
+"komponenten": "GC8801iF…, OC8801iF…, OC7800F…, HF-Set HYC.., AW .. OR-S/T, CS5800, CS6800",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"gas_alle",
+"gas_boden",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"oel_alle",
+"oel_boden",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721897007",
+"titel": "Condens 7800F und 8801iF H",
+"stand": "2026/08",
+"komponenten": "GC8801iF…, OC8801iF…, OC7800F…, W..., WP..., HF-Set HYC..., AW .. OR-S/T, CS5800, CS6800",
+"bopa": "BOPA GC8F101, BOPA GC8F102, BOPA GC8F103, BOPA GC8F104, BOPA OC7F101, BOPA OC7F102, BOPA OC7F103, BOPA OC7F104",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"gas_alle",
+"gas_boden",
+"leistungsgroesse_klein",
+"oel_alle",
+"oel_boden",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721897010",
+"titel": "Condens 7800F und 8801iF H",
+"stand": "2026/08",
+"komponenten": "GC8801iF…, OC8801iF…, OC7800F…, WPS...-1, HF-Set HYC..., AW .. OR-S/T, CS5800, CS6800",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"gas_alle",
+"gas_boden",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"oel_alle",
+"oel_boden",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_dhw",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721897012",
+"titel": "Condens 7800F und 8801iF H",
+"stand": "2026/08",
+"komponenten": "GC8801iF…, OC8801iF…, OC7800F…, SP...-1, HF-Set HYC..., AW .. OR-S/T, CS5800, CS6800",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"gas_alle",
+"gas_boden",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"oel_alle",
+"oel_boden",
+"regelung_emsplus",
+"solar_alle",
+"solar_zur_heizungsunterstuetzung",
+"trinkwassererwaermung_kombispeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721897013",
+"titel": "Condens 7800F und 8801iF H",
+"stand": "2026/08",
+"komponenten": "GC8801iF…, OC8801iF…, OC7800F…, Feststoffkessel, WP..., W..., HF-Set HYC..., AW .. OR-S/T, CS5800, CS6800",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"gas_alle",
+"gas_boden",
+"kaminofen",
+"leistungsgroesse_klein",
+"oel_alle",
+"oel_boden",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721897014",
+"titel": "Condens 7800F und 8801iF H",
+"stand": "2026/08",
+"komponenten": "GC8801iF…, OC8801iF…, OC7800F…, BP...-7 EM, FF20, HF-Set HYC..., AW .. OR-S/T, CS5800, CS6800",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"gas_alle",
+"gas_boden",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"oel_alle",
+"oel_boden",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721897016",
+"titel": "Condens 7800F und 8801iF H",
+"stand": "2026/08",
+"komponenten": "GC8801iF…, OC8801iF…, OC7800F…, WST 135-200, WH 135-200, HF-Set HYC..., AW .. OR-S/T, CS5800, CS6800",
+"bopa": "BOPA GC8F101, BOPA GC8F102, BOPA GC8F103, BOPA GC8F104, BOPA OC7F101, BOPA OC7F102, BOPA OC7F103, BOPA OC8iF101, BOPA OC8iF102",
+"kategorien": [
+"einbindungwaermeerzeuger_direkt",
+"gas_alle",
+"gas_boden",
+"gas_kompakt",
+"heat_distribution_heat_exchanger",
+"leistungsgroesse_klein",
+"oel_alle",
+"oel_boden",
+"oel_kompakt",
+"regelung_emsplus",
+"trinkwassererwaermung_warmwasserspeicher",
+"waermepumpeluftwasser_alle",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721897062",
+"titel": "HY2x Compress 8800iAW (Kask.)",
+"stand": "2026/09",
+"komponenten": "CS8800iAW-.. O-T, TH3500-.., BP500-7 EM, BP...-7 EM, HPC800iC, Kaskade",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_kaskade",
+"waermepumpeluftwasser_wasserhygiene",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721897063",
+"titel": "2xCompress 8800iAW (Kask.)",
+"stand": "2026/09",
+"komponenten": "CS8800iAW-.. O-T, TH3500-.., BP500-7 EM, BP...-7 EM, HPC800iC, Kaskade",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_kaskade",
+"waermepumpeluftwasser_wasserhygiene",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721897064",
+"titel": "2xCompress 8800iAW (Kask.)",
+"stand": "2026/09",
+"komponenten": "CS8800iAW-.. O-T, TH3500-..., BP...-7 EM, Flow 7002 HPS, HPC800iC, Kaskade",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_kaskade",
+"waermepumpeluftwasser_wasserhygiene",
+"wohnungsstation_zwei_leiter"
+],
+"dwg": true
+},
+{
+"nr": "6721897065",
+"titel": "2xCompress 8800iAW (Kask.)",
+"stand": "2026/10",
+"komponenten": "CS8800iAW-.. O-T, TH3500-..., BP500-7 EM, BP...-7 EM, FF27, HPC800iC, Kaskade",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_kaskade",
+"waermepumpeluftwasser_wasserhygiene",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721897066",
+"titel": "2xCompress 8800iAW (Kask.)",
+"stand": "2026/09",
+"komponenten": "CS8800iAW-.. O-T, GC7000WP ..., BP500-7 EM, BP...-7 EM, FF27, HPC800iC, Kaskade",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_mittel_gross",
+"regelung_emsplus",
+"trinkwassererwaermung_frischwasserstation",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_kaskade",
+"waermepumpeluftwasser_wasserhygiene",
+"wohnungsstation_ohne"
+],
+"dwg": true
+},
+{
+"nr": "6721897067",
+"titel": "2xCompress 8800iAW (Kask.)",
+"stand": "2026/09",
+"komponenten": "CS8800iAW-.. O-T, TH3500-..., BP500-7 EM, HPC800iC, Kaskade",
+"bopa": "",
+"kategorien": [
+"einbindungwaermeerzeuger_pufferspeicher",
+"leistungsgroesse_klein",
+"regelung_emsplus",
+"trinkwassererwaermung_ohne",
+"waermepumpeluftwasser_alle",
+"waermepumpeluftwasser_kaskade",
+"wohnungsstation_ohne"
+],
+"dwg": true
+}
+]
+}

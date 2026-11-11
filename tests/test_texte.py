@@ -12,6 +12,7 @@ from test_mfh import mfh_eingabe
 from test_rechnen import szenarien
 from wp import daten as D
 from wp import mfh as M
+from wp import hydraulik as HY
 from wp import texte as T
 
 HIER = Path(__file__).resolve().parent
@@ -45,3 +46,29 @@ def test_klartext_python_gleich_html(tmp_path):
     assert js["glossar"] == T.GLOSSAR
     for e, j in zip(ein, js["klartext"]):
         assert klartext(e) == j
+
+
+def schemata(e):
+    r = M.rechne(e, D.geraete(), D.katalog(), D.mfh())
+    return HY.schemata(e, r, D.hydraulik(), T.inneneinheit(e, r, D.katalog()))
+
+
+def test_hydraulikschemata_passen():
+    s = schemata(mfh_eingabe("sanierung", 12, "hiu"))
+    assert s and s[0]["nr"] == "6721896998"   # 3x Compress 8800iAW mit Flow 7002 HPS
+    s = schemata(mfh_eingabe("neubau", 16, "dle"))
+    assert s[0]["titel"].startswith("2xCompress 8800iAW")
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="node nicht installiert")
+def test_hydraulik_python_gleich_html(tmp_path):
+    ein = []
+    for e in faelle():
+        r = M.rechne(e, D.geraete(), D.katalog(), D.mfh())
+        ein.append([e, T.inneneinheit(e, r, D.katalog())])
+    datei = tmp_path / "ein.json"
+    datei.write_text(json.dumps(ein, ensure_ascii=False), encoding="utf-8")
+    js = json.loads(subprocess.run(["node", str(HIER / "hdb_html.js"), str(ROOT / "index.html"), str(datei)],
+                                   capture_output=True, text=True, check=True).stdout)
+    for (e, _), j in zip(ein, js):
+        assert schemata(e) == j

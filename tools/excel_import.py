@@ -216,7 +216,8 @@ def einbetten(daten: dict, klima: dict) -> None:
              ";\nconst KLIMA_DATEN = " + json.dumps(klima, ensure_ascii=False, separators=(",", ":")) +
              ";\nconst BILDER_DATEN = " + json.dumps(_bilder(), separators=(",", ":")) +
              ";\nconst PAKETE_DATEN = " + json.dumps(_pakete(), ensure_ascii=False, separators=(",", ":")) +
-             ";\nconst MFH_DATEN = " + json.dumps(_mfh(), ensure_ascii=False, separators=(",", ":")) + ";\n")
+             ";\nconst MFH_DATEN = " + json.dumps(_mfh(), ensure_ascii=False, separators=(",", ":")) +
+             ";\nconst HYDRAULIK_DATEN = " + json.dumps(_hydraulik(), ensure_ascii=False, separators=(",", ":")) + ";\n")
     html.write_text(text[:i] + block + text[j:], encoding="utf-8")
 
 
@@ -226,6 +227,12 @@ def _mfh() -> dict:
     from wp import daten as wd
     wd.mfh.cache_clear()
     return wd.mfh()
+
+
+def _hydraulik() -> dict:
+    """Index der Bosch-Hydraulikdatenbank (daten/hydraulik.json, tools/hdb_import.py)."""
+    datei = DATEN / "hydraulik.json"
+    return json.loads(datei.read_text(encoding="utf-8")) if datei.exists() else {"basis": "", "schemata": []}
 
 
 def _katalog() -> dict:
