@@ -88,6 +88,11 @@ def neu_setzen(*pfade):
         ss.pop("w_" + p_, None)
 
 
+@st.cache_data(ttl=24 * 3600, show_spinner="Hydraulikschema wird aus der Bosch-Hydraulikdatenbank geladen …")
+def schema_pdf(nr: str) -> bytes | None:
+    return X.lade_schema(nr)
+
+
 def mfh_bereich(r: dict, e: dict) -> None:
     v, MD = r["mfh"], D.mfh()
     a_ = MD["annahmen"][v["tabelle"]]
@@ -101,13 +106,25 @@ def mfh_bereich(r: dict, e: dict) -> None:
     ids = [z_["id"] for z_ in v["zellen"]]
     gew = {a["zelle"]["id"] for a in v["auswahl"]}
     beschr = {z_["id"]: f"{z_['we']} WE · {z_['kw']} kW" + (f" · {z_['variante'].replace('Gas-Brennwert ', '')}" if z_.get("variante") else "")
-              for z_ in v["zellen"]}
+              + (" · GAEB" if z_.get("vorlage") else "") for z_ in v["zellen"]}
     wahl_ = st.radio("Musterlösung", ["auto"] + ids, horizontal=True, key="mfh_zelle",
                      index=(ids.index(e["mfh"]["zelle"]) + 1) if e["mfh"].get("zelle") in ids else 0,
                      format_func=lambda x: "automatisch (" + " / ".join(beschr[i_] for i_ in ids if i_ in gew) + ")" if x == "auto" else beschr[x])
     if (wahl_ if wahl_ != "auto" else "") != (e["mfh"].get("zelle") or ""):
         e["mfh"]["zelle"] = "" if wahl_ == "auto" else wahl_
         st.rerun()
+    st.caption("„· GAEB“ = mit Bosch-Bestellvorschlag zum Export (.d83/CSV).")
+    d_ = X.dokumentation(e, r, KAT)
+    if d_:
+        (st.success if d_["valide"] else st.warning)(
+            ("✓ Dokumentation vollständig und valide" if d_["valide"] else "! Dokumentation unvollständig – Hinweise beachten") + "\n\n"
+            + "\n".join(f"- {T.STATUS_ICON[x['status']]} {x['text']}" for x in d_["pruefungen"]))
+        if d_["schema"]:
+            c_i, c_t = st.columns([1, 2])
+            c_i.image(HY.link(D.hydraulik(), d_["schema"]["nr"], "bild"))
+            c_t.markdown(f"**Hydraulikschema {d_['schema']['nr']}** – {d_['schema']['titel']} (Stand {d_['schema']['stand']})  \n"
+                         f"{d_['schema']['komponenten']}  \n[PDF]({HY.link(D.hydraulik(), d_['schema']['nr'], 'pdf')}) · "
+                         f"[in der Datenbank]({HY.link(D.hydraulik(), d_['schema']['nr'], 'suche')})")
     if v["ausserhalb"]:
         st.warning("Heizlast bzw. Wohneinheiten liegen über den Musterlösungen – größte Musterlösung angezeigt, Anlage individuell planen (SysCon).")
     g_ = r["gewaehlt"]
@@ -126,7 +143,15 @@ def mfh_bereich(r: dict, e: dict) -> None:
             st.rerun()
         vo = MD["vorlagen"].get(z_.get("vorlage") or "")
         if not vo:
-            st.caption("Für diese Musterlösung liegt noch kein GAEB-Bestellvorschlag vor – Komponenten siehe oben, Zubehör im SysCon ergänzen.")
+            mit_ = [f"{c_['we']} WE" for c_ in v["zellen"] if c_.get("vorlage")]
+            st.warning("**Kein GAEB-Bestellvorschlag für diese Musterlösung vorhanden.** Bosch hat dafür (noch) keinen Musterbestellvorschlag – "
+                       "der GAEB-Export ist deshalb nicht möglich. Die Komponentenliste lässt sich als CSV exportieren; Zubehör und Bestellung "
+                       "im SysCon ergänzen. " + (f"GAEB-Bestellvorschläge gibt es in dieser Zeile für: {', '.join(mit_)}." if mit_
+                                                 else "In dieser Zeile hat noch keine Musterlösung einen GAEB-Bestellvorschlag."))
+            kz_ = "Musterlösung;Komponente;Hinweis\r\n" + "".join(f"{z_['we']} WE / {z_['kw']} kW;{k_.replace(';', ',')};Bestell-Nr. im SysCon ergänzen\r\n"
+                                                                  for k_ in z_["komponenten"])
+            c2.download_button("Komponentenliste CSV", ("\ufeff" + kz_).encode("utf-8"), f"Komponentenliste_{z_['we']}WE_{X.dateiname(e)}.csv",
+                               "text/csv", key="mfh_komp_" + z_["id"])
             continue
         pos = M.positionen(vo, MD["langtexte"], v["we"])
         dname = f"Bestellvorschlag_{vo['nr']}_" + ((e["projekt"]["name"] or "MFH").replace(" ", "_"))
@@ -560,13 +585,31 @@ with rechts:
                    "B0/W.. bei Sole/Wasser = Sole 0 °C. θe = Norm-Außentemperatur.")
 
     with t_hyd:
+        hs_ = HY.schemata(E, r, D.hydraulik(), ie)
+        dk_ = X.dokumentation(E, r, KAT)
+        if dk_ and dk_["schema"]:   # MFH: Schema der Musterlösung zuerst
+            hs_ = ([dk_["schema"]] + [x_ for x_ in hs_ if x_["nr"] != dk_["schema"]["nr"]])[:5]
+        if hs_:
+            st.markdown("**Hydraulikschema – Bosch-Hydraulikdatenbank** (maßgeblich für Planung und Bestellung)")
+            st.image(HY.link(D.hydraulik(), hs_[0]["nr"], "bild"), width="stretch")
+            hd_ = D.hydraulik()
+            for i_, x_ in enumerate(hs_):
+                c_b, c_t = st.columns([1, 4])
+                c_b.image(HY.link(hd_, x_["nr"], "bild"), width=130)
+                c_t.markdown(("**am besten passend:** " if i_ == 0 else "") + f"**{x_['titel']}** · Nr. {x_['nr']} · Stand {x_['stand']}"
+                             + (f" · {x_['bopa']}" if x_["bopa"] else "") + f"  \n{x_['komponenten']}  \n"
+                             f"[PDF]({HY.link(hd_, x_['nr'], 'pdf')})"
+                             + f" · [in der Datenbank{' (PDF + DWG)' if x_['dwg'] else ''}]({HY.link(hd_, x_['nr'], 'suche')})")
+        else:
+            st.info("Sonderfall: kein passendes Schema in der Hydraulikdatenbank – die Prinzipskizze ist Grundlage, Hydraulik im SysCon planen.")
         if g:
-            st.markdown("**Anlagenschema (vereinfacht)**")
+            st.markdown("**Vereinfachte Prinzipskizze** – Übersicht, nur bei Sonderfällen maßgeblich")
             svg = S.schema_svg(r, ie, T.heizkreis_liste(E), S.FARBEN_DRUCK).replace('width="900" height="470"', 'width="100%"')
             st.markdown("<div style='background:#fff;border:1px solid #d3dce5;border-radius:12px;padding:8px'>" + svg + "</div>",
                         unsafe_allow_html=True)
-            st.caption("Prinzipdarstellung – Zubehör, Speicher und Sicherheitstechnik im SysCon planen.")
-
+            st.caption("Maßgeblich ist das Bosch-Hydraulikschema oben; Zubehör, Speicher und Sicherheitstechnik im SysCon planen."
+                       if hs_ else "Sonderfall ohne passendes Schema in der Hydraulikdatenbank: Prinzipdarstellung als Grundlage – "
+                       "Hydraulik individuell im SysCon planen.")
         kacheln = T.anbindung(E, r)
         if kacheln:
             st.markdown("**Warmwasser & Anbindung**")
@@ -574,17 +617,6 @@ with rechts:
             for i_, (a_, b_, c_) in enumerate(kacheln):
                 sp_[i_ % len(sp_)].markdown(f"<div class='kpi'><div class='t'>{a_}</div><div class='v'>{b_}</div><div class='s'>{c_}</div></div>",
                                             unsafe_allow_html=True)
-        hs_ = HY.schemata(E, r, D.hydraulik(), ie)
-        if hs_:
-            st.markdown("**Bosch-Hydraulikschemata** – Hydraulikdatenbank, passend zur Auslegung (PDF/DWG online)")
-            hd_ = D.hydraulik()
-            for i_, x_ in enumerate(hs_):
-                c_b, c_t = st.columns([1, 4])
-                c_b.image(HY.link(hd_, x_["nr"], "bild"), width=130)
-                c_t.markdown(("**am besten passend:** " if i_ == 0 else "") + f"**{x_['titel']}** · Nr. {x_['nr']} · Stand {x_['stand']}"
-                             + (f" · {x_['bopa']}" if x_["bopa"] else "") + f"  \n{x_['komponenten']}  \n"
-                             f"[PDF]({HY.link(hd_, x_['nr'], 'pdf')})" + (f" · [DWG]({HY.link(hd_, x_['nr'], 'dwg')})" if x_["dwg"] else "")
-                             + f" · [in der Datenbank]({HY.link(hd_, x_['nr'], 'suche')})")
     with t_best:
         # ---- MFH-Bestellvorschlag (Musterlösungen) – wie mfhHtml() in index.html
         if r["mfh"]:
@@ -640,8 +672,15 @@ with rechts:
     c_p, c_m = st.columns(2)
     c_p.download_button("📄 Auslegung als PDF", pdf_, f"WP-Auslegung_{name}{'_intern' if E['preise_drucken'] else ''}.pdf",
                         "application/pdf", type="primary", width="stretch")
-    c_m.download_button("🗂 Projektmappe (.zip)", X.mappe_bytes(E, r, KAT, pdf_), f"WP-Auslegung_{X.dateiname(E)}.zip",
+    sch_ = X.schema_fuer_export(E, r, KAT)
+    sch_pdf_ = schema_pdf(sch_["nr"]) if sch_ else None
+    c_m.download_button("🗂 Projektmappe (.zip)", X.mappe_bytes(E, r, KAT, pdf_, {"pdf": sch_pdf_} if sch_pdf_ else None),
+                        f"WP-Auslegung_{X.dateiname(E)}.zip",
                         "application/zip", width="stretch",
-                        help="Projektdatei, Kurzbericht, PDF und – bei MFH-Musterlösungen – Bestellvorschlag als GAEB (.d83) und CSV")
+                        help="Projektdatei, Kurzbericht, Dokumentation, PDF (mit Original-Hydraulikschema) und – bei MFH-Musterlösungen – "
+                             "Bestellvorschlag als GAEB (.d83) und CSV")
+    if sch_pdf_:
+        st.download_button(f"📄 Auslegung + Hydraulikschema {sch_['nr']} (ein PDF)", X.pdf_mit_schema(pdf_, sch_pdf_),
+                           f"WP-Auslegung_{X.dateiname(E)}_mit_Hydraulik.pdf", "application/pdf", width="stretch")
     st.caption(f"Entwickelt von Daniel Sommer · HC/SDE3-PSD · Leistungsdaten: {DATEN['quelle']} · Katalog: Gesamtkatalog März 2026 · "
                "Ergebnis ersetzt keine Fachplanung.")

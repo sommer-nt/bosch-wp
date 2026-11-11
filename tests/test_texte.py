@@ -84,6 +84,47 @@ def test_projektmappe():
     r = M.rechne(e, D.geraete(), D.katalog(), D.mfh())
     z = zipfile.ZipFile(io.BytesIO(X.mappe_bytes(e, r, D.katalog(), b"%PDF-1.4")))
     namen = set(z.namelist())
-    assert namen == {"WP-Auslegung_Muster_MFH.json", "Kurzbericht.txt", "Bestellvorschlag_4000194338.d83",
+    assert namen == {"WP-Auslegung_Muster_MFH.json", "Kurzbericht.txt", "Dokumentation_Bestellvorschlag.txt", "Bestellvorschlag_4000194338.d83",
                      "Bestellvorschlag_4000194338.csv", "WP-Auslegung_Muster_MFH.pdf"}
     assert "Aus der MFH-Musterlösung" in z.read("Kurzbericht.txt").decode("utf-8")
+
+
+def doku(e):
+    r = M.rechne(e, D.geraete(), D.katalog(), D.mfh())
+    return M.dokumentation(e, r, D.mfh(), D.hydraulik(), T.inneneinheit(e, r, D.katalog()))
+
+
+def mfh_faelle():
+    out = []
+    for typ in ("sanierung", "neubau"):
+        for ww in ("friwa", "hiu", "dle", "speicher"):
+            for we in (4, 8, 10, 12, 16):
+                out.append(mfh_eingabe(typ, we, ww))
+        for we in (6, 8, 14):
+            out.append(mfh_eingabe(typ, we, "dle", "hybrid"))
+    e = mfh_eingabe("neubau", 10, "dle")
+    e["auswahl"].update(geraet="CS5001 AW22", anzahl=1)
+    return out + [e]
+
+
+def test_dokumentation_valide():
+    d = doku(mfh_eingabe("neubau", 10, "dle"))
+    assert d["valide"] and d["vorlage"] == "4000194338" and d["schema"]["nr"] == "6721897067"
+    assert doku(mfh_eingabe("sanierung", 4, "dle"))["schema"]["nr"] == "6721896965"   # aus den Unterlagen der Musterlösung
+    e = mfh_eingabe("neubau", 10, "dle")
+    e["auswahl"].update(geraet="CS5001 AW22", anzahl=1)
+    assert not doku(e)["valide"]   # abweichende Wärmepumpe
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="node nicht installiert")
+def test_dokumentation_python_gleich_html(tmp_path):
+    ein = []
+    for e in mfh_faelle():
+        r = M.rechne(e, D.geraete(), D.katalog(), D.mfh())
+        ein.append([e, T.inneneinheit(e, r, D.katalog())])
+    datei = tmp_path / "ein.json"
+    datei.write_text(json.dumps(ein, ensure_ascii=False), encoding="utf-8")
+    js = json.loads(subprocess.run(["node", str(HIER / "doku_html.js"), str(ROOT / "index.html"), str(datei)],
+                                   capture_output=True, text=True, check=True).stdout)
+    for (e, _), j in zip(ein, js):
+        assert doku(e) == j

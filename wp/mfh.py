@@ -205,3 +205,84 @@ def csv_text(pos: list[dict]) -> str:
                                  "" if p["gp"] is None else f"{p['gp']:.2f}".replace(".", ","),
                                  "ja" if p["summe"] else "nein"]) for p in pos]
     return "\r\n".join(zeilen) + "\r\n"
+
+
+def dokumentation(e: dict, r: dict, matrix: dict, hdb: dict, ie: dict | None) -> dict | None:
+    """Prüfprotokoll zum Bestellvorschlag (wie mfhDokumentation() in index.html).
+
+    Prüft Auslegung, Übereinstimmung mit der Musterlösung, Heizlast/WE im Musterbereich, GAEB-Bestellvorschlag und das
+    passende Bosch-Hydraulikschema (Anzahl Wärmepumpen, Warmwasser, Hybrid). valide = keine Warnung, kein Fehler.
+    """
+    from . import hydraulik as HY
+    from .schema import zahl
+
+    def z(x, d=1):
+        return zahl(x, d)
+
+    v, g = r.get("mfh"), r.get("gewaehlt")
+    if not v or not v["auswahl"]:
+        return None
+    a = next((x for x in v["auswahl"] if g and x["zelle"]["geraet"] == g["geraet"] and x["zelle"]["n"] == g["n"]), v["auswahl"][0])
+    zl = a["zelle"]
+    p = []
+    name = (f"{zl['n']} × " if zl["n"] > 1 else "") + zl["geraet"]
+    p.append({"text": f"Musterlösung {zl['we']} WE / {zl['kw']} kW: {' · '.join(zl['komponenten'])}", "status": ""})
+    krit = {"monovalent": "monovalent", "monoenergetisch": "monoenergetisch", "hybrid": "GEG-Hybrid"}[r["kriterium"]]
+    if g and g["moeglich"] and g["ok"]:
+        p.append({"text": f"Auslegung {krit} erfüllt: {(str(g['n']) + ' × ') if g['n'] > 1 else ''}{g['geraet']}, "
+                          f"Bivalenzpunkt {T_biv(g)}", "status": "ok"})
+    else:
+        p.append({"text": f"Auslegung {krit} nicht erfüllt – Wärmepumpe prüfen.", "status": "bad"})
+    if g and g["geraet"] == zl["geraet"] and g["n"] == zl["n"]:
+        p.append({"text": f"Gewählte Wärmepumpe entspricht der Musterlösung ({name}).", "status": "ok"})
+    else:
+        p.append({"text": f"Gewählte Wärmepumpe weicht von der Musterlösung ab (Muster: {name}) – Bestellvorschlag anpassen.", "status": "warn"})
+    if v["ausserhalb"]:
+        p.append({"text": "Heizlast bzw. Wohneinheiten über den Musterlösungen – Anlage individuell planen.", "status": "bad"})
+    else:
+        ok = v["qh"] <= a["muster_qh"] + 1e-9 and v["we"] <= zl["we"]
+        p.append({"text": f"Heizlast {z(v['qh'])} kW / {v['we']} WE im Musterbereich ({z(a['muster_qh'])} kW / {zl['we']} WE).",
+                  "status": "ok" if ok else "warn"})
+    vo = matrix["vorlagen"].get(zl.get("vorlage") or "")
+    if vo:
+        n_pos = sum(1 for gr in vo["gruppen"] for x in gr["elemente"] if "oz" in x)
+        p.append({"text": f"GAEB-Bestellvorschlag {vo['nr']} vom {vo['datum']} ({n_pos} Positionen).", "status": "ok"})
+    else:
+        p.append({"text": "Kein GAEB-Bestellvorschlag zu dieser Musterlösung – nur Komponentenliste; Bestellung im SysCon erstellen.",
+                  "status": "warn"})
+    s = schema_zur_loesung(e, r, hdb, ie, zl) if g else None
+    if s and all(s["passt"].values()):
+        p.append({"text": f"Hydraulikschema {s['nr']} „{s['titel']}“ (Stand {s['stand']}"
+                          + (", aus den Unterlagen der Musterlösung" if zl.get("hydraulik") == s["nr"] else "")
+                          + ") passt: Anzahl Wärmepumpen, Warmwasser und Betriebsweise.", "status": "ok"})
+    elif s:
+        fehlt = [t for k, t in (("anzahl", "Anzahl Wärmepumpen"), ("ww", "Warmwasser"), ("hybrid", "Betriebsweise")) if not s["passt"][k]]
+        p.append({"text": f"Hydraulikschema {s['nr']} „{s['titel']}“ passt nur teilweise ({', '.join(fehlt)} abweichend) – "
+                          "Sonderfall, Hydraulik prüfen.", "status": "warn"})
+    else:
+        p.append({"text": "Kein passendes Schema in der Hydraulikdatenbank – Sonderfall, Hydraulik individuell planen.", "status": "warn"})
+    p.append({"text": f"Preisstand: {('Bestellvorschlag ' + vo['datum'] + ', ') if vo else ''}Kostenübersicht {matrix['stand']}.", "status": ""})
+    return {"pruefungen": p, "schema": s, "vorlage": vo["nr"] if vo else None,
+            "valide": not any(x["status"] in ("warn", "bad") for x in p)}
+
+
+def schema_zur_loesung(e: dict, r: dict, hdb: dict, ie: dict | None, zl: dict) -> dict | None:
+    """Hydraulikschema zur Musterlösung: aus den Unterlagen der Lösung (zelle „hydraulik“), sonst das passendste aus der
+    Hydraulikdatenbank (mit den Komponenten der Lösung als Kennworten)."""
+    from . import hydraulik as HY
+    alle = HY.schemata(e, r, hdb, ie, 999, HY.kennworte(zl["komponenten"]))
+    if zl.get("hydraulik"):
+        fest = next((x for x in alle if x["nr"] == zl["hydraulik"]), None)
+        if fest:
+            return fest
+    return alle[0] if alle else None
+
+
+def T_biv(g: dict) -> str:
+    """Bivalenzpunkt als Text – Rundung wie schemaZahl() (gleich in index.html)."""
+    from .schema import zahl
+    if not g or not g.get("moeglich"):
+        return "–"
+    if g["bivalenz_art"] == "nicht":
+        return "nicht erreicht"
+    return ("≤ " if g["bivalenz_art"] == "unter" else "") + zahl(g["bivalenz"], 1).replace("-", "−") + " °C"

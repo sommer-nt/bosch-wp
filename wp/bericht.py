@@ -13,6 +13,7 @@ from pathlib import Path
 from fpdf import FPDF
 
 from . import daten as D
+from . import hydraulik as HY
 from . import mfh as M
 from . import rechnen as R
 from . import schema as S
@@ -391,6 +392,22 @@ def mfh_seite(pdf: Ausdruck, e: dict, r: dict, v: dict, preise: bool) -> None:
             txt = txt[:-1]
         return txt.rstrip() + "..."
 
+    d = M.dokumentation(e, r, MD, D.hydraulik(), T.inneneinheit(e, r, D.katalog()))
+    if d:
+        pdf.h2("Dokumentation zum Bestellvorschlag – " + ("vollständig und valide" if d["valide"] else "unvollständig, Hinweise beachten"))
+        farben = {"ok": (24, 160, 88), "warn": (178, 106, 0), "bad": ROT, "": HELL}
+        for x in d["pruefungen"]:
+            yy = pdf.get_y()
+            pdf.set_fill_color(*farben[x["status"]])
+            pdf.ellipse(14, yy + 1.4, 1.8, 1.8, style="F")
+            pdf.schrift_(7.6)
+            pdf.set_xy(18, yy)
+            pdf.multi_cell(179, 3.9, pdf.t(x["text"]), new_x="LMARGIN", new_y="NEXT")
+        if d["schema"]:
+            pdf.schrift_(6.8, False, GRAU)
+            pdf.multi_cell(184, 3.5, pdf.t(f"Hydraulikschema {d['schema']['nr']}: {HY.link(D.hydraulik(), d['schema']['nr'], 'pdf')} "
+                                           "(vollständig mit Verdrahtungsplan in der Projektmappe bzw. im PDF „Auslegung + Hydraulikschema“)."),
+                           new_x="LMARGIN", new_y="NEXT")
     for a in v["auswahl"]:
         z = a["zelle"]
         pdf.h2(f"{z.get('erzeuger') or 'Monoenergetisch'} · {z['we']} WE / {z['kw']} kW" + (f" · {z['variante']}" if z.get("variante") else ""))

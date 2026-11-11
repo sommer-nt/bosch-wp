@@ -42,7 +42,8 @@
    "summe": 34700,
    "geraet": "CS8800iAW 13 O-T",
    "n": 1,
-   "id": "B-mono-friwa-4"
+   "id": "B-mono-friwa-4",
+   "hydraulik": "6721896891"
   },
   {
    "tabelle": "bestand",
@@ -290,7 +291,8 @@
    "geraet": "CS8800iAW 13 O-T",
    "n": 1,
    "vorlage": "4000191953",
-   "id": "B-mono-dle-4"
+   "id": "B-mono-dle-4",
+   "hydraulik": "6721896965"
   },
   {
    "tabelle": "bestand",
@@ -355,7 +357,8 @@
    "summe": 60500,
    "geraet": "CS8800iAW 13 O-T",
    "n": 3,
-   "id": "B-mono-dle-12"
+   "id": "B-mono-dle-12",
+   "hydraulik": "6721897001"
   },
   {
    "tabelle": "bestand",
@@ -673,7 +676,8 @@
    "n": 1,
    "vorlage": "4000162196",
    "erzeuger": "Hybrid MH200",
-   "id": "B-hybrid-dle-6"
+   "id": "B-hybrid-dle-6",
+   "hydraulik": "6721896658"
   },
   {
    "tabelle": "bestand",
@@ -691,7 +695,8 @@
    "n": 1,
    "vorlage": "4000162204",
    "erzeuger": "Hybrid MH200",
-   "id": "B-hybrid-dle-8"
+   "id": "B-hybrid-dle-8",
+   "hydraulik": "6721896658"
   },
   {
    "tabelle": "bestand",
@@ -1054,7 +1059,8 @@
    "geraet": "CS8800iAW 15 O-T",
    "n": 1,
    "vorlage": "4000179621",
-   "id": "N-mono-dle-8"
+   "id": "N-mono-dle-8",
+   "hydraulik": "6721896965"
   },
   {
    "tabelle": "neubau",
@@ -1126,5 +1132,6 @@
    "vorlage": "4000194358",
    "id": "N-mono-dle-16"
   }
- ]
+ ],
+ "hinweis_hydraulik": "„hydraulik“: Hydraulikschema aus den Unterlagen der Musterlösung (Techn. Doku); sonst passendes Schema aus der Hydraulikdatenbank."
 }
