@@ -100,6 +100,9 @@
   .wpkopf .det b{display:block;color:var(--ink);font-size:14px;font-weight:600}
   svg text{font-family:inherit}
   .legende{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--ink-soft);margin:4px 0 8px}
+  .ablesen{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:13px;margin:6px 0 2px} .ablesen input[type=range]{width:220px;vertical-align:middle;accent-color:#7a3e9d}
+  .ablesen #ablesenText{color:var(--ink-soft)} #diagramm svg{touch-action:none} #diagramm svg.zieh{cursor:ew-resize}
+  @media print{.ablesen{display:none}}
   .legende i{display:inline-block;width:20px;height:0;border-top:3px solid;vertical-align:middle;margin-right:5px}
   .preis{color:var(--ink-faint)}
   .nurdruck{display:none}
@@ -168,7 +171,7 @@
   .info:hover::after,.info:focus::after{content:attr(data-tip);position:absolute;left:50%;top:22px;transform:translateX(-50%);width:280px;z-index:20;
     background:var(--ink);color:var(--paper);font-size:12px;font-weight:400;line-height:1.4;padding:8px 10px;border-radius:8px;white-space:normal;text-align:left;box-shadow:0 4px 14px rgba(0,0,0,.2)}
   #druck ul.klartext.dk-klar li{font-size:8.2pt;padding:1.2mm 0 1.2mm 6mm;line-height:1.35}
-  #druck img.dk-hdb{width:100%;max-height:138mm;object-fit:contain;border:0.3mm solid #d3dce5}
+  #druck img.dk-hdb{width:100%;max-height:124mm;object-fit:contain;border:0.3mm solid #d3dce5}
   .gaeb{font-size:10px;font-weight:800;background:#18a058;color:#fff;border-radius:8px;padding:1px 6px;vertical-align:1px}
   .menuliste button:disabled{opacity:.5;cursor:not-allowed}
   .doku{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0 12px;background:var(--panel)}
@@ -354,6 +357,10 @@
   <div class="card" data-tab="ueberblick geraete"><h2>Gewählte Wärmepumpe</h2><div class="in" id="wpKarte"></div></div>
   <div class="card" data-tab="ueberblick leistung"><h2>Heizleistung über der Außentemperatur <span class="info" data-g="kennlinie">?</span></h2><div class="in">
     <div class="legende" id="legende"></div><div id="diagramm"></div>
+    <div class="ablesen" id="ablesenZeile"><label>Ablese-Linie bei <input type="range" id="tMarke" step="0.5"> <b id="tMarkeWert"></b></label>
+      <button type="button" id="tMarkeNat">auf θe</button><span id="ablesenText"></span></div>
+    <p class="hint">Die violette <b>Ablese-Linie</b> lässt sich verschieben (Regler oder im Diagramm ziehen) – z. B. auf −5 °C oder tiefer, je nach Gebiet.
+      Sie dient nur der Veranschaulichung und ändert die Auslegung nicht.</p>
     <p class="hint">So lesen: Die schwarze <b>Gebäudekennlinie</b> zeigt den Bedarf, die blaue Kurve die maximale Leistung der Wärmepumpe.
       Wo Blau über Schwarz liegt, schafft die Wärmepumpe den Bedarf allein; links vom <b>Bivalenzpunkt</b> hilft der Heizstab.
       Rechts der <b>Taktgrenze</b> liegt der Bedarf unter der kleinsten Leistung (gestrichelt) – die Wärmepumpe taktet.</p></div></div>
@@ -706,7 +713,24 @@ const RK = (() => {
     for (const t of [-7, 2, 7]) if (nat <= t && t <= thg) punkte[String(t)] = vlBei(t);
     return {typ, exponent: n, spreizung: sigma, t: ts, vl: vls, rl: vls.map((v, i) => v - sigma * qv(ts[i])), punkte};
   }
-  return {rechne, bewerte, kurveBeiVl, last, lastprofilAusLiter, heizkurve, VDI_BIV_T, VDI_BIV_MU, VDI_BIV_PAR, VDI_BIV_ALT};
+  // Ablese-Linie im Diagramm: Bedarf, WP-Leistung (max./min.) und Heizstab bei t (Standard θe) – wie rechnen.ablesen()
+  function ablesen(r, t) {
+    const k = r.kennlinien;
+    if (!r.gewaehlt || !k) return null;
+    const ts = k.t;
+    t = Math.min(Math.max(+(t === null || t === undefined ? r.nat : t), ts[0]), ts[ts.length - 1]);
+    const wert = qs => {
+      if (!qs) return null;
+      const i = Math.min(Math.floor(t - ts[0] + 1e-9), ts.length - 1);
+      if (i === ts.length - 1 || Math.abs(t - ts[i]) < 1e-9) return qs[i];
+      const a = qs[i], b = qs[i + 1];
+      if (a === null || b === null) return null;
+      return a + (b - a) * (t - ts[i]) / (ts[i + 1] - ts[i]);
+    };
+    const bedarf = last(t, r.qh + r.qsperr, r.qtw, r.nat, r.heizgrenze), wp = wert(k.max);
+    return {t, bedarf, wp_max: wp, wp_min: wert(k.min), heizstab: wp !== null ? Math.max(0.0, bedarf - wp) : null};
+  }
+  return {rechne, bewerte, kurveBeiVl, last, lastprofilAusLiter, heizkurve, ablesen, VDI_BIV_T, VDI_BIV_MU, VDI_BIV_PAR, VDI_BIV_ALT};
 })();
 if (typeof module !== 'undefined') module.exports = RK;
 </script>
@@ -1148,7 +1172,8 @@ const STANDARD = {
         nutzung: 'Wohngebäude', bezug: 'liter', qwb: 1.1, flaeche_m2: 0.0},
   sperrzeit_h: 0, waermequelle: 'luft', aufstellung: {entfernung_m: 5.0, spreizung: 5.0, entzug_w_m: 50.0},
   auslegung: 'monoenergetisch', vl: 55.0, serien: [],
-  auswahl: {geraet: '', anzahl: 1, inneneinheit: ''}, hydraulik: {schema: '', loesung: ''}, preise_drucken: false
+  auswahl: {geraet: '', anzahl: 1, inneneinheit: ''}, hydraulik: {schema: '', loesung: ''}, preise_drucken: false,
+  ansicht: {t_marke: null}   // Ablese-Linie im Diagramm (null = θe), nur Anzeige
 };
 const SPEICHER_KEY = 'wp_auslegung_v1';
 let E = JSON.parse(JSON.stringify(STANDARD));   // Start immer leer (keine vorbelegte Wärmepumpe)
@@ -1406,6 +1431,9 @@ function zeichne() {
   $$('#mfh [data-uebernehmen]').forEach(b => b.onclick = () => { const [g0, n0] = b.dataset.uebernehmen.split('|'); E.auswahl.geraet = g0; E.auswahl.anzahl = +n0; E.auswahl.inneneinheit = ''; aktualisiere(); });
   $('#legende').innerHTML = legende(r) + minHinweis(r);
   $('#diagramm').innerHTML = diagramm(r, {breite: 900, hoehe: 380});
+  diagrammZiehen(); ablesenZeigen(r);
+  $('#tMarke').oninput = ev => markeSetzen(+ev.target.value);
+  $('#tMarkeNat').onclick = () => markeSetzen(null);
   $('#heizkurve').innerHTML = heizkurveSvg(r, {breite: 900, hoehe: 250});
   $('#tabKandidaten').innerHTML = kandidatenTabelle(r, true);
   $$('#tabKandidaten tr[data-g]').forEach(tr => tr.onclick = () => { E.auswahl.geraet = tr.dataset.g; E.auswahl.anzahl = +tr.dataset.n; E.auswahl.inneneinheit = ''; aktualisiere(); });
@@ -1710,7 +1738,7 @@ function legende(r) {
     ${r.kennlinien.min ? '<span><i style="border-color:var(--bosch-blue);border-top-style:dashed"></i>Mindestleistung (1 Gerät)</span>' : ''}
     <span><i style="border-color:var(--chart-other);border-top-style:dotted"></i>weitere Größen der Baureihe</span>
     <span><i style="border-color:var(--chart-ink)"></i>Gebäudekennlinie QGES</span>
-    <span title="Normprüfpunkt nach EN 14511: Außenluft −7 °C. Bezugspunkt für die Mindestleistung (Excel-Werkzeug, GEG)."><i style="border-color:#e20015"></i>A-7 = Außenluft −7 °C (Prüfpunkt EN 14511)</span><span><i style="border-color:#f28c28;border-top-width:8px;opacity:.5"></i>Bivalenzpunkt</span>`;
+    <span><i style="border-color:#7a3e9d"></i>Ablese-Linie (verschiebbar, Standard θe)</span><span><i style="border-color:#f28c28;border-top-width:8px;opacity:.5"></i>Bivalenzpunkt</span>`;
 }
 // ------------------------------------------------------------------ Erklärungen (Klartext, Glossar, Reiter)
 const RECHENWEG = [
@@ -1762,6 +1790,37 @@ function heizkurveSvg(r, o) {
     Bei milderen Außentemperaturen sinkt der Vorlauf – die Wärmepumpe arbeitet dann effizienter und mit mehr Leistung als im Diagramm oben (dort konstant ${f(r.vl, 0)} °C wie Excel-Werkzeug).</p>`;
 }
 
+// Ablese-Linie: gewählte Außentemperatur (E.ansicht.t_marke) oder θe des Standorts
+function markeT(r) { const t = (E.ansicht || {}).t_marke; return t === null || t === undefined || t === '' ? r.nat : +t + 0; }
+function ablesenZeigen(r) {
+  const k = r.kennlinien, a = k ? RK.ablesen(r, markeT(r)) : null, z = $('#ablesenZeile');
+  if (!z) return;
+  z.style.display = a ? '' : 'none';
+  if (!a) return;
+  const sl = $('#tMarke'); sl.min = k.t[0]; sl.max = k.t[k.t.length - 1]; sl.value = a.t;
+  $('#tMarkeWert').textContent = fT(a.t) + ' °C' + (Math.abs(a.t - r.nat) < 1e-9 ? ' (θe)' : '');
+  $('#ablesenText').innerHTML = `Bedarf <b>${f(a.bedarf, 1)} kW</b> · Wärmepumpe max. <b>${a.wp_max !== null ? f(a.wp_max, 1) + ' kW' : '–'}</b>`
+    + (a.wp_min !== null ? ` (min. ${f(a.wp_min, 1)} kW je Gerät)` : '') + ' · ' + (a.heizstab ? `Heizstab <b>${f(a.heizstab, 1)} kW</b>` : (a.wp_max !== null ? '<b>Wärmepumpe deckt allein</b>' : 'außerhalb der Herstellerdaten'));
+}
+function markeSetzen(t) {
+  E.ansicht = Object.assign({}, E.ansicht, {t_marke: t});
+  $('#diagramm').innerHTML = diagramm(R, {breite: 900, hoehe: 380});
+  diagrammZiehen(); ablesenZeigen(R); sichere();
+}
+function diagrammZiehen() {
+  const svg = $('#diagramm svg'); if (!svg || !svg.dataset.t0) return;
+  svg.classList.add('zieh');
+  const tAus = ev => {
+    const p = svg.createSVGPoint(); p.x = ev.clientX; p.y = ev.clientY;
+    const x = p.matrixTransform(svg.getScreenCTM().inverse()).x, d = svg.dataset;
+    const t = +d.t0 + (x - +d.l) / (+d.r - +d.l) * (+d.t1 - +d.t0);
+    return Math.round(Math.min(Math.max(t, +d.t0), +d.t1) * 2) / 2 + 0;   // + 0: kein −0
+  };
+  let aktiv = false;
+  svg.onpointerdown = ev => { aktiv = true; svg.setPointerCapture(ev.pointerId); markeSetzen(tAus(ev)); };
+  svg.onpointermove = ev => { if (aktiv) { const t = tAus(ev); if (t !== markeT(R)) markeSetzen(t); } };
+  svg.onpointerup = svg.onpointercancel = () => { aktiv = false; };
+}
 function diagramm(r, o) {
   const k = r.kennlinien, g = r.gewaehlt;
   if (!k) return '<p class="hint">Kein Diagramm – keine Wärmepumpe mit Leistungsdaten beim gewählten Vorlauf.</p>';
@@ -1789,9 +1848,8 @@ function diagramm(r, o) {
     const idx = k.t.map((t, i) => i).filter(i => k.max[i] !== null && k.min[i] !== null);
     if (idx.length > 1) s += `<path d="M${idx.map(i => X(k.t[i]).toFixed(1) + ',' + Y(k.max[i]).toFixed(1)).join('L')}L${idx.slice().reverse().map(i => X(k.t[i]).toFixed(1) + ',' + Y(k.min[i]).toFixed(1)).join('L')}Z" fill="var(--bosch-blue)" opacity=".08"/>`;
   }
-  // Bivalenzbereich (Excel: orange) und A-7-Marke (Excel: rot)
+  // Bivalenzbereich (Excel: orange)
   if (g.bivalenz_art === 'punkt' && g.bivalenz > t0) s += `<rect x="${X(g.bivalenz - 0.8)}" y="${T}" width="${X(g.bivalenz + 0.8) - X(g.bivalenz - 0.8)}" height="${H - B - T}" fill="#f28c28" opacity=".14"/>`;
-  if (-7 > t0) s += `<line x1="${X(-7)}" x2="${X(-7)}" y1="${T + 18}" y2="${H - B}" stroke="#e20015" stroke-width="1.6"/><text x="${X(-7) + 4}" y="${T + 28}" font-size="10.5" fill="#e20015">A-7 (−7 °C)</text>`;
   // NAT
   s += `<line x1="${X(r.nat)}" x2="${X(r.nat)}" y1="${T}" y2="${H - B}" stroke="var(--ink-faint)" stroke-dasharray="2 3"/><text x="${X(r.nat) + 4}" y="${T + 10}" font-size="11" fill="var(--ink-soft)">θe ${fT(r.nat)} °C</text>`;
   const ende = [];
@@ -1811,8 +1869,19 @@ function diagramm(r, o) {
     s += `<circle cx="${X(g.taktgrenze)}" cy="${Y(qt)}" r="4" fill="#fff" stroke="var(--bosch-blue)" stroke-width="2"/><text x="${X(g.taktgrenze)}" y="${Y(qt) - 10}" font-size="11" text-anchor="middle" fill="var(--ink-soft)" paint-order="stroke" stroke="var(--paper)" stroke-width="4">Taktgrenze ≈ ${fT(g.taktgrenze)} °C</text>`;
   }
   if (g.t_daten_min > t0) s += `<text x="${X(g.t_daten_min) + 3}" y="${H - B - 6}" font-size="10" fill="var(--ink-faint)">Herstellerdaten ab ${fT(g.t_daten_min)} °C</text>`;
+  // Ablese-Linie (verschiebbar, Standard θe): Bedarf und WP-Leistung bei dieser Außentemperatur
+  const a = RK.ablesen(r, markeT(r));
+  if (a) {
+    const xm = X(a.t), links = xm > L + (W - L - Rr) * 0.6, tx = links ? xm - 8 : xm + 8, anker = links ? 'end' : 'start';
+    const zeilen = [`Ablesen ${fT(a.t)} °C`, `Bedarf ${f(a.bedarf, 1)} kW`, a.wp_max !== null ? `WP max. ${f(a.wp_max, 1)} kW` : 'WP: keine Herstellerdaten',
+      a.heizstab ? `Heizstab ${f(a.heizstab, 1)} kW` : (a.wp_max !== null ? 'WP deckt allein' : '')].filter(Boolean);
+    s += `<line x1="${xm}" x2="${xm}" y1="${T}" y2="${H - B}" stroke="#7a3e9d" stroke-width="2"/>`
+      + `<circle cx="${xm}" cy="${Y(a.bedarf)}" r="4.5" fill="var(--chart-ink)" stroke="#fff" stroke-width="1.5"/>`
+      + (a.wp_max !== null ? `<circle cx="${xm}" cy="${Y(a.wp_max)}" r="4.5" fill="var(--bosch-blue)" stroke="#fff" stroke-width="1.5"/>` : '')
+      + zeilen.map((z, i) => `<text x="${tx}" y="${T + 26 + i * 14}" font-size="11" text-anchor="${anker}" font-weight="${i ? 400 : 700}" fill="${i ? 'var(--ink)' : '#7a3e9d'}" paint-order="stroke" stroke="var(--paper)" stroke-width="3">${z}</text>`).join('');
+  }
   s += `<line x1="${L}" x2="${W - Rr}" y1="${H - B}" y2="${H - B}" stroke="var(--ink-faint)"/></svg>`;
-  return s;
+  return s.replace('<svg ', `<svg data-t0="${t0}" data-t1="${t1}" data-l="${L}" data-r="${W - Rr}" data-w="${W}" `);
 }
 
 // ------------------------------------------------------------------ Anlagenschema (SVG)

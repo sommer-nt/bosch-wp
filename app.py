@@ -25,7 +25,7 @@ from wp import rechnen as R  # noqa: E402
 from wp import schema as S  # noqa: E402
 from wp import texte as T  # noqa: E402
 
-BLAU, ROT = "#005691", "#e20015"
+BLAU, ROT, VIOLETT = "#005691", "#e20015", "#7a3e9d"
 ss = st.session_state
 
 # ------------------------------------------------------------------ Zugang (optional, wie Bosch Flow)
@@ -522,12 +522,37 @@ with rechts:
                 fig.add_scatter(x=[g["bivalenz"]], y=[qb], mode="markers+text", text=[f"Bivalenzpunkt {T.ft(g['bivalenz'])} °C"],
                                 textposition="bottom left", marker=dict(size=11, color=BLAU), showlegend=False)
             fig.add_vline(x=r["nat"], line_dash="dot", line_color="#78889a", annotation_text=f"θe {T.ft(r['nat'])} °C")
-            fig.add_vline(x=-7, line_color="#e20015", line_width=1.6, annotation_text="A-7 (Außenluft −7 °C)", annotation_font_color="#e20015")
+            # Ablese-Linie (verschiebbar, Standard θe) – wie im HTML, nur Veranschaulichung
+            tm_ = (E.get("ansicht") or {}).get("t_marke")
+            ab_ = R.ablesen(r, tm_)
+            if ab_:
+                fig.add_vline(x=ab_["t"], line_color=VIOLETT, line_width=2, annotation_text=f"Ablesen {T.ft(ab_['t'])} °C",
+                              annotation_font_color=VIOLETT, annotation_position="top left")
+                fig.add_scatter(x=[ab_["t"]] * (2 if ab_["wp_max"] is not None else 1),
+                                y=[ab_["bedarf"]] + ([ab_["wp_max"]] if ab_["wp_max"] is not None else []), mode="markers",
+                                marker=dict(size=9, color=["#141e29", BLAU][:2 if ab_["wp_max"] is not None else 1]), showlegend=False)
             if g["bivalenz_art"] == "punkt":
                 fig.add_vrect(x0=g["bivalenz"] - 0.8, x1=g["bivalenz"] + 0.8, fillcolor="#f28c28", opacity=0.14, line_width=0)
             fig.update_layout(height=420, margin=dict(l=10, r=10, t=30, b=10), xaxis_title="Außentemperatur in °C",
                               yaxis_title="Heizleistung in kW", yaxis_rangemode="tozero", legend=dict(orientation="h", y=1.12), template="plotly_white")
             st.plotly_chart(fig, width="stretch")
+            if ab_:
+                c_s, c_b = st.columns([4, 1])
+                t_neu = c_s.slider("Ablese-Linie bei Außentemperatur [°C]", float(kl["t"][0]), float(kl["t"][-1]), float(ab_["t"]), 0.5,
+                                   key="t_marke", help="Zur Veranschaulichung verschiebbar (z. B. −5 °C oder tiefer, je nach Gebiet) – "
+                                                       "ändert die Auslegung nicht. Standard: Norm-Außentemperatur θe.")
+                if c_b.button("auf θe", key="t_marke_nat"):
+                    E.setdefault("ansicht", {})["t_marke"] = None
+                    ss.pop("t_marke", None)
+                    st.rerun()
+                if abs(t_neu - ab_["t"]) > 1e-9:
+                    E.setdefault("ansicht", {})["t_marke"] = t_neu
+                    st.rerun()
+                st.caption(f"Bei {T.ft(ab_['t'])} °C{' (θe)' if abs(ab_['t'] - r['nat']) < 1e-9 else ''}: Bedarf {T.f(ab_['bedarf'], 1)} kW · "
+                           f"Wärmepumpe max. {T.f(ab_['wp_max'], 1) + ' kW' if ab_['wp_max'] is not None else '–'}"
+                           + (f" (min. {T.f(ab_['wp_min'], 1)} kW je Gerät)" if ab_["wp_min"] is not None else "") + " · "
+                           + (f"Heizstab {T.f(ab_['heizstab'], 1)} kW" if ab_["heizstab"] else
+                              ("Wärmepumpe deckt allein" if ab_["wp_max"] is not None else "außerhalb der Herstellerdaten")))
             st.caption(T.min_hinweis(r))
 
     with t_leis:

@@ -360,6 +360,31 @@ def kennlinien(geraet: dict, n: int, vl: float, r: dict) -> dict:
             "min": werte_im_bereich(kmin, ts, 1) if kmin else None}
 
 
+def ablesen(r: dict, t: float | None = None) -> dict | None:
+    """Ablese-Linie im Diagramm: Gebäudebedarf, Leistung der Wärmepumpe (max./min.) und Heizstab bei der Außentemperatur t
+    (Standard θe des Standorts). Nur Veranschaulichung – die Auslegung selbst ändert sich nicht. Wie RK.ablesen in index.html."""
+    k = r.get("kennlinien")
+    if not r.get("gewaehlt") or not k:
+        return None
+    ts = k["t"]
+    t = min(max(float(r["nat"] if t is None else t), ts[0]), ts[-1])
+
+    def wert(qs):
+        if qs is None:
+            return None
+        i = min(int(math.floor(t - ts[0] + 1e-9)), len(ts) - 1)
+        if i == len(ts) - 1 or abs(t - ts[i]) < 1e-9:
+            return qs[i]
+        a, b = qs[i], qs[i + 1]
+        if a is None or b is None:
+            return None
+        return a + (b - a) * (t - ts[i]) / (ts[i + 1] - ts[i])
+    bedarf = last(t, r["qh"] + r["qsperr"], r["qtw"], r["nat"], r["heizgrenze"])
+    wp = wert(k["max"])
+    return {"t": t, "bedarf": bedarf, "wp_max": wp, "wp_min": wert(k["min"]),
+            "heizstab": max(0.0, bedarf - wp) if wp is not None else None}
+
+
 def werte_im_bereich(k, ts: list, n: int) -> list:
     return [n * k[0](t) if k[1] - 1e-9 <= t <= k[2] + 1e-9 else None for t in ts]
 

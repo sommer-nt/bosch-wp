@@ -22,6 +22,7 @@ from . import texte as T
 BILDER = Path(__file__).resolve().parent.parent / "daten" / "bilder"
 ENTWICKLER = "Entwickelt von Daniel Sommer · HC/SDE3-PSD"
 ROT = (226, 0, 21)
+VIOLETT = (122, 62, 157)
 BLAU = (0, 86, 145)
 INK = (20, 30, 41)
 GRAU = (74, 88, 102)
@@ -169,7 +170,7 @@ class Ausdruck(FPDF):
 
 
 # ------------------------------------------------------------------------------------------------ Diagramm
-def diagramm(pdf: Ausdruck, r: dict, daten: dict, x: float, y: float, w: float, h: float):
+def diagramm(pdf: Ausdruck, r: dict, daten: dict, x: float, y: float, w: float, h: float, t_marke: float | None = None):
     k, g = r["kennlinien"], r["gewaehlt"]
     if not k:
         return
@@ -208,17 +209,10 @@ def diagramm(pdf: Ausdruck, r: dict, daten: dict, x: float, y: float, w: float, 
     with pdf.rotation(90, x + 2, y + (h - B) / 2):
         pdf.set_xy(x + 2 - 20, y + (h - B) / 2 - 2)
         pdf.cell(40, 4, pdf.t("Heizleistung in kW"), align="C")
-    # Bivalenzbereich (orange) und A-7-Marke (rot) wie im Excel-Diagramm
+    # Bivalenzbereich (orange) wie im Excel-Diagramm
     if g["bivalenz_art"] == "punkt" and g["bivalenz"] > t0:
         pdf.set_fill_color(252, 228, 205)
         pdf.rect(X(g["bivalenz"] - 0.8), Y(qmax), X(g["bivalenz"] + 0.8) - X(g["bivalenz"] - 0.8), Y(0) - Y(qmax), style="F")
-    if -7 > t0:
-        pdf.set_draw_color(*ROT)
-        pdf.set_line_width(0.4)
-        pdf.line(X(-7), Y(0), X(-7), Y(qmax) + 4)
-        pdf.schrift_(6.2, False, ROT)
-        pdf.set_xy(X(-7) + 0.8, Y(qmax) + 3.5)
-        pdf.cell(20, 3, pdf.t("A-7 (−7 °C)"))
     # θe
     pdf.set_draw_color(*HELL)
     pdf.set_dash_pattern(0.6, 0.9)
@@ -281,7 +275,29 @@ def diagramm(pdf: Ausdruck, r: dict, daten: dict, x: float, y: float, w: float, 
         pdf.schrift_(6.5, False, GRAU)
         pdf.set_xy(X(g["taktgrenze"]) - 20, Y(qt) - 5.5)
         pdf.cell(40, 3.5, pdf.t("Taktgrenze ≈ " + T.ft(g["taktgrenze"]) + " °C"), align="C")
-
+    # Ablese-Linie (violett, Standard θe – wie im HTML verschiebbar, hier die gewählte Stellung)
+    ab = R.ablesen(r, t_marke)
+    if ab:
+        pdf.set_draw_color(*VIOLETT)
+        pdf.set_line_width(0.5)
+        pdf.line(X(ab["t"]), Y(0), X(ab["t"]), Y(qmax))
+        pdf.schrift_(6.2, True, VIOLETT)
+        links = X(ab["t"]) > x + w * 0.6
+        txt = [f"Ablesen {T.ft(ab['t'])} °C", f"Bedarf {T.f(ab['bedarf'], 1)} kW"]
+        if ab["wp_max"] is not None:
+            txt.append(f"WP max. {T.f(ab['wp_max'], 1)} kW")
+            txt.append(f"Heizstab {T.f(ab['heizstab'], 1)} kW" if ab["heizstab"] else "WP deckt allein")
+        pdf.set_fill_color(255, 255, 255)
+        for i, z in enumerate(txt):
+            pdf.schrift_(6.2, i == 0, VIOLETT if i == 0 else (0, 0, 0))
+            breite = pdf.get_string_width(pdf.t(z)) + 1.2
+            pdf.set_xy(X(ab["t"]) - 1 - breite if links else X(ab["t"]) + 1, Y(qmax) + 6 + i * 3)
+            pdf.cell(breite, 3, pdf.t(z), align="R" if links else "L", fill=True)
+        for q_, farbe in ((ab["bedarf"], (20, 30, 41)), (ab["wp_max"], BLAU)):
+            if q_ is not None:
+                pdf.set_fill_color(*farbe)
+                pdf.ellipse(X(ab["t"]) - 1.1, Y(q_) - 1.1, 2.2, 2.2, style="F")
+        pdf.set_line_width(0.2)
 
 def heizkurve(pdf: Ausdruck, r: dict, x: float, y: float, w: float, h: float):
     """Heizkurve (DIN EN 442) wie heizkurveSvg() in index.html."""
@@ -518,9 +534,9 @@ def pdf_bytes(e: dict, r: dict, daten: dict, katalog: dict) -> bytes:
         pdf.h2(f"Heizleistung über der Außentemperatur – Vorlauf {T.f(r['vl'], 0)} °C")
         pdf.schrift_(6.8, False, GRAU)
         pdf.cell(0, 4, pdf.t(f"Blau: {(str(g['n']) + ' × ') if g['n'] > 1 else ''}{g['geraet']} (max., gestrichelt Mindestleistung) · "
-                             "grau: weitere Größen der Baureihe · schwarz: Gebäudekennlinie · rot: A-7 = Außenluft −7 °C (Prüfpunkt EN 14511)"), new_x="LMARGIN", new_y="NEXT")
+                             "grau: weitere Größen der Baureihe · schwarz: Gebäudekennlinie · violett: Ablese-Linie (Standard θe)"), new_x="LMARGIN", new_y="NEXT")
         y = pdf.get_y() + 1
-        diagramm(pdf, r, daten, 13, y, 184, 92)
+        diagramm(pdf, r, daten, 13, y, 184, 92, (e.get("ansicht") or {}).get("t_marke"))
         pdf.set_y(y + 96)
     if r.get("heizkurve"):
         hk = r["heizkurve"]

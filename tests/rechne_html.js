@@ -8,5 +8,7 @@ vm.createContext(ctx);
 vm.runInContext(block('daten') + ';this.GERAETE_DATEN=GERAETE_DATEN;this.KATALOG_DATEN=KATALOG_DATEN;', ctx);
 vm.runInContext(block('rechenkern') + ';this.RK=RK;', ctx);
 const sz = JSON.parse(fs.readFileSync(process.argv[3], 'utf8'));
-const out = sz.map(s => ctx.RK.rechne(s.eingaben, ctx.GERAETE_DATEN, ctx.KATALOG_DATEN));
+const ABLESEN = [null, -5, -10.5, 3, 40];   // Ablese-Linie: θe, Zwischenwerte, außerhalb (wird begrenzt)
+const out = sz.map(s => { const r = ctx.RK.rechne(s.eingaben, ctx.GERAETE_DATEN, ctx.KATALOG_DATEN);
+  return Object.assign({}, r, {_ablesen: ABLESEN.map(t => ctx.RK.ablesen(r, t))}); });
 process.stdout.write(JSON.stringify(out));

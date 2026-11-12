@@ -210,7 +210,8 @@ def test_python_gleich_html(tmp_path):
                          capture_output=True, text=True, check=True).stdout
     js = json.loads(out)
     for s, j in zip(sz, js):
-        py = json.loads(json.dumps(rechne(copy.deepcopy(s["eingaben"]))))
+        r = rechne(copy.deepcopy(s["eingaben"]))
+        py = json.loads(json.dumps({**r, "_ablesen": [R.ablesen(r, t) for t in (None, -5, -10.5, 3, 40)]}))
         gleich(py, j, s["name"])
 
 

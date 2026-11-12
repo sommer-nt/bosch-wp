@@ -34,6 +34,7 @@ STANDARD: dict = {
     "auswahl": {"geraet": "", "anzahl": 1, "inneneinheit": ""},
     "hydraulik": {"schema": "", "loesung": ""},
     "preise_drucken": False,
+    "ansicht": {"t_marke": None},   # Ablese-Linie im Diagramm (None = θe), nur Anzeige
 }
 
 
