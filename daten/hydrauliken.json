@@ -10,6 +10,7 @@
     "2.1.3.6",
     "2.1.3.7"
    ],
+   "hps": false,
    "serien": [
     "CS8800"
    ],
@@ -27,12 +28,38 @@
    ]
   },
   {
+   "id": "10WE_2L_2CS8800_PBE_HPS",
+   "datei": "10WE_2L_2CS8800_PBE_HPS.pdf",
+   "titel": "10WE 2L 2CS8800 PBE HPS",
+   "loesungen": [
+    "2.1.2.4",
+    "2.1.2.5"
+   ],
+   "hps": true,
+   "serien": [
+    "CS8800"
+   ],
+   "anzahl": [
+    2
+   ],
+   "ww": [
+    "hiu"
+   ],
+   "system": [
+    "mono"
+   ],
+   "gebaeude": [
+    "neubau"
+   ]
+  },
+  {
    "id": "12WE_29KW_CS5001_BP500_1ug",
    "datei": "12WE_29KW_CS5001_BP500_1ug.pdf",
    "titel": "12WE 29KW CS5001 BP500",
    "loesungen": [
     "2.1.3.5"
    ],
+   "hps": false,
    "serien": [
     "CS5001"
    ],
@@ -50,12 +77,37 @@
    ]
   },
   {
+   "id": "14WE_2L_3CS8800_2BP-7EM_HPS",
+   "datei": "14WE_2L_3CS8800_2BP-7EM_HPS.pdf",
+   "titel": "14WE 2L 3CS8800 2BP-7EM HPS",
+   "loesungen": [
+    "2.1.2.6"
+   ],
+   "hps": true,
+   "serien": [
+    "CS8800"
+   ],
+   "anzahl": [
+    3
+   ],
+   "ww": [
+    "hiu"
+   ],
+   "system": [
+    "mono"
+   ],
+   "gebaeude": [
+    "neubau"
+   ]
+  },
+  {
    "id": "14WE_51",
    "datei": "14WE_51.PDF",
    "titel": "14WE 50kW 2xCS5001AW22",
    "loesungen": [
     "1.1.3.6"
    ],
+   "hps": false,
    "serien": [
     "CS5001"
    ],
@@ -73,12 +125,37 @@
    ]
   },
   {
+   "id": "16WE_2L_2CS5001AW22_2BP7EM_HPS",
+   "datei": "16WE_2L_2CS5001AW22_2BP7EM_HPS.pdf",
+   "titel": "16WE 2L 2CS5001AW22 2BP7EM HPS",
+   "loesungen": [
+    "2.1.2.7"
+   ],
+   "hps": true,
+   "serien": [
+    "CS5001"
+   ],
+   "anzahl": [
+    2
+   ],
+   "ww": [
+    "hiu"
+   ],
+   "system": [
+    "mono"
+   ],
+   "gebaeude": [
+    "neubau"
+   ]
+  },
+  {
    "id": "16WE_58KW_CS5001_42__BP1000_1ug",
    "datei": "16WE_58KW_CS5001(42)_BP1000_1ug.pdf",
    "titel": "16WE 58KW CS5001(42) BP1000",
    "loesungen": [
     "1.1.3.7"
    ],
+   "hps": false,
    "serien": [
     "CS5001"
    ],
@@ -102,6 +179,7 @@
    "loesungen": [
     "1.1.1.5"
    ],
+   "hps": false,
    "serien": [
     "CS5001"
    ],
@@ -125,6 +203,7 @@
    "loesungen": [
     "1.1.2.7"
    ],
+   "hps": false,
    "serien": [
     "CS5001"
    ],
@@ -142,12 +221,37 @@
    ]
   },
   {
+   "id": "2CS5001_22__B2P1000_B500-6M_FF40_1ug_TH3500",
+   "datei": "2CS5001(22)_B2P1000_B500-6M_FF40_1ug_TH3500.pdf",
+   "titel": "2CS5001(22) B2P1000 B500-6M FF40",
+   "loesungen": [
+    "2.1.1.7"
+   ],
+   "hps": false,
+   "serien": [
+    "CS5001"
+   ],
+   "anzahl": [
+    2
+   ],
+   "ww": [
+    "friwa"
+   ],
+   "system": [
+    "mono"
+   ],
+   "gebaeude": [
+    "neubau"
+   ]
+  },
+  {
    "id": "4WE_10kW_CS5800_AWMB_1ug_FBH",
    "datei": "4WE_10kW_CS5800_AWMB_1ug FBH.pdf",
    "titel": "4WE 10kW CS5800 AWMB",
    "loesungen": [
     "2.1.3.1"
    ],
+   "hps": false,
    "serien": [
     "CS5800"
    ],
@@ -171,6 +275,7 @@
    "loesungen": [
     "2.1.2.1"
    ],
+   "hps": true,
    "serien": [
     "CS5800"
    ],
@@ -195,6 +300,7 @@
     "1.3.3.1",
     "1.3.3.2"
    ],
+   "hps": false,
    "serien": [
     "CS5800"
    ],
@@ -218,6 +324,7 @@
    "loesungen": [
     "1.1.1.1"
    ],
+   "hps": false,
    "serien": [
     "CS8800"
    ],
@@ -242,6 +349,7 @@
     "1.1.3.1",
     "2.1.3.3"
    ],
+   "hps": false,
    "serien": [
     "CS8800"
    ],
@@ -267,6 +375,7 @@
     "1.1.3.2",
     "1.1.3.5"
    ],
+   "hps": false,
    "serien": [
     "CS8800"
    ],
@@ -285,12 +394,85 @@
    ]
   },
   {
+   "id": "6WE_15KW_CS5800_BH120_1ug_Pendel",
+   "datei": "6WE_15KW_CS5800_BH120_1ug_Pendel.pdf",
+   "titel": "6WE 15KW CS5800 BH120",
+   "loesungen": [
+    "2.1.3.2"
+   ],
+   "hps": false,
+   "serien": [
+    "CS5800"
+   ],
+   "anzahl": [
+    1
+   ],
+   "ww": [
+    "dle"
+   ],
+   "system": [
+    "mono"
+   ],
+   "gebaeude": [
+    "neubau"
+   ]
+  },
+  {
+   "id": "6WE_2L_CS8800_BP7EM_HPS",
+   "datei": "6WE_2L_CS8800_BP7EM_HPS.pdf",
+   "titel": "6WE 2L CS8800 BP7EM HPS",
+   "loesungen": [
+    "2.1.2.2"
+   ],
+   "hps": true,
+   "serien": [
+    "CS8800"
+   ],
+   "anzahl": [
+    1
+   ],
+   "ww": [
+    "hiu"
+   ],
+   "system": [
+    "mono"
+   ],
+   "gebaeude": [
+    "neubau"
+   ]
+  },
+  {
+   "id": "8WE_2L_CS5001_BPE_HPS",
+   "datei": "8WE_2L_CS5001_BPE_HPS.pdf",
+   "titel": "8WE 2L CS5001 BPE HPS",
+   "loesungen": [
+    "2.1.2.3"
+   ],
+   "hps": true,
+   "serien": [
+    "CS5001"
+   ],
+   "anzahl": [
+    1
+   ],
+   "ww": [
+    "hiu"
+   ],
+   "system": [
+    "mono"
+   ],
+   "gebaeude": [
+    "neubau"
+   ]
+  },
+  {
    "id": "8WE_30kW_CS5000_22__BP500_1ug",
    "datei": "8WE_30kW_CS5000(22)_BP500_1ug.pdf",
    "titel": "8WE 30kW CS5000(22) BP500",
    "loesungen": [
     "1.1.3.3"
    ],
+   "hps": false,
    "serien": [
     "CS5001"
    ],
@@ -314,6 +496,7 @@
    "loesungen": [
     "1.2.1.1"
    ],
+   "hps": false,
    "serien": [
     "CS5001"
    ],
@@ -337,6 +520,7 @@
    "loesungen": [
     "1.2.1.2"
    ],
+   "hps": false,
    "serien": [
     "CS5001"
    ],
@@ -360,6 +544,7 @@
    "loesungen": [
     "1.2.1.3"
    ],
+   "hps": false,
    "serien": [
     "CS5001"
    ],
@@ -383,6 +568,7 @@
    "loesungen": [
     "1.2.1.4"
    ],
+   "hps": false,
    "serien": [
     "CS5001"
    ],
@@ -406,6 +592,7 @@
    "loesungen": [
     "1.2.1.5"
    ],
+   "hps": false,
    "serien": [
     "CS5001"
    ],
@@ -429,6 +616,7 @@
    "loesungen": [
     "1.2.2.1"
    ],
+   "hps": false,
    "serien": [
     "CS5001"
    ],
@@ -452,6 +640,7 @@
    "loesungen": [
     "1.2.2.2"
    ],
+   "hps": false,
    "serien": [
     "CS5001"
    ],
@@ -475,6 +664,7 @@
    "loesungen": [
     "1.2.2.3"
    ],
+   "hps": false,
    "serien": [
     "CS5001"
    ],
@@ -498,6 +688,7 @@
    "loesungen": [
     "1.2.2.4"
    ],
+   "hps": false,
    "serien": [
     "CS5001"
    ],
@@ -521,6 +712,7 @@
    "loesungen": [
     "1.2.3.1"
    ],
+   "hps": false,
    "serien": [
     "CS5001"
    ],
@@ -544,6 +736,7 @@
    "loesungen": [
     "1.2.3.2"
    ],
+   "hps": false,
    "serien": [
     "CS5001"
    ],
@@ -567,6 +760,7 @@
    "loesungen": [
     "1.2.3.3"
    ],
+   "hps": false,
    "serien": [
     "CS5001"
    ],
@@ -590,6 +784,7 @@
    "loesungen": [
     "1.2.3.4"
    ],
+   "hps": false,
    "serien": [
     "CS5001"
    ],
@@ -613,6 +808,7 @@
    "loesungen": [
     "1.1.1.3"
    ],
+   "hps": false,
    "serien": [
     "CS5001"
    ],
@@ -636,6 +832,7 @@
    "loesungen": [
     "1.1.1.7"
    ],
+   "hps": false,
    "serien": [
     "CS5001"
    ],
@@ -659,6 +856,7 @@
    "loesungen": [
     "1.1.2.3"
    ],
+   "hps": false,
    "serien": [
     "CS5001"
    ],
@@ -682,6 +880,7 @@
    "loesungen": [
     "1.1.2.6"
    ],
+   "hps": false,
    "serien": [
     "CS5001"
    ],
@@ -699,12 +898,37 @@
    ]
   },
   {
+   "id": "CS5001_BPE_BP750ERZ_FF27_TH3500_1ug",
+   "datei": "CS5001_BPE_BP750ERZ_FF27_TH3500_1ug.pdf",
+   "titel": "CS5001 BPE BP750ERZ FF27 TH3500",
+   "loesungen": [
+    "2.1.1.3"
+   ],
+   "hps": false,
+   "serien": [
+    "CS5001"
+   ],
+   "anzahl": [
+    1
+   ],
+   "ww": [
+    "friwa"
+   ],
+   "system": [
+    "mono"
+   ],
+   "gebaeude": [
+    "neubau"
+   ]
+  },
+  {
    "id": "CS58001",
    "datei": "CS58001.PDF",
    "titel": "4WE 15kW CS5800AW 10ORT",
    "loesungen": [
     "2.1.1.1"
    ],
+   "hps": false,
    "serien": [
     "CS5800"
    ],
@@ -728,6 +952,7 @@
    "loesungen": [
     "1.1.2.1"
    ],
+   "hps": false,
    "serien": [
     "CS8800"
    ],
@@ -751,6 +976,7 @@
    "loesungen": [
     "2.1.1.2"
    ],
+   "hps": false,
    "serien": [
     "CS8800"
    ],
@@ -774,6 +1000,7 @@
    "loesungen": [
     "1.1.4.1"
    ],
+   "hps": false,
    "serien": [
     "CS8800"
    ],
@@ -798,6 +1025,7 @@
     "1.3.1.1",
     "1.3.1.2"
    ],
+   "hps": false,
    "serien": [
     "CS5800"
    ],
@@ -821,6 +1049,7 @@
    "loesungen": [
     "1.3.2.1"
    ],
+   "hps": false,
    "serien": [
     "CS5800"
    ],
@@ -844,6 +1073,7 @@
    "loesungen": [
     "1.3.2.2"
    ],
+   "hps": false,
    "serien": [
     "CS5800"
    ],
@@ -867,6 +1097,7 @@
    "loesungen": [
     "1.1.1.2"
    ],
+   "hps": false,
    "serien": [
     "CS8800"
    ],
@@ -890,6 +1121,7 @@
    "loesungen": [
     "1.1.1.4"
    ],
+   "hps": false,
    "serien": [
     "CS8800"
    ],
@@ -913,6 +1145,7 @@
    "loesungen": [
     "1.1.1.6"
    ],
+   "hps": false,
    "serien": [
     "CS8800"
    ],
@@ -937,6 +1170,7 @@
     "1.1.3.2",
     "1.1.3.4"
    ],
+   "hps": false,
    "serien": [
     "CS8800"
    ],
@@ -960,6 +1194,7 @@
    "loesungen": [
     "1.1.3.5"
    ],
+   "hps": false,
    "serien": [
     "CS8800"
    ],
@@ -983,6 +1218,7 @@
    "loesungen": [
     "1.1.1.4"
    ],
+   "hps": false,
    "serien": [
     "CS8800"
    ],
@@ -1006,6 +1242,7 @@
    "loesungen": [
     "1.1.1.6"
    ],
+   "hps": false,
    "serien": [
     "CS8800"
    ],
@@ -1023,12 +1260,38 @@
    ]
   },
   {
+   "id": "HPC800iC_2CS8800_BP500-7EM_FF40_1ug",
+   "datei": "HPC800iC_2CS8800_BP500-7EM_FF40_1ug.pdf",
+   "titel": "HPC800iC 2CS8800 BP500-7EM FF40",
+   "loesungen": [
+    "2.1.1.4",
+    "2.1.1.5"
+   ],
+   "hps": false,
+   "serien": [
+    "CS8800"
+   ],
+   "anzahl": [
+    2
+   ],
+   "ww": [
+    "friwa"
+   ],
+   "system": [
+    "mono"
+   ],
+   "gebaeude": [
+    "neubau"
+   ]
+  },
+  {
    "id": "HPC800iC_2CS8800_BP_-7EM_Flow7002RS_TH3500",
    "datei": "HPC800iC_2CS8800_BP...-7EM_Flow7002RS_TH3500.pdf",
    "titel": "HPC800iC 2CS8800 BP...-7EM Flow7002RS TH3500",
    "loesungen": [
     "1.1.2.2"
    ],
+   "hps": false,
    "serien": [
     "CS8800"
    ],
@@ -1052,6 +1315,7 @@
    "loesungen": [
     "1.1.2.4"
    ],
+   "hps": false,
    "serien": [
     "CS8800"
    ],
@@ -1069,12 +1333,61 @@
    ]
   },
   {
+   "id": "HPC800iC_3CS8800_2BP500-7EM_FF40_1ug",
+   "datei": "HPC800iC_3CS8800_2BP500-7EM_FF40_1ug.pdf",
+   "titel": "HPC800iC 3CS8800 2BP500-7EM FF40",
+   "loesungen": [
+    "2.1.1.6"
+   ],
+   "hps": false,
+   "serien": [
+    "CS8800"
+   ],
+   "anzahl": [
+    3
+   ],
+   "ww": [
+    "friwa"
+   ],
+   "system": [
+    "mono"
+   ],
+   "gebaeude": [
+    "neubau"
+   ]
+  },
+  {
+   "id": "HPC800iC_3CS8800_2BP500-7EM_FF40_1ug_au_U00dfen",
+   "datei": "HPC800iC_3CS8800_2BP500-7EM_FF40_1ug_au#U00dfen.pdf",
+   "titel": "HPC800iC 3CS8800 2BP500-7EM FF40",
+   "loesungen": [
+    "2.1.1.6"
+   ],
+   "hps": false,
+   "serien": [
+    "CS8800"
+   ],
+   "anzahl": [
+    3
+   ],
+   "ww": [
+    "friwa"
+   ],
+   "system": [
+    "mono"
+   ],
+   "gebaeude": [
+    "neubau"
+   ]
+  },
+  {
    "id": "HPC800iC_3CS8800_BP_-E_Flow7002RS_TH3500",
    "datei": "HPC800iC_3CS8800_BP...-E_Flow7002RS_TH3500.pdf",
    "titel": "HPC800iC 3CS8800 BP...-E Flow7002RS TH3500",
    "loesungen": [
     "1.1.2.5"
    ],
+   "hps": false,
    "serien": [
     "CS8800"
    ],
@@ -2704,7 +3017,9 @@
    "kw": 20.0,
    "geraet": "CS5001 AW22",
    "n": 1,
-   "schemata": [],
+   "schemata": [
+    "CS5001_BPE_BP750ERZ_FF27_TH3500_1ug"
+   ],
    "auslegung": {
     "datei": "Auslegung WP.pdf",
     "plz": "88521",
@@ -2726,6 +3041,7 @@
     "vl_angenommen": true
    },
    "tww": [
+    "Auslegung TWW.pdf",
     "Auslegung TWW.pdf"
    ],
    "hiu": []
@@ -2740,7 +3056,9 @@
    "kw": 24.0,
    "geraet": "CS8800iAW 13 O-T",
    "n": 2,
-   "schemata": [],
+   "schemata": [
+    "HPC800iC_2CS8800_BP500-7EM_FF40_1ug"
+   ],
    "auslegung": {
     "datei": "Auslegung WP.pdf",
     "plz": "88521",
@@ -2761,6 +3079,7 @@
     "vl": 35.0
    },
    "tww": [
+    "Auslegung TWW.pdf",
     "Auslegung TWW.pdf"
    ],
    "hiu": []
@@ -2775,7 +3094,9 @@
    "kw": 29.0,
    "geraet": "CS8800iAW 15 O-T",
    "n": 2,
-   "schemata": [],
+   "schemata": [
+    "HPC800iC_2CS8800_BP500-7EM_FF40_1ug"
+   ],
    "auslegung": {
     "datei": "Auslegung WP.pdf",
     "plz": "88521",
@@ -2796,6 +3117,7 @@
     "vl": 35.0
    },
    "tww": [
+    "Auslegung TWW.pdf",
     "Auslegung TWW.pdf"
    ],
    "hiu": []
@@ -2810,7 +3132,10 @@
    "kw": 34.0,
    "geraet": "CS8800iAW 13 O-T",
    "n": 3,
-   "schemata": [],
+   "schemata": [
+    "HPC800iC_3CS8800_2BP500-7EM_FF40_1ug",
+    "HPC800iC_3CS8800_2BP500-7EM_FF40_1ug_au_U00dfen"
+   ],
    "auslegung": {
     "datei": "Auslegung WP.pdf",
     "plz": "88521",
@@ -2831,6 +3156,7 @@
     "vl": 35.0
    },
    "tww": [
+    "Auslegung TWW.pdf",
     "Auslegung TWW.pdf"
    ],
    "hiu": []
@@ -2845,7 +3171,9 @@
    "kw": 39.0,
    "geraet": "CS5001 AW22",
    "n": 2,
-   "schemata": [],
+   "schemata": [
+    "2CS5001_22__B2P1000_B500-6M_FF40_1ug_TH3500"
+   ],
    "auslegung": {
     "datei": "Auslegung WP.pdf",
     "plz": "88521",
@@ -2867,6 +3195,7 @@
     "vl_angenommen": true
    },
    "tww": [
+    "Auslegung TWW.pdf",
     "Auslegung TWW.pdf"
    ],
    "hiu": []
@@ -2909,6 +3238,43 @@
    ]
   },
   {
+   "id": "2.1.2.2",
+   "ordner": "2.1.2.2_6_WE_2L_CS8800iAW15ORT",
+   "gebaeude": "neubau",
+   "system": "mono",
+   "ww": "hiu",
+   "we": 6,
+   "kw": null,
+   "geraet": "CS8800iAW 15 O-T",
+   "n": 1,
+   "schemata": [
+    "6WE_2L_CS8800_BP7EM_HPS"
+   ],
+   "auslegung": {
+    "datei": "Auslegung WP.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 19.0,
+    "spez_w_m2": 0.0,
+    "flaeche_m2": 0.0,
+    "heizgrenze": 12.0,
+    "innen": 20.0,
+    "personen": 0.0,
+    "kw_person": 0.1,
+    "sperrzeit_h": 0.0,
+    "qges": 19.0,
+    "mindest_kw": 5.7,
+    "auslegung": "hybrid",
+    "diagramm": "CS8800iAW - W45°C CS 7000i",
+    "vl": 45.0
+   },
+   "tww": [],
+   "hiu": [
+    "HIU-Auslegung_6WE_CS8800AW15OR.pdf"
+   ]
+  },
+  {
    "id": "2.1.2.3",
    "ordner": "2.1.2.3_8 WE_2L_CS5001AW22",
    "gebaeude": "neubau",
@@ -2918,7 +3284,9 @@
    "kw": null,
    "geraet": "CS5001 AW22",
    "n": 1,
-   "schemata": [],
+   "schemata": [
+    "8WE_2L_CS5001_BPE_HPS"
+   ],
    "auslegung": {
     "datei": "Auslegung WP.pdf",
     "plz": "88521",
@@ -2936,11 +3304,162 @@
     "mindest_kw": 7.2,
     "auslegung": "hybrid",
     "diagramm": "CS5001 AW22 CS5001 AW22",
-    "vl": 35.0,
+    "vl": 45.0,
     "vl_angenommen": true
    },
    "tww": [],
-   "hiu": []
+   "hiu": [
+    "HIU-Auslegung_8WE.pdf"
+   ]
+  },
+  {
+   "id": "2.1.2.4",
+   "ordner": "2.1.2.4_10_WE_2L_2xCS8800iAW13",
+   "gebaeude": "neubau",
+   "system": "mono",
+   "ww": "hiu",
+   "we": 10,
+   "kw": null,
+   "geraet": "CS8800iAW 13 O-T",
+   "n": 2,
+   "schemata": [
+    "10WE_2L_2CS8800_PBE_HPS"
+   ],
+   "auslegung": {
+    "datei": "Auslegung WP.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 29.0,
+    "spez_w_m2": 0.0,
+    "flaeche_m2": 0.0,
+    "heizgrenze": 12.0,
+    "innen": 20.0,
+    "personen": 0.0,
+    "kw_person": 0.1,
+    "sperrzeit_h": 0.0,
+    "qges": 29.0,
+    "mindest_kw": 8.7,
+    "auslegung": "hybrid",
+    "diagramm": "2er Kaskade CS8800 45°C",
+    "vl": 45.0
+   },
+   "tww": [],
+   "hiu": [
+    "HIU-Auslegung_10WE.pdf"
+   ]
+  },
+  {
+   "id": "2.1.2.5",
+   "ordner": "2.1.2.5_12 WE_2L_2xCS8800iAW15",
+   "gebaeude": "neubau",
+   "system": "mono",
+   "ww": "hiu",
+   "we": 12,
+   "kw": null,
+   "geraet": "CS8800iAW 15 O-T",
+   "n": 2,
+   "schemata": [
+    "10WE_2L_2CS8800_PBE_HPS"
+   ],
+   "auslegung": {
+    "datei": "Auslegung WP.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 34.0,
+    "spez_w_m2": 0.0,
+    "flaeche_m2": 0.0,
+    "heizgrenze": 12.0,
+    "innen": 20.0,
+    "personen": 0.0,
+    "kw_person": 0.1,
+    "sperrzeit_h": 0.0,
+    "qges": 34.0,
+    "mindest_kw": 10.2,
+    "auslegung": "hybrid",
+    "diagramm": "2er Kaskade CS8800 45°C",
+    "vl": 45.0
+   },
+   "tww": [],
+   "hiu": [
+    "HIU-Auslegung_12WE.pdf"
+   ]
+  },
+  {
+   "id": "2.1.2.6",
+   "ordner": "2.1.2.6_14_WE_2L_3xCS8000iAW11",
+   "gebaeude": "neubau",
+   "system": "mono",
+   "ww": "hiu",
+   "we": 14,
+   "kw": null,
+   "geraet": "CS8800iAW 11 O-T",
+   "n": 3,
+   "schemata": [
+    "14WE_2L_3CS8800_2BP-7EM_HPS"
+   ],
+   "auslegung": {
+    "datei": "Auslegung_WP.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 38.0,
+    "spez_w_m2": 0.0,
+    "flaeche_m2": 0.0,
+    "heizgrenze": 12.0,
+    "innen": 20.0,
+    "personen": 0.0,
+    "kw_person": 0.1,
+    "sperrzeit_h": 0.0,
+    "qges": 38.0,
+    "mindest_kw": 11.4,
+    "auslegung": "hybrid",
+    "diagramm": "3er Kaskade CS8800 45°C",
+    "vl": 45.0
+   },
+   "tww": [],
+   "hiu": [
+    "HIU_Auslegung.pdf"
+   ]
+  },
+  {
+   "id": "2.1.2.7",
+   "ordner": "2.1.2.7_16_WE_2L_2xCS5000AW22",
+   "gebaeude": "neubau",
+   "system": "mono",
+   "ww": "hiu",
+   "we": 16,
+   "kw": null,
+   "geraet": "CS5001 AW22",
+   "n": 2,
+   "schemata": [
+    "16WE_2L_2CS5001AW22_2BP7EM_HPS"
+   ],
+   "auslegung": {
+    "datei": "Auslegung WP.pdf",
+    "plz": "88521",
+    "ort": "Ertingen",
+    "nat": -13.0,
+    "vorgabe_kw": 43.0,
+    "spez_w_m2": 0.0,
+    "flaeche_m2": 0.0,
+    "heizgrenze": 12.0,
+    "innen": 20.0,
+    "personen": 0.0,
+    "kw_person": 0.1,
+    "sperrzeit_h": 0.0,
+    "qges": 43.0,
+    "mindest_kw": 12.9,
+    "auslegung": "hybrid",
+    "diagramm": "2er Kaskade CS5001 AW22",
+    "vl": 45.0,
+    "vl_angenommen": true
+   },
+   "tww": [],
+   "hiu": [
+    "HIU-Auslegung_16WE.pdf"
+   ]
   },
   {
    "id": "2.1.3.1",
@@ -2987,7 +3506,9 @@
    "kw": 15.0,
    "geraet": "CS5800/6800iAW 12 OR-T",
    "n": 1,
-   "schemata": [],
+   "schemata": [
+    "6WE_15KW_CS5800_BH120_1ug_Pendel"
+   ],
    "auslegung": {
     "datei": "Auslegung WP.pdf",
     "plz": "88521",

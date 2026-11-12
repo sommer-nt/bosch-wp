@@ -76,6 +76,12 @@ def hinweise(e: dict, r: dict, lib: dict) -> list[str]:
     if ww_art(e, r) == "speicher" and we > 4:
         t.append(f"Ein Warmwasserspeicher an der Wärmepumpe reicht nur für kleine Mehrfamilienhäuser bis Leistungskennzahl NL 4 "
                  f"(etwa 4 Wohnungen). Für {we} WE besser „Zentral · FriWa“ oder „Dezentral · HIU“ wählen.")
+    h = gewaehlt(e, r, lib)
+    s = next((s for s in lib["schemata"] if h and s["id"] == h["id"]), None)
+    if s and s.get("hps"):
+        t.append("Wohnungsstationen mit E-Nacherwärmung (HPS): Das Heiznetz läuft nur mit ca. 45 °C, ein Durchlauferhitzer "
+                 "(ca. 13 kW) in jeder Station heizt das Warmwasser nach. Die Wärmepumpe arbeitet dadurch effizienter, "
+                 "dafür kommt Strom in den Wohnungen dazu.")
     if not any(x["passend"] for x in schemata(e, r, lib)):
         t.append("Für diese Kombination enthalten die Musterlösungen keine Hydraulikzeichnung (bei FriWa, HIU und bivalent liegen "
                  "dort nur die Auslegungen bei). Vorgeschlagen ist die ähnlichste Hydraulik als Vorlage – was anzupassen ist, steht darunter.")

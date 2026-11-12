@@ -195,7 +195,8 @@ def main(ordner: list[str]) -> None:
                     continue                                          # zweite (gleiche) Auslegung im Ordner
                 L["auslegung"] = auslegung(f)
                 if L["auslegung"] and L["auslegung"]["vl"] is None:   # CS5001-Blatt ohne Vorlauf im Diagrammtitel
-                    L["auslegung"]["vl"] = 55.0 if info["gebaeude"] == "bestand" else 35.0
+                    # Neubau-HIU: 45-°C-Netz (Wohnungsstationen mit E-Nacherwärmung, HPS), sonst 55 °C Bestand / 35 °C Neubau
+                    L["auslegung"]["vl"] = 55.0 if info["gebaeude"] == "bestand" else (45.0 if info["ww"] == "hiu" else 35.0)
                     L["auslegung"]["vl_angenommen"] = True
             elif a in ("tww", "hiu"):
                 L[a].append(f.name)
@@ -203,7 +204,8 @@ def main(ordner: list[str]) -> None:
                 sid = schema_id(f, nr, schemata, inhalt)
                 if sid not in schemata:
                     bild(f, BILDER / f"{sid}.jpg")
-                    schemata[sid] = {"id": sid, "datei": f.name, "titel": schema_titel(f, info["ordner"], nr), "loesungen": []}
+                    schemata[sid] = {"id": sid, "datei": f.name, "titel": schema_titel(f, info["ordner"], nr), "loesungen": [],
+                                     "hps": "HPS" in f.stem.upper()}   # Wohnungsstationen mit E-Nacherwärmung (45-°C-Netz)
                 if nr not in schemata[sid]["loesungen"]:
                     schemata[sid]["loesungen"].append(nr)
                 if sid not in L["schemata"]:
