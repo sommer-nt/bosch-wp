@@ -25,7 +25,7 @@ from wp import rechnen as R  # noqa: E402
 from wp import schema as S  # noqa: E402
 from wp import texte as T  # noqa: E402
 
-BLAU, ROT, VIOLETT = "#005691", "#e20015", "#7a3e9d"
+BLAU, ROT, VIOLETT = "#007BC0", "#ED0007", "#7a3e9d"
 ss = st.session_state
 
 # ------------------------------------------------------------------ Zugang (optional, wie Bosch Flow)
@@ -42,17 +42,28 @@ if "e" not in ss:
 E = ss.e
 DATEN, KAT = D.geraete(), D.katalog()
 
+# Bosch-Gestaltung wie index.html: Tokens des Bosch Frontend-Kits (blue-50 #007BC0, gray-95 #EFF1F2, green-50, red-50,
+# yellow-85), eckige Kanten ohne Schatten, Bosch Sans falls installiert (keine Google Fonts)
 st.markdown("""<style>
+html,body,[class*="css"],.stMarkdown,.stButton button,input,select,textarea{font-family:"Bosch Sans","BoschSans",Arial,Helvetica,sans-serif}
 .block-container{padding-top:3rem}
-.kpi{border:1px solid #d3dce5;border-radius:9px;padding:8px 12px;background:#f4f7fa;margin-bottom:8px}
-.kpi .t{font-size:11px;color:#4a5866;text-transform:uppercase}.kpi .v{font-size:21px;font-weight:700;color:#005691}
-.kpi .s{font-size:11px;color:#78889a}.kpi.ok{border-left:4px solid #2e7d32}.kpi.warn{border-left:4px solid #b26a00}.kpi.bad{border-left:4px solid #c0161d}
+*{border-radius:0!important}
+.stButton button,.stDownloadButton button{border:1px solid #007BC0;color:#007BC0;background:#fff;font-weight:400;min-height:40px}
+.stButton button:hover,.stDownloadButton button:hover{background:#E8F1FF;color:#00629A;border-color:#00629A}
+.stButton button[kind="primary"]{background:#007BC0;color:#fff}
+.stTextInput input,.stNumberInput input,.stSelectbox div[data-baseweb="select"]>div{background:#E0E2E5;border:0;border-bottom:1px solid #000}
+.stNumberInput input{text-align:right}
+.stTabs [data-baseweb="tab"][aria-selected="true"]{color:#007BC0}
+.stTabs [data-baseweb="tab-highlight"]{background-color:#007BC0}
+.kpi{border:1px solid #E0E2E5;padding:8px 12px;background:#fff;margin-bottom:8px}
+.kpi .t{font-size:11px;color:#43464A;text-transform:uppercase}.kpi .v{font-size:21px;font-weight:700;color:#000}
+.kpi .s{font-size:11px;color:#71767C}.kpi.ok{border-left:4px solid #00884A}.kpi.warn{border-left:4px solid #FFCF00}.kpi.bad{border-left:4px solid #ED0007}
 </style>""", unsafe_allow_html=True)
 st.markdown(f"<span style='color:{ROT};font-weight:800;font-size:22px'>BOSCH</span> "
-            "<span style='font-size:20px;font-weight:600'>WP-Schnellauslegung</span> "
+            "<span style='font-size:20px;font-weight:400'>WP-Schnellauslegung</span> "
             "<span style='color:#4a5866'>· Luft/Wasser- und Sole/Wasser-Wärmepumpen · Heizlast, Bivalenzpunkt, Geräteauswahl</span> "
-            "<span style='font-size:12px;color:#4a5866;background:#f4f7fa;border:1px solid #d3dce5;padding:3px 10px;"
-            "border-radius:14px;margin-left:8px'>Entwickelt von <b style='color:#005691'>Daniel Sommer</b> · HC/SDE3-PSD</span>",
+            "<span style='font-size:12px;color:#4a5866;background:#E0E2E5;padding:3px 6px;"
+            "margin-left:8px'>Entwickelt von <b style='color:#007BC0'>Daniel Sommer</b> · HC/SDE3-PSD</span>",
             unsafe_allow_html=True)
 
 

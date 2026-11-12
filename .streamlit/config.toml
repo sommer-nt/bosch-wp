@@ -1,9 +1,10 @@
 # Bosch-Blau als Akzent – getrennt für Hell und Dunkel, damit der Schalter im Tool umschalten kann
 [theme.light]
-primaryColor = "#005691"
+primaryColor = "#007BC0"
+font = "sans serif"
 
 [theme.dark]
-primaryColor = "#4fa3e0"
+primaryColor = "#56B0FF"
 
 [browser]
 gatherUsageStats = false

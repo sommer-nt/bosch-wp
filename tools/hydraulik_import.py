@@ -5,7 +5,7 @@
 
 Durchsucht die entpackten ZIP-Ordner (z. B. „1.1_Monoenergetisch/…/1.1.3.7_16WE_58kW_CS5001AW42/Techn_Doku“) nach
 - Hydraulikschemata (PDF: Bosch-Schemata 6721…, Planungszeichnungen „…_1ug“) → Bild der ersten Seite
-  in daten/hydrauliken/<id>.jpg,
+  in daten/hydrauliken/<id>.png (220 dpi, bis 2600 px, Farbpalette – scharf und klein),
 - WP-Auslegungen aus dem Excel-Werkzeug („Auslegung WP …“, „WP-Auslegung_S …“) → Eingabewerte (PLZ, θe, Heizgrenze,
   W/m², Fläche bzw. kW, Personen, Lastprofil, Sperrzeit, Kriterium, Vorlauf, Wärmepumpe) für den Rechenkern,
 und schreibt daten/hydrauliken.json. Ordnerstruktur: 1.x Bestand, 2.x Neubau; x.1 monoenergetisch, 1.2 bivalent,
@@ -157,11 +157,12 @@ def bild(pdf: Path, ziel: Path) -> None:
     from PIL import Image
     seite = str(hydraulik_seite(pdf))
     with tempfile.TemporaryDirectory() as tmp:
-        subprocess.run(["pdftoppm", "-r", "100", "-f", seite, "-l", seite, "-png", str(pdf), str(Path(tmp) / "s")], check=True)
+        subprocess.run(["pdftoppm", "-r", "220", "-f", seite, "-l", seite, "-png", str(pdf), str(Path(tmp) / "s")], check=True)
         png = next(Path(tmp).glob("s*.png"))
         im = Image.open(png).convert("RGB")
-        im.thumbnail((1400, 1400))
-        im.save(ziel, "JPEG", quality=62, optimize=True, progressive=True)
+        im.thumbnail((2600, 2600))
+        # Linienzeichnung: 48-Farben-Palette als PNG – deutlich schärfer als JPEG bei ähnlicher Dateigröße
+        im.quantize(colors=48, method=Image.Quantize.MEDIANCUT).save(ziel, "PNG", optimize=True)
 
 
 def matrix_geraet(info: dict) -> tuple[str | None, int]:
@@ -203,7 +204,7 @@ def main(ordner: list[str]) -> None:
             else:
                 sid = schema_id(f, nr, schemata, inhalt)
                 if sid not in schemata:
-                    bild(f, BILDER / f"{sid}.jpg")
+                    bild(f, BILDER / f"{sid}.png")
                     schemata[sid] = {"id": sid, "datei": f.name, "titel": schema_titel(f, info["ordner"], nr), "loesungen": [],
                                      "hps": "HPS" in f.stem.upper()}   # Wohnungsstationen mit E-Nacherwärmung (45-°C-Netz)
                 if nr not in schemata[sid]["loesungen"]:

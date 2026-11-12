@@ -87,13 +87,22 @@ Im Schema hängt die Frischwasserstation an einem eigenen FriWa-Puffer, nicht am
 Wohnungsstationen (HIU) hängen über das 2-Leiter-Netz am Puffer, bei DLE zeigt das Schema die Durchlauferhitzer je
 Wohnung, bei GEG-Hybrid den Gas-Brennwertkessel als zweiten Wärmeerzeuger am Puffer.
 
+## Gestaltung
+
+Bosch-Gestaltung nach den Tokens des Bosch Frontend-Kits, wie auf bosch-homecomfortgroup.com eingesetzt: Bosch-Blau
+blue-50 #007BC0 (Hover #00629A), Rot red-50 #ED0007, Grün green-50 #00884A, Warnung yellow-85 #FFCF00, Grautöne gray-95/90/80;
+eckige Buttons, Eingabefelder und Flächen ohne Schatten; Reiter mit blauem Unterstrich; Schrift Bosch Sans, sofern auf dem Rechner
+installiert, sonst Arial (keine Google Fonts, keine Schriftdateien im Repo). Aus der HC-Spezifikation: Farbwechsel aufeinander-
+folgender Inhaltsbereiche (Weiß / gray-95), weißer Rahmen für Buttons auf blauem Grund, Zahlenfelder rechtsbündig, Linien-Icons
+(viewBox 24, Strich 2), Datenschutzhinweis im Fuß mit einem Klick. Streamlit über .streamlit/config.toml und CSS gleich gestaltet.
+
 ## Hydraulik-Auswahl (Musterlösungen)
 
 Im Reiter „Hydraulik & Warmwasser“ wählt man zur ausgelegten Maschine die passende Hydraulik aus den Musterlösungen
 (Techn. Doku der Musterlösungs-Ordner aus den ZIP-Daten und Nachlieferungen): 58 Hydraulikschemata (Bosch-Schemata
 6721… und Planungszeichnungen) zu allen 62 Musterlösungen mit Wärmepumpe, alle mit Excel-WP-Auslegung; Neubau-HIU mit
 Wohnungsstationen mit E-Nacherwärmung (HPS, 45-°C-Netz) ist gekennzeichnet; gleiche Zeichnungen in mehreren Ordnern
-werden am Inhalt erkannt und zusammengefasst. Fernwärme ist noch nicht im Tool. Bewertet werden Baureihe, Anzahl
+werden am Inhalt erkannt und zusammengefasst. Bilder: PNG mit Farbpalette, 220 dpi, bis 2600 px (scharf bei kleiner Dateigröße). Fernwärme ist noch nicht im Tool. Bewertet werden Baureihe, Anzahl
 (Kaskade), Warmwasser (FriWa, HIU, ohne/DLE, Speicher) und Anlagenart; vorgeschlagen wird die passende Hydraulik, deren
 Musterlösung in WE und Gerät am nächsten liegt – jede andere lässt sich von Hand wählen. „Auslegung übernehmen“ setzt die
 Eingaben der Excel-Auslegung einer Musterlösung (PLZ, θe, Heizgrenze, W/m² und Fläche, Personen, Lastprofil, Sperrzeit,

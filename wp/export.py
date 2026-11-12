@@ -42,7 +42,7 @@ def mappe_bytes(e: dict, r: dict, katalog: dict, pdf: bytes | None = None) -> by
         z.writestr("Kurzbericht.txt", kurzbericht(e, r, katalog))
         h = HY.gewaehlt(e, r, D.hydraulik()) if r.get("gewaehlt") else None
         if h and D.hydraulik_bild(h["id"]).exists():
-            z.write(D.hydraulik_bild(h["id"]), f"Hydraulik_{h['id']}.jpg")
+            z.write(D.hydraulik_bild(h["id"]), f"Hydraulik_{h['id']}.png")
         if pdf:
             z.writestr(f"WP-Auslegung_{n}.pdf", pdf)
     return puffer.getvalue()

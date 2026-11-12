@@ -237,10 +237,10 @@ def _hydraulik() -> dict:
 
 
 def _hydraulik_bilder() -> dict:
-    """Schemabilder als data-URI (daten/hydrauliken/*.jpg)."""
+    """Schemabilder als data-URI (daten/hydrauliken/*.png)."""
     import base64
-    return {b.stem: "data:image/jpeg;base64," + base64.b64encode(b.read_bytes()).decode()
-            for b in sorted((DATEN / "hydrauliken").glob("*.jpg"))}
+    return {b.stem: "data:image/png;base64," + base64.b64encode(b.read_bytes()).decode()
+            for b in sorted((DATEN / "hydrauliken").glob("*.png"))}
 
 
 def _katalog() -> dict:

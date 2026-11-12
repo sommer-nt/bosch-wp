@@ -59,5 +59,5 @@ def test_projektmappe():
     r = M.rechne(e, D.geraete(), D.katalog(), D.mfh())
     z = zipfile.ZipFile(io.BytesIO(X.mappe_bytes(e, r, D.katalog(), b"%PDF-1.4")))
     h = HY.gewaehlt(e, r, D.hydraulik())
-    assert set(z.namelist()) == {"WP-Auslegung_Muster_MFH.json", "Kurzbericht.txt", "WP-Auslegung_Muster_MFH.pdf", f"Hydraulik_{h['id']}.jpg"}
+    assert set(z.namelist()) == {"WP-Auslegung_Muster_MFH.json", "Kurzbericht.txt", "WP-Auslegung_Muster_MFH.pdf", f"Hydraulik_{h['id']}.png"}
     assert "Hydraulik" in z.read("Kurzbericht.txt").decode("utf-8")

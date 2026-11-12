@@ -70,4 +70,4 @@ def hydraulik() -> dict:
 
 
 def hydraulik_bild(sid: str):
-    return DATEN / "hydrauliken" / f"{sid}.jpg"
+    return DATEN / "hydrauliken" / f"{sid}.png"
