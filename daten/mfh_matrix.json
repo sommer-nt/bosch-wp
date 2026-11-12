@@ -1179,5 +1179,18 @@
    "id": "N-mono-dle-16",
    "loesung": "2.1.3.7"
   }
- ]
+ ],
+ "zweiter": {
+  "gas": [
+   "GC7000 F 75",
+   "GC7000 WP 70",
+   "GC9800 40H",
+   "GC9800 50H",
+   "GC9800iW 30H",
+   "GC9800iW 40H",
+   "GC9800iWA 30P"
+  ],
+  "oel": [],
+  "pellet": []
+ }
 }

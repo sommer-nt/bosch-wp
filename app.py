@@ -77,6 +77,12 @@ st.markdown(f"<span style='color:{ROT};font-weight:800;font-size:22px'>BOSCH</sp
             unsafe_allow_html=True)
 
 
+def erkl(text: str) -> None:
+    """Erklärtext (Rechenweg, Norm, Lesehilfe) nur im Expertenmodus – wie .erkl in index.html."""
+    if E.get("experte"):
+        st.caption(text)
+
+
 def zahl(label, pfad, **kw):
     teile = pfad.split(".")
     ziel = E
@@ -85,7 +91,7 @@ def zahl(label, pfad, **kw):
     ziel[teile[-1]] = st.number_input(label, value=float(ziel[teile[-1]]), key="n_" + pfad, **kw)
 
 
-def wahl(label, pfad, optionen: dict, horizontal=True, radio=True):
+def wahl(label, pfad, optionen: dict, horizontal=True, radio=True, help=None):
     """Auswahl (Radio als Segment) für E[pfad]; liefert True bei Änderung."""
     teile = pfad.split(".")
     ziel = E
@@ -95,9 +101,9 @@ def wahl(label, pfad, optionen: dict, horizontal=True, radio=True):
     liste = list(optionen)
     idx = liste.index(alt) if alt in liste else 0
     if radio:
-        neu_ = st.radio(label, liste, index=idx, format_func=optionen.get, horizontal=horizontal, key="w_" + pfad)
+        neu_ = st.radio(label, liste, index=idx, format_func=optionen.get, horizontal=horizontal, key="w_" + pfad, help=help)
     else:
-        neu_ = st.selectbox(label, liste, index=idx, format_func=optionen.get, key="w_" + pfad)
+        neu_ = st.selectbox(label, liste, index=idx, format_func=optionen.get, key="w_" + pfad, help=help)
     ziel[teile[-1]] = neu_
     return neu_ != alt
 
@@ -201,7 +207,7 @@ def schall_bereich(r: dict, e: dict) -> None:
     st.dataframe([{"Gebiet (Immissionsrichtwerte TA Lärm 6.1)": x["gebiet"],
                    "Tag 6–22 Uhr": f"{x['tag']} dB(A){zeichen(x['tag_ok'])}",
                    "Nacht 22–6 Uhr": f"{x['nacht']} dB(A){zeichen(x['nacht_ok'])}"} for x in s_["gebiete"]], hide_index=True)
-    st.caption("Vereinfachte Abschätzung nach TA Lärm A.2.4.3 mit dem Schallleistungspegel nach ErP (Katalog), ohne Zuschläge für "
+    erkl("Vereinfachte Abschätzung nach TA Lärm A.2.4.3 mit dem Schallleistungspegel nach ErP (Katalog), ohne Zuschläge für "
                "Tonhaltigkeit, weitere Reflexionen und Vorbelastung. Für Bauantrag und Nachbarschaft den Höchstwert aus dem "
                "Datenblatt ansetzen und die Landesbauordnung (Abstandsflächen) beachten.")
 
@@ -245,7 +251,7 @@ def kosten_bereich(r: dict, e: dict) -> None:
     anteil = f"{T.f(abs(k['ersparnis_eur']) / k['alt_eur'] * 100, 0)} %" if k["alt_eur"] > 0 else None
     m[2].metric("Einsparung pro Jahr" if spar else "Mehrkosten pro Jahr", f"{T.f(abs(k['ersparnis_eur']), 0)} €",
                 delta=(f"−{anteil}" if spar else f"+{anteil}") if anteil else None, delta_color="inverse")
-    st.caption("Schätzung ohne Grund- und Zählergebühren, Wartung, Preisentwicklung und Förderung. "
+    erkl("Schätzung ohne Grund- und Zählergebühren, Wartung, Preisentwicklung und Förderung. "
                "Bisheriger Bedarf = Jahreswärme / Nutzungsgrad; Heizöl: 1 l ≈ 10 kWh.")
 
 
@@ -289,7 +295,7 @@ def mfh_bereich(r: dict, e: dict) -> None:
         elif st.button("Wärmepumpe übernehmen", key="mfh_ueb_" + z_["id"]):
             e["auswahl"].update(geraet=z_["geraet"], anzahl=z_["n"], inneneinheit="")
             st.rerun()
-    st.caption("Die passende Hydraulik zur Musterlösung wählen Sie im Reiter „Hydraulik“. Musterlösungen ersetzen keine Fachplanung.")
+    erkl("Die passende Hydraulik zur Musterlösung wählen Sie im Reiter „Hydraulik“. Musterlösungen ersetzen keine Fachplanung.")
 
 
 STUFE_ZEICHEN = {"passt": "✅", "vorlage": "🟡", "prinzip": "❌"}
@@ -310,7 +316,7 @@ def hydraulik_bereich(r: dict, e: dict) -> None:
                + (f" · {len(passend)} passende Hydraulik(en) aus den Musterlösungen." if passend else "."))
     for t_ in HY.hinweise(e, r, lib):
         st.warning(t_)
-    st.caption("Ampel: ✅ passt direkt = Schema 1 : 1 verwendbar · 🟡 Vorlage = gleiche Baureihe, die genannten Punkte ergänzen · "
+    erkl("Ampel: ✅ passt direkt = Schema 1 : 1 verwendbar · 🟡 Vorlage = gleiche Baureihe, die genannten Punkte ergänzen · "
                "❌ Prinzip = andere Baureihe, nur zur Orientierung.")
 
     def stufe(x: dict) -> str:
@@ -337,7 +343,7 @@ def hydraulik_bereich(r: dict, e: dict) -> None:
     ls = HY.loesungen(e, r, lib)
     if ls:
         st.markdown("**Musterlösungen mit Excel-Auslegung zu dieser Maschine**")
-        st.caption("„Auslegung übernehmen“ setzt die Eingaben der Excel-Auslegung (PLZ, Heizlast, Warmwasser, Vorlauf, Kriterium, "
+        erkl("„Auslegung übernehmen“ setzt die Eingaben der Excel-Auslegung (PLZ, Heizlast, Warmwasser, Vorlauf, Kriterium, "
                    "Wärmepumpe) – der Rechenkern prüft die Musterlösung dann nach.")
         for L in ls:
             a = L["auslegung"]
@@ -404,31 +410,30 @@ with links:
                 neu_setzen("heizlast.methode", "heizlast.spez_w_m2", "heizlast.flaeche_m2", "heizlast.gebaeudeart", "heizlast.vbh", "tww.personen", "tww.system")
                 st.rerun()
             if wahl("Warmwasserbereitung", "mfh.ww", {"friwa": "Zentral · FriWa", "hiu": "Dezentral · HIU", "dle": "Ohne · DLE",
-                                                      "speicher": "Speicher · bis 4 WE"}):
+                                                      "speicher": "Speicher · bis 4 WE"}, help="Je WE 80 m² und 3,5 Personen. Zentral: Frischwasserstation mit eigenem Puffer. Dezentral: Wohnungsstationen (HIU, 2-Leiter). Ohne: Durchlauferhitzer je Wohnung. Speicher: nur bis NL 4 (etwa 4 WE)."):
                 M.eingaben_folgen(E, "mfh.ww")
                 neu_setzen("heizlast.methode", "heizlast.spez_w_m2", "heizlast.flaeche_m2", "heizlast.gebaeudeart", "heizlast.vbh", "tww.personen", "tww.system")
                 st.rerun()
             anl = {"mono": "Monoenergetisch", "hybrid": "Hybrid · MH200", "bivalent": "Bivalent · CC8000"}
             anl_akt = HY.system_art(E, D.hydraulik())   # ohne Wahl: aus der Betriebsweise
             anl_neu = st.radio("Anlagenart", list(anl), index=list(anl).index(anl_akt), format_func=anl.get, horizontal=True,
-                               key=f"anl_{anl_akt}")
+                               key=f"anl_{anl_akt}", help="Monoenergetisch: Wärmepumpe mit Heizstab. Hybrid: Gas-Brennwertgerät + CS5800/6800 über MH200 (6–8 WE). Bivalent: Kessel + CS5001 über CC8000 (ab 10 WE). Hybrid und bivalent nach GEG-Hybrid-Kriterium.")
             if anl_neu != anl_akt:
                 E["mfh"]["system"] = anl_neu
                 M.eingaben_folgen(E, "mfh.system")
                 neu_setzen("auslegung")
                 st.rerun()
-            st.caption("Monoenergetisch = Wärmepumpe mit Heizstab. Hybrid = Gas-Brennwertgerät und Wärmepumpe CS5800/6800 über das Hybridmodul MH200 (Bestand, 6–8 WE). Bivalent = Kessel (Gas, Öl oder Pellet) und Wärmepumpe CS5001 über den Kaskadenregler CC8000 (Bestand, ab 10 WE). Hybrid und bivalent werden nach dem GEG-Hybrid-Kriterium ausgelegt (Wärmepumpe mind. 30 % der Heizlast).")
-            if anl_akt != "mono":
-                E.setdefault("zweiter", "gas")
-                if wahl("Zweiter Wärmeerzeuger", "zweiter", {"gas": "Gas-Brennwert", "oel": "Öl-Brennwert", "pellet": "Pellet"}, radio=False):
+            # nur Kesselarten, für die Bosch-Geräte in den Daten stehen; bei nur einer Art keine Auswahl
+            zw_arten = [k_ for k_, v_ in D.mfh().get("zweiter", {"gas": ["GC"]}).items() if v_] or ["gas"]
+            if E.get("zweiter") not in zw_arten:
+                E["zweiter"] = zw_arten[0]
+                E["kosten"]["preis_kessel"], E["kosten"]["eta_kessel"] = R.KESSEL[E["zweiter"]]
+            if anl_akt != "mono" and len(zw_arten) > 1:
+                zw_txt = {"gas": "Gas-Brennwert", "oel": "Öl-Brennwert", "pellet": "Pellet"}
+                if wahl("Zweiter Wärmeerzeuger", "zweiter", {k_: zw_txt[k_] for k_ in zw_arten}, radio=False):
                     E["kosten"]["preis_kessel"], E["kosten"]["eta_kessel"] = R.KESSEL[E["zweiter"]]
                     neu_setzen("kosten.preis_kessel", "kosten.eta_kessel")
                     st.rerun()
-                st.caption("Für Öl- und Pelletkessel sind keine Produkte hinterlegt – Kessel nach Herstellerunterlage planen. Die Restwärme (1 − Deckungsanteil) liefert der Kessel statt eines Heizstabs.")
-            st.caption("MFH-Musterlösungen: je WE 80 m² und 3,5 Personen (Personen und Wohnfläche werden vorbelegt). "
-                       "Zentral = Frischwasserstation mit eigenem Puffer (> 60 °C), dezentral = Wohnungsstationen (HIU, 2-Leiter, "
-                       "< 60 °C), ohne = elektrische Durchlauferhitzer je Wohnung, Speicher = Warmwasserspeicher an der Wärmepumpe – "
-                       "nur für kleine MFH bis Leistungskennzahl NL 4 (etwa 4 Wohnungen).")
         arten = {a: a for a in R.VOLLBENUTZUNGSSTUNDEN}
         if wahl("Gebäudeart", "heizlast.gebaeudeart", arten, radio=False):
             E["heizlast"]["vbh"] = float(R.VOLLBENUTZUNGSSTUNDEN[E["heizlast"]["gebaeudeart"]])
@@ -484,7 +489,7 @@ with links:
                 zahl("Vollbenutzungsstunden th (VDI 2067) [h/a]", "heizlast.vbh", min_value=1.0, step=50.0)
                 zahl("Jahresnutzungsgrad Altanlage η", "heizlast.nutzungsgrad", min_value=0.5, max_value=1.1, step=0.01,
                      help="1,0 = Rechenweg Excel (ohne Umrechnungsfaktoren und Gradtage)")
-            st.caption("Excel-Blatt „DIN EN 12831 Heizlast nach Verbrauch mit TWW“: Øh,in = Øh,g + Ew,g,in / (td · 365). "
+            erkl("Excel-Blatt „DIN EN 12831 Heizlast nach Verbrauch mit TWW“: Øh,in = Øh,g + Ew,g,in / (td · 365). "
                        "Der Warmwasser-Zuschlag läuft dabei automatisch über die Nachheizzeit.")
 
     with st.expander("③ Heizkreise & Wärmeverteilung", expanded=True):
@@ -661,6 +666,7 @@ with rechts:
         if g and g["moeglich"]:
             ks += [("Bivalenzpunkt", T.biv_text(g), "Schnitt mit Gebäudekennlinie", "ok" if g["ok"] else "bad"),
                    ("Leistung bei θe", f"{T.f(g['q_nat'], 2)} kW", f"Abdeckung {T.f(g['abdeckung'] * 100, 0)} %", "ok" if g["abdeckung"] >= 1 else "warn"),
+                   ("Kessel bei θe", f"{T.f(g['heizstab_kw'], 2)} kW", KESSEL_NAME[r["zweiter"]], "") if r.get("zweiter") else
                    ("Heizstab bei θe", f"{T.f(g['heizstab_kw'], 2)} kW",
                     f"verfügbar {T.f(g['heizstab_max_kw'], 0)} kW" if g["heizstab_max_kw"] is not None else "bauseits",
                     "ok" if g["heizstab_kw"] <= 0 else "warn"),
@@ -757,7 +763,7 @@ with rechts:
             fh.update_layout(height=280, margin=dict(l=10, r=10, t=30, b=10), xaxis_title="Außentemperatur in °C",
                              yaxis_title="Temperatur in °C", legend=dict(orientation="h", y=1.15), template="plotly_white")
             st.plotly_chart(fh, width="stretch")
-            st.caption(f"Maßgebend: {T.HK_TYP.get(hkv['typ'], hkv['typ'])} (Exponent n = {T.f(hkv['exponent'], 1)}, Spreizung "
+            erkl(f"Maßgebend: {T.HK_TYP.get(hkv['typ'], hkv['typ'])} (Exponent n = {T.f(hkv['exponent'], 1)}, Spreizung "
                        f"{T.f(hkv['spreizung'], 0)} K bei θe) · {T.f(r['vl'], 0)} °C Vorlauf bei θe {T.ft(r['nat'])} °C bis zur Heizgrenze "
                        f"{T.ft(r['heizgrenze'])} °C. Bei milderen Außentemperaturen sinkt der Vorlauf – die Wärmepumpe arbeitet dann effizienter "
                        f"und mit mehr Leistung als im Diagramm oben (dort konstant {T.f(r['vl'], 0)} °C wie Excel-Werkzeug).")
@@ -789,7 +795,7 @@ with rechts:
         if r.get("energie") and g:
             st.markdown("**Alle Kennzahlen auf einen Blick**", help=T.GLOSSAR["scop"])
             st.markdown(kennzahlen_html(r, E), unsafe_allow_html=True)
-            st.caption("Grobe Schätzung: Strom = Wärme · Deckungsanteil / SCOP (EN 14825, mittleres Klima, zwischen 35 und 55 °C "
+            erkl("Grobe Schätzung: Strom = Wärme · Deckungsanteil / SCOP (EN 14825, mittleres Klima, zwischen 35 und 55 °C "
                        "interpoliert); Restwärme = Wärme · (1 − Deckungsanteil) über Heizstab bzw. Kessel (Hybrid / bivalent). Ohne SCOP im Katalog nur Jahreswärme und Deckungsanteil.")
         if g:
             schall_bereich(r, E)
@@ -814,7 +820,7 @@ with rechts:
                            "UVP [€]": KAT["geraete"].get(c["geraet"], {}).get("uvp", 0) * c["n"] or None,
                            "Hinweis": c["grund"] or ("überdimensioniert" if c.get("ueberdimensioniert") else "")})
         st.dataframe(zeilen, hide_index=True, width="stretch", column_config={"Bild": st.column_config.ImageColumn("", width="small")})
-        st.caption("A-7/W.. = Heizleistung bei −7 °C Außenluft und Auslegungsvorlauf (Prüfpunkt nach EN 14511, Bezug der Mindestleistung); "
+        erkl("A-7/W.. = Heizleistung bei −7 °C Außenluft und Auslegungsvorlauf (Prüfpunkt nach EN 14511, Bezug der Mindestleistung); "
                    "B0/W.. bei Sole/Wasser = Sole 0 °C. θe = Norm-Außentemperatur.")
 
     with t_hyd:
@@ -824,7 +830,7 @@ with rechts:
             svg = S.schema_svg(r, ie, T.heizkreis_liste(E), S.FARBEN_DRUCK).replace('width="900" height="470"', 'width="100%"')
             st.markdown("<div style='background:#fff;border:1px solid #d3dce5;border-radius:12px;padding:8px'>" + svg + "</div>",
                         unsafe_allow_html=True)
-            st.caption("Vereinfachte Prinzipdarstellung der Auslegung. Maßgeblich ist die oben ausgewählte Hydraulik der Musterlösung.")
+            erkl("Vereinfachte Prinzipdarstellung der Auslegung. Maßgeblich ist die oben ausgewählte Hydraulik der Musterlösung.")
         kacheln = T.anbindung(E, r)
         if kacheln:
             st.markdown("**Warmwasser & Anbindung**")
@@ -863,7 +869,7 @@ with rechts:
                     with st.expander("Paketinhalt"):
                         st.markdown("\n".join("- " + x_ for x_ in gruppe[0]["inhalt"]))
                 if pl:
-                    st.caption(f"★ passt zur gewählten Inneneinheit{' (' + ie['typ'] + ')' if ie else ''}. "
+                    erkl(f"★ passt zur gewählten Inneneinheit{' (' + ie['typ'] + ')' if ie else ''}. "
                                "Quelle: Produktkatalog Klima-, Lüftungs- und Wärmepumpen-Sortiment, März 2026.")
                 zub = T.zubehoer_fuer(r, PK)
                 if zub:
@@ -871,7 +877,7 @@ with rechts:
                         st.dataframe([{"Zubehör": z_["text"], "Bestell-Nr.": z_["artnr"], "UVP [€]": z_["uvp"]} for z_ in zub],
                                      hide_index=True, width="stretch")
                         hk_ = T.heizkreis_liste(E)
-                        st.caption(f"Heizkreise laut Eingabe: {sum(not x['gemischt'] for x in hk_)} ungemischt, "
+                        erkl(f"Heizkreise laut Eingabe: {sum(not x['gemischt'] for x in hk_)} ungemischt, "
                                    f"{sum(x['gemischt'] for x in hk_)} gemischt – Heizkreispaket BOPA HK HP je Heizkreis berücksichtigen.")
 
         if not r.get("mfh") and not g:

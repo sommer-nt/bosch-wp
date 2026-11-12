@@ -92,13 +92,15 @@ Lösung“ übernommen.
 Anlagenart (Eingabe beim MFH, `mfh.system`): **monoenergetisch**, **Hybrid** (Gas-Brennwertgerät + CS5800/6800 über das
 Hybridmodul MH200, Ordner 1.3) oder **bivalent** (Gaskessel + CS5001 über den Kaskadenregler CC8000, Ordner 1.2). Hybrid und
 bivalent sind getrennte Merkmale bei Kostenübersicht und Hydraulik-Auswahl; beide werden nach dem GEG-Hybrid-Kriterium
-ausgelegt. Zweiter Wärmeerzeuger wählbar (`zweiter`: Gas, Öl, Pellet – Produkte nicht hinterlegt): bei Hybrid und
+ausgelegt. Zweiter Wärmeerzeuger (`zweiter`): angeboten werden nur Kesselarten mit Bosch-Gerät in `daten/mfh_matrix.json` → `zweiter` (derzeit nur Gas; Öl und Pellet erscheinen, sobald dort Geräte eingetragen sind): bei Hybrid und
 bivalent liefert der Kessel die Restwärme (`energie.kessel_kwh`, Kosten mit Brennstoffpreis und Nutzungsgrad, Vorgabe Gas
 0,12 €/kWh η 0,95 · Öl 0,11 η 0,93 · Pellet 0,08 η 0,88), nicht der Heizstab. Ob ein Kessel da ist, folgt aus der Anlagenart
 (`rechnen.anlagenart`), nicht aus dem Kriterium – die Excel-Auslegungen nutzen GEG-Hybrid auch bei monoenergetischen Anlagen.
 Jede Zelle der Kostenübersicht verweist auf ihre Musterlösung (`loesung`), jede Musterlösung trägt ihre
 Bestellvorschlag-Nr. (`bv_nr`, 10-stellig 4000…, vom Importer aus Seite 1 des Bestellvorschlags gelesen) – angezeigt in
 der MFH-Karte (mit Kopieren), bei den Hydrauliken, im Druck und im Kurzbericht.
+
+Erklärtexte (Rechenweg, Normbezüge, Lesehilfen) erscheinen im Tool nur im Expertenmodus (`.erkl` in index.html, `erkl()` in app.py); im Druck bleiben sie.
 
 Druck: `druckEinpassen()` vermisst jede Druckseite im Browser mit den tatsächlichen Schriften und verkleinert den Inhalt
 einer Seite, die sonst in die Fußzeile liefe; `tools/druck_pruefen.js` prüft das in A4-Breite (Test).

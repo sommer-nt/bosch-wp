@@ -95,7 +95,9 @@ def experten_abweichungen(e: dict) -> list[str]:
         a.append("Warmwasser-Zuschlag fest")
     if int(e.get("sperrzeit_h") or 0):
         a.append(f"Sperrzeit {int(e['sperrzeit_h'])} h")
-    if e.get("auslegung") != ("monovalent" if e.get("waermequelle") == "sole" else "monoenergetisch"):
+    m = e.get("mfh") or {}
+    anl_gewaehlt = m.get("art") == "mfh" and m.get("system") in ("hybrid", "bivalent") and e.get("auslegung") == "hybrid"
+    if not anl_gewaehlt and e.get("auslegung") != ("monovalent" if e.get("waermequelle") == "sole" else "monoenergetisch"):
         a.append(f"Betriebsweise {e.get('auslegung')}")
     if e["heizlast"]["methode"] == "huelle":
         a.append("Heizlast über Gebäudehülle")
@@ -351,12 +353,13 @@ def klartext(e: dict, r: dict, katalog: dict) -> list[dict]:
     art = g["bivalenz_art"]
     if art == "unter":
         out.append({"text": f"Die Wärmepumpe deckt den Bedarf allein – auch bei {zt(r['nat'])} °C (Abdeckung "
-                            f"**{z(g['abdeckung'] * 100, 0)} %**), kein Heizstab nötig.", "status": "ok"})
+                            f"**{z(g['abdeckung'] * 100, 0)} %**), kein {'Kessel' if r.get('zweiter') else 'Heizstab'} nötig.", "status": "ok"})
     elif art == "punkt":
-        zu_viel = g["heizstab_max_kw"] is not None and g["heizstab_kw"] > g["heizstab_max_kw"] + 1e-9
+        kessel = {"gas": "Gaskessel", "oel": "Ölkessel", "pellet": "Pelletkessel"}.get(r.get("zweiter"))
+        zu_viel = not kessel and g["heizstab_max_kw"] is not None and g["heizstab_kw"] > g["heizstab_max_kw"] + 1e-9
         t = (f"Die Wärmepumpe schafft den Bedarf allein bis **{zt(g['bivalenz'])} °C** (Bivalenzpunkt). Nur darunter hilft "
-             f"der Heizstab – bei {zt(r['nat'])} °C mit **{z(g['heizstab_kw'], 1)} kW**")
-        if g["heizstab_max_kw"] is not None:
+             f"der {kessel or 'Heizstab'} – bei {zt(r['nat'])} °C mit **{z(g['heizstab_kw'], 1)} kW**")
+        if not kessel and g["heizstab_max_kw"] is not None:
             t += f" (eingebaut {z(g['heizstab_max_kw'], 0)} kW)"
         out.append({"text": t + ("; das reicht nicht – größere Wärmepumpe oder Kaskade wählen." if zu_viel else "."),
                     "status": "bad" if zu_viel else ("ok" if g["ok"] else "warn")})
