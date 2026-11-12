@@ -2119,7 +2119,9 @@ function baueDruck() {
   const meldungen = $('#meldungen').innerHTML;
   // Systempakete auf so viele Druckseiten verteilen wie nötig (nutzbar ≈ 205 mm je Seite), Haftungsausschluss (≈ 55 mm) nie abschneiden
   const pg = r.mfh ? null : paketeGruppen(r, ie), pSeiten = [];
-  let rest = 0;
+  // Herleitung der Heizlast steht vor den Systempaketen (Seite 4 ist mit Hydraulikbild und Anbindung voll)
+  const hlHtml = herleitung(r), hlBlock = `<div class="dk-h2">Herleitung der Heizlast</div><table class="formel dk-tab">${hlHtml}</table>`;
+  let rest = 16 + 7 * (hlHtml.match(/<tr/g) || []).length;
   if (pg) {
     let von = 0;
     pg.forEach((gr, i) => { const mm = paketeHoehe(gr); if (rest + mm > 205 && i > von) { pSeiten.push([von, i]); von = i; rest = 0; } rest += mm; });
@@ -2160,13 +2162,11 @@ function baueDruck() {
     <div class="dk-h2">E-Heizer je Baugröße</div><div class="dk-tab">${eheizerHtml(r).replace('<table>', '<table class="dk-tab">')}</div>
     <div class="dk-tab">${vdiTabelle(r)}</div>${fuss(3, n)}</div>`;
   const hGew = g ? HYD.gewaehlt(E, r, HYDRAULIK_DATEN) : null;
-  h += `<div class="seite">${klein}<div class="dk-h">Hydraulik, Anbindung und Rechenweg</div>
+  h += `<div class="seite">${klein}<div class="dk-h">Hydraulik und Anbindung</div>
     ${hGew ? `<div class="dk-h2">Hydraulik: ${esc(hGew.titel)} (${hGew.manuell ? 'ausgewählt' : 'vorgeschlagen'} · ${HYD.STUFE_TEXT[hGew.stufe]} · Musterlösungen ${esc(hGew.loesungen.join(', '))})</div>
       ${hGew.anpassen.length ? `<p class="hint" style="margin:0 0 3px">Anpassen: ${esc(hGew.anpassen.join(' · '))}</p>` : ''}${hydBild(hGew.id, 'dk-hdb')}`
     : `${schema(r, {breite: 760})}<p class="hint">Prinzipdarstellung der Auslegung – keine Hydraulik der Musterlösungen ausgewählt.</p>`}
     <div class="dk-h2">Warmwasser und Anbindung</div>${anbindungHtml(r)}
-    <div class="dk-h2">Herleitung der Heizlast</div>
-    <table class="formel dk-tab">${herleitung(r)}</table>
     ${fuss(4, n)}</div>`;
   if (r.mfh) h += `<div class="seite">${klein}<div class="dk-h">MFH-Musterlösung</div>
     <div class="dk-tab">${mfhHtml(r, preise, true)}</div>${fuss(5, n)}</div>`;
@@ -2181,8 +2181,8 @@ function baueDruck() {
   const s0 = (r.mfh ? 6 : 5) + 1;
   pSeiten.forEach(([von, bis], i) => {
     const letzte = i === pSeiten.length - 1;
-    h += `<div class="seite">${klein}<div class="dk-h">${r.mfh ? 'Hinweise' : i ? 'Systempakete (Fortsetzung)' : 'Systempakete und Hinweise'}</div>
-    ${r.mfh ? '' : `${i ? '' : '<div class="dk-h2">Passende Systempakete (BOPA)</div>'}<div class="dk-tab">${paketeHtml(r, preise, true, von, bis)}</div>`}
+    h += `<div class="seite">${klein}<div class="dk-h">${i ? 'Systempakete (Fortsetzung)' : r.mfh ? 'Heizlast und Hinweise' : 'Heizlast, Systempakete und Hinweise'}</div>
+    ${i ? '' : hlBlock}${r.mfh ? '' : `${i ? '' : '<div class="dk-h2">Passende Systempakete (BOPA)</div>'}<div class="dk-tab">${paketeHtml(r, preise, true, von, bis)}</div>`}
     ${letzte && !haftungEigen ? haftung : ''}${fuss(s0 + i, n)}</div>`;
   });
   if (haftungEigen) h += `<div class="seite">${klein}<div class="dk-h">Hinweise</div>${haftung}${fuss(n, n)}</div>`;
@@ -2266,7 +2266,7 @@ function oeffnen(ev) {
 (function () {
   const kandidatenOrig = kandidatenTabelle, paketeOrig = paketeHtml, druckOrig = baueDruck;
   kandidatenTabelle = (r, preise, nurPassend) => kandidatenOrig(r, false, nurPassend);
-  paketeHtml = (r, preise, druck) => paketeOrig(r, false, druck);
+  paketeHtml = (r, preise, druck, ...bereich) => paketeOrig(r, false, druck, ...bereich);
   const mfhOrig = mfhHtml;
   mfhHtml = (r, preise, druck) => mfhOrig(r, false, druck);
   vdiTabelle = () => '';

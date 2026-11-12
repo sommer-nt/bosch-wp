@@ -109,6 +109,11 @@ class Ausdruck(FPDF):
         self.cell(0, 9, self.t(s), new_x="LMARGIN", new_y="NEXT")
         self.ln(1)
 
+    def platz(self, mm: float) -> None:
+        """Neue Seite, wenn ein Block von mm Höhe nicht mehr ganz auf die Seite passt (Blöcke nie zerreißen)."""
+        if self.get_y() + mm > self.page_break_trigger:
+            self.add_page()
+
     def h2(self, s: str):
         self.ln(2)
         self.schrift_(10.5, True)
@@ -508,20 +513,29 @@ def pdf_bytes(e: dict, r: dict, daten: dict, katalog: dict) -> bytes:
         pdf.set_xy(18, yy)
         pdf.multi_cell(179, 4.1, pdf.t(x["text"]), markdown=True, new_x="LMARGIN", new_y="NEXT")
         pdf.set_y(pdf.get_y() + 0.6)
-    pdf.h2("Herleitung der Heizlast")
-    for a, b, c in T.herleitung(e, r):
-        fett = a.startswith("Gesamt")
-        yy = pdf.get_y()
-        pdf.schrift_(7.8, fett, INK if fett else GRAU)
-        pdf.set_xy(13, yy)
-        pdf.cell(62, 5, pdf.t(a))
-        pdf.schrift_(7.8, False)
-        pdf.set_xy(75, yy)
-        pdf.cell(98, 5, pdf.t(b))
-        pdf.schrift_(7.8, True)
-        pdf.set_xy(173, yy)
-        pdf.cell(24, 5, pdf.t(c), align="R")
-        pdf.set_y(yy + 5)
+    # Herleitung nur als geschlossener Block: passt sie nicht mehr auf Seite 1, folgt sie unter den Leistungsdaten
+    herl = T.herleitung(e, r)
+    herl_mm = 9 + 5 * len(herl)
+
+    def herleitung_block():
+        pdf.h2("Herleitung der Heizlast")
+        for a, b, c in herl:
+            fett = a.startswith("Gesamt")
+            yy = pdf.get_y()
+            pdf.schrift_(7.8, fett, INK if fett else GRAU)
+            pdf.set_xy(13, yy)
+            pdf.cell(62, 5, pdf.t(a))
+            pdf.schrift_(7.8, False)
+            pdf.set_xy(75, yy)
+            pdf.cell(98, 5, pdf.t(b))
+            pdf.schrift_(7.8, True)
+            pdf.set_xy(173, yy)
+            pdf.cell(24, 5, pdf.t(c), align="R")
+            pdf.set_y(yy + 5)
+
+    herl_offen = pdf.get_y() + herl_mm > pdf.page_break_trigger
+    if not herl_offen:
+        herleitung_block()
     if p.get("notiz"):
         pdf.h2("Notiz")
         pdf.schrift_(8.5)
@@ -548,7 +562,11 @@ def pdf_bytes(e: dict, r: dict, daten: dict, katalog: dict) -> bytes:
         y = pdf.get_y() + 1
         heizkurve(pdf, r, 13, y, 184, 50)
         pdf.set_y(y + 53)
-        pdf.add_page()
+    if herl_offen:
+        if pdf.get_y() + herl_mm > pdf.page_break_trigger:
+            pdf.add_page()
+        herleitung_block()
+    pdf.add_page()
     pdf.h2("Passende Wärmepumpen je Baureihe (kleinste passende Größe) und gewählte Wärmepumpe")
     emp = set(r["empfehlung_je_serie"])
     zeilen, bilder_tab = [], []
@@ -624,9 +642,22 @@ def pdf_bytes(e: dict, r: dict, daten: dict, katalog: dict) -> bytes:
         if hg["anpassen"]:
             pdf.schrift_(7.6)
             pdf.multi_cell(184, 3.6, pdf.t("Anpassen: " + " · ".join(hg["anpassen"])), new_x="LMARGIN", new_y="NEXT")
+        from PIL import Image
+        with Image.open(D.hydraulik_bild(hg["id"])) as im_:
+            verh = im_.height / im_.width
+        w_ = 184.0
+        h_ = min(w_ * verh, 150.0)            # hohe Zeichnungen begrenzen
+        w_ = h_ / verh
         y = pdf.get_y() + 1
-        pdf.image(str(D.hydraulik_bild(hg["id"])), x=13, y=y, w=184)
-        pdf.set_y(y + 184 * 910 / 1287 + 2)
+        if y + h_ > pdf.page_break_trigger:   # Rest der Seite reicht nicht: verkleinern bis 110 mm, sonst neue Seite
+            h_ = max(110.0, pdf.page_break_trigger - y)
+            if y + h_ > pdf.page_break_trigger:
+                pdf.add_page()
+                y = pdf.get_y()
+            w_ = min(184.0, h_ / verh)
+            h_ = w_ * verh
+        pdf.image(str(D.hydraulik_bild(hg["id"])), x=13 + (184 - w_) / 2, y=y, w=w_)
+        pdf.set_y(y + h_ + 2)
     elif g:
         y = schema(pdf, e, r, ie, 13, pdf.get_y(), 184)
         pdf.set_y(y)
@@ -635,6 +666,7 @@ def pdf_bytes(e: dict, r: dict, daten: dict, katalog: dict) -> bytes:
                        new_x="LMARGIN", new_y="NEXT")
     vb = r.get("vdi_bivalenz")
     if g:
+        pdf.platz(36)
         pdf.h2("Deckungsanteil nach Bivalenzpunkt (DIN V 4701-10 / VDI 4650)")
         ts = R.VDI_BIV_T
         naechst = min(ts, key=lambda t: abs(t - vb["t_biv"])) if vb else None
@@ -691,6 +723,7 @@ def pdf_bytes(e: dict, r: dict, daten: dict, katalog: dict) -> bytes:
                                            "Wärmepumpen-Sortiment, März 2026."), new_x="LMARGIN", new_y="NEXT")
     kacheln = T.anbindung(e, r)
     if kacheln:
+        pdf.platz(10 + ((len(kacheln) + 2) // 3) * 22)
         pdf.h2("Warmwasser und Anbindung")
         y = pdf.get_y()
         for i, (a, b, c) in enumerate(kacheln):
@@ -710,8 +743,9 @@ def pdf_bytes(e: dict, r: dict, daten: dict, katalog: dict) -> bytes:
         pdf.set_y(y + ((len(kacheln) + 2) // 3) * 22 + 1)
     en = r.get("energie")
     if en:
-        pdf.h2("Kennzahlen (Schätzung)")
         g = r["gewaehlt"]
+        pdf.platz(10 + 3 * 17 + 12)
+        pdf.h2("Kennzahlen (Schätzung)")
         werte = [("Jahreswärme Heizung + WW", T.f(en["waerme_kwh"], 0) + " kWh/a")]
         if g:
             werte.append(("Deckungsanteil Wärmepumpe", T.f(g["deckung"] * 100, 1) + " %"))
@@ -756,6 +790,7 @@ def pdf_bytes(e: dict, r: dict, daten: dict, katalog: dict) -> bytes:
                     f"{T.f(k_['preis_alt'], 2)} €/kWh bei η {T.f(k_['eta_alt'], 2)} = {T.f(k_['alt_eur'], 0)} €/a; "
                     "ohne Grundgebühren, Wartung und Förderung.")
         pdf.multi_cell(184, 3.8, pdf.t(txt), new_x="LMARGIN", new_y="NEXT")
+    pdf.platz(40)
     pdf.h2("Haftungsausschluss")
     pdf.schrift_(7.4, False, GRAU)
     pdf.multi_cell(184, 3.8, pdf.t(T.HAFTUNG + (" Preise: unverbindliche Preisempfehlung ohne MwSt." if preise else "")),

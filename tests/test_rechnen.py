@@ -226,6 +226,20 @@ def test_pdf_alle_szenarien():
         assert pdf[:5] == b"%PDF-" and len(pdf) > 5000, s["name"]
 
 
+@pytest.mark.skipif(shutil.which("pdftotext") is None, reason="pdftotext nicht installiert")
+def test_pdf_ohne_leerseiten(tmp_path):
+    """Python-PDF: keine Seiten mit nur Kopf, Fuß und einzelnen abgerissenen Zeilen."""
+    from wp import bericht as B
+    for s in szenarien():
+        e = s["eingaben"]
+        e["preise_drucken"] = True
+        datei = tmp_path / "a.pdf"
+        datei.write_bytes(B.pdf_bytes(e, rechne(e), D.geraete(), D.katalog()))
+        seiten = subprocess.run(["pdftotext", "-layout", str(datei), "-"], capture_output=True, text=True).stdout.split("\f")[:-1]
+        zeilen = [len([z for z in p.splitlines() if z.strip()]) for p in seiten]
+        assert len(seiten) <= 7 and min(zeilen) >= 6, (s["name"], zeilen)
+
+
 def test_heizkreise():
     from wp import texte as T
     e = e_mit(heizkreise=[{"typ": "hk"}, {"typ": "fbh"}])
@@ -302,6 +316,15 @@ def test_schema_ohne_ueberschneidungen():
     out = subprocess.run(["node", str(ROOT / "tools" / "schema_pruefen.js"), str(ROOT / "index.html")],
                          capture_output=True, text=True, timeout=120)
     assert out.returncode == 0, out.stdout + out.stderr
+
+
+@pytest.mark.skipif(not _playwright_da(), reason="node/playwright nicht installiert")
+def test_druckseiten_ohne_ueberlauf():
+    """Druck (index.html und prototyp.html): auf keiner Seite läuft Inhalt in die Fußzeile (tools/druck_pruefen.js)."""
+    for datei in ("index.html", "prototyp.html"):
+        out = subprocess.run(["node", str(ROOT / "tools" / "druck_pruefen.js"), str(ROOT / datei)],
+                             capture_output=True, text=True, timeout=180)
+        assert out.returncode == 0, datei + ": " + out.stdout + out.stderr
 
 
 @pytest.mark.skipif(shutil.which("node") is None, reason="node nicht installiert")

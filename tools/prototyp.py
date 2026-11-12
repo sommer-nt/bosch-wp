@@ -31,7 +31,7 @@ JS = r"""
 (function () {
   const kandidatenOrig = kandidatenTabelle, paketeOrig = paketeHtml, druckOrig = baueDruck;
   kandidatenTabelle = (r, preise, nurPassend) => kandidatenOrig(r, false, nurPassend);
-  paketeHtml = (r, preise, druck) => paketeOrig(r, false, druck);
+  paketeHtml = (r, preise, druck, ...bereich) => paketeOrig(r, false, druck, ...bereich);
   const mfhOrig = mfhHtml;
   mfhHtml = (r, preise, druck) => mfhOrig(r, false, druck);
   vdiTabelle = () => '';
