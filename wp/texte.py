@@ -312,6 +312,8 @@ GLOSSAR = {
             "(Fußbodenheizung) höher als bei 55 °C (Heizkörper).",
     "kaskade": "Kaskade: mehrere Wärmepumpen über einen Kaskadenregler (HPC800i C, HPC 301 C) – mehr Leistung, feinere "
                "Modulation und Redundanz.",
+    "schall": "Geräuschpegel: Schalldruckpegel der Außeneinheit im Abstand s, abgeschätzt nach TA Lärm A.2.4.3 aus dem Schallleistungspegel (ErP, Katalog): Lp = LWA + DΩ − 20·lg s − 11 dB. Vor einer Wand +3 dB, in einer Ecke +6 dB gegenüber freier Aufstellung; doppelter Abstand −6 dB, zwei Geräte +3 dB.",
+    "kosten": "Energiekosten: Strom von Wärmepumpe und Heizstab mal Strompreis, verglichen mit dem bisherigen Energieträger (Jahreswärme / Nutzungsgrad · Preis). Preise und Nutzungsgrad sind Vorgaben und frei änderbar.",
 }
 
 

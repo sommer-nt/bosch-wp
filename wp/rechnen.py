@@ -458,8 +458,10 @@ def rechne(e: dict, daten: dict, katalog: dict | None = None) -> dict:
         r["gewaehlt"] = bewerte(geraet, n, vl, r, daten, katalog)
         r["kennlinien"] = kennlinien(geraet, n, vl, r) if r["gewaehlt"]["moeglich"] else None
         r["energie"] = energie(e, r, katalog)
+        r["schall"] = schall(e, r, katalog)
+        r["kosten"] = kosten(e, r)
     else:
-        r["gewaehlt"], r["kennlinien"], r["energie"] = None, None, None
+        r["gewaehlt"], r["kennlinien"], r["energie"], r["schall"], r["kosten"] = None, None, None, None, None
     r["leitung"] = leitung(e, r)
     r["heizkurve"] = heizkurve(e, r)
     r["erdreich"] = erdreich(e, r, katalog)
@@ -546,6 +548,49 @@ def erdreich(e: dict, r: dict, katalog: dict | None) -> dict | None:
     w_m = float((e.get("aufstellung") or {}).get("entzug_w_m") or 50)
     q0 = g["q_nat"] * (1 - 1 / cop)
     return {"cop": cop, "q_entzug_kw": q0, "entzug_w_m": w_m, "sondenlaenge_m": q0 * 1000 / w_m}
+
+
+# Geräuschpegel nach TA Lärm Anhang A.2.4.3 (vereinfacht): Lp = LWA + 10·lg(n) + DΩ − 20·lg(s/1 m) − 11 dB
+SCHALL_DOMEGA = {"frei": 3.0, "wand": 6.0, "ecke": 9.0}      # Raumwinkelmaß: frei auf dem Boden / vor einer Wand / in einer Ecke
+# Immissionsrichtwerte TA Lärm Nr. 6.1 (außen, dB(A)): Gebiet, Tag, Nacht
+TA_LAERM = (("Industriegebiet", 70, 70), ("Gewerbegebiet", 65, 50), ("Kern-, Dorf- und Mischgebiet", 60, 45),
+            ("allgemeines Wohngebiet", 55, 40), ("reines Wohngebiet", 50, 35), ("Kurgebiet, Krankenhaus", 45, 35))
+# Vorgabewerte Energiekosten (€/kWh, Nutzungsgrad) – im Tool überschreibbar
+KOSTEN_ALT = {"gas": (0.12, 0.90), "oel": (0.11, 0.85), "strom": (0.35, 1.0)}
+
+
+def schall(e: dict, r: dict, katalog: dict | None) -> dict | None:
+    """Schalldruckpegel der Außeneinheit(en) im Abstand s (Katalogwert Schallleistung ErP, Kaskade +10·lg n)."""
+    g = r.get("gewaehlt")
+    if not g:
+        return None
+    lw = ((katalog or {}).get("geraete", {}).get(g["geraet"]) or {}).get("lw_db")
+    if lw is None:
+        return None
+    s = e.get("schall") or {}
+    a = max(1.0, float(s.get("abstand_m") or 5.0))
+    auf = s.get("aufstellung") if s.get("aufstellung") in SCHALL_DOMEGA else "frei"
+    lw_ges = float(lw) + 10 * math.log10(max(1, int(g["n"])))
+    lp = lw_ges + SCHALL_DOMEGA[auf] - 20 * math.log10(a) - 11.0
+    return {"lw_db": float(lw), "lw_gesamt_db": lw_ges, "abstand_m": a, "aufstellung": auf, "domega_db": SCHALL_DOMEGA[auf], "lp_db": lp,
+            "gebiete": [{"gebiet": n_, "tag": t_, "nacht": na_, "tag_ok": lp <= t_, "nacht_ok": lp <= na_} for n_, t_, na_ in TA_LAERM]}
+
+
+def kosten(e: dict, r: dict) -> dict | None:
+    """Energiekosten pro Jahr: Wärmepumpe und Heizstab gegen das bisherige System (Wärme / Nutzungsgrad · Preis)."""
+    en = r.get("energie")
+    if not en or not en.get("scop"):
+        return None
+    k = e.get("kosten") or {}
+    alt = k.get("alt") if k.get("alt") in KOSTEN_ALT else "gas"
+    p_wp = float(k.get("strom_wp") if k.get("strom_wp") is not None else 0.28)
+    p_hs = float(k.get("strom_hs") if k.get("strom_hs") is not None else 0.35)
+    p_alt = float(k.get("preis_alt") if k.get("preis_alt") is not None else KOSTEN_ALT[alt][0])
+    eta = float(k.get("eta_alt") if k.get("eta_alt") is not None else KOSTEN_ALT[alt][1])
+    wp, hs = en["strom_wp_kwh"] * p_wp, en["strom_heizstab_kwh"] * p_hs
+    bedarf_alt = en["waerme_kwh"] / max(eta, 0.1)
+    return {"wp_eur": wp, "hs_eur": hs, "neu_eur": wp + hs, "alt": alt, "alt_kwh": bedarf_alt, "alt_eur": bedarf_alt * p_alt,
+            "ersparnis_eur": bedarf_alt * p_alt - wp - hs, "strom_wp": p_wp, "strom_hs": p_hs, "preis_alt": p_alt, "eta_alt": eta}
 
 
 def energie(e: dict, r: dict, katalog: dict | None) -> dict | None:

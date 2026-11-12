@@ -710,27 +710,51 @@ def pdf_bytes(e: dict, r: dict, daten: dict, katalog: dict) -> bytes:
         pdf.set_y(y + ((len(kacheln) + 2) // 3) * 22 + 1)
     en = r.get("energie")
     if en:
-        pdf.h2("Jahresbilanz (Schätzung)")
+        pdf.h2("Kennzahlen (Schätzung)")
+        g = r["gewaehlt"]
         werte = [("Jahreswärme Heizung + WW", T.f(en["waerme_kwh"], 0) + " kWh/a")]
+        if g:
+            werte.append(("Deckungsanteil Wärmepumpe", T.f(g["deckung"] * 100, 1) + " %"))
         if en.get("scop"):
-            werte += [("Strom Wärmepumpe", T.f(en["strom_wp_kwh"], 0) + " kWh/a"),
-                      ("Strom Heizstab", T.f(en["strom_heizstab_kwh"], 0) + " kWh/a"),
-                      ("Umweltwärme", T.f(en["umwelt_kwh"], 0) + " kWh/a")]
+            q_ = en["waerme_kwh"] or 1
+            werte += [("Strom Wärmepumpe", f"{T.f(en['strom_wp_kwh'], 0)} kWh/a ({T.f(en['strom_wp_kwh'] / q_ * 100, 0)} %)"),
+                      ("Strom Heizstab", f"{T.f(en['strom_heizstab_kwh'], 0)} kWh/a ({T.f(en['strom_heizstab_kwh'] / q_ * 100, 0)} %)"),
+                      ("Umweltwärme", f"{T.f(en['umwelt_kwh'], 0)} kWh/a ({T.f(en['umwelt_kwh'] / q_ * 100, 0)} %)")]
+        s_, k_ = r.get("schall"), r.get("kosten")
+        if s_ and r["waermequelle"] != "sole":
+            nachts = [x["gebiet"] for x in s_["gebiete"] if x["nacht_ok"]]
+            werte.append((f"Schalldruck in {T.f(s_['abstand_m'], 1)} m (TA Lärm)",
+                          f"{T.f(s_['lp_db'], 1)} dB(A)", ))
+            werte.append(("Nachts eingehalten bis", nachts[-1] if nachts else "kein Gebiet"))
+        if k_:
+            werte.append(("Energiekosten WP pro Jahr", T.f(k_["neu_eur"], 0) + " €"))
+            werte.append(("Einsparung pro Jahr" if k_["ersparnis_eur"] >= 0 else "Mehrkosten pro Jahr",
+                          T.f(abs(k_["ersparnis_eur"]), 0) + " €"))
         y = pdf.get_y()
         for i, (a, b) in enumerate(werte):
+            x0, y0 = 13 + (i % 4) * 46.5, y + (i // 4) * 17
             pdf.set_fill_color(242, 245, 248)
             pdf.set_draw_color(*LINIE)
-            pdf.rect(13 + i * 46.5, y, 44, 15, style="DF")
+            pdf.rect(x0, y0, 44, 15, style="DF")
             pdf.schrift_(6.5, False, GRAU)
-            pdf.set_xy(15 + i * 46.5, y + 2)
+            pdf.set_xy(x0 + 2, y0 + 2)
             pdf.cell(40, 3.5, pdf.t(a))
-            pdf.schrift_(11, True, BLAU)
-            pdf.set_xy(15 + i * 46.5, y + 7)
+            pdf.schrift_(11 if len(b) < 18 else (8.5 if len(b) < 21 else 7.2), True, BLAU)
+            pdf.set_xy(x0 + 2, y0 + 7)
             pdf.cell(40, 5, pdf.t(b))
-        pdf.set_y(y + 17)
+        pdf.set_y(y + ((len(werte) + 3) // 4) * 17)
         pdf.schrift_(7, False, HELL)
         txt = ("Strom = Wärme · Deckungsanteil / SCOP (EN 14825, mittleres Klima, zwischen 35 und 55 °C interpoliert, "
                f"SCOP ≈ {T.f(en['scop'], 2)})." if en.get("scop") else "Für dieses Gerät ist kein SCOP im Katalog hinterlegt.")
+        if s_ and r["waermequelle"] != "sole":
+            txt += (f" Geräuschpegel: Schallleistung {T.f(s_['lw_db'], 0)} dB(A) (ErP, Katalog), "
+                    f"{ {'frei': 'frei aufgestellt', 'wand': 'vor einer Wand', 'ecke': 'in einer Ecke'}[s_['aufstellung']]}, "
+                    "vereinfacht nach TA Lärm A.2.4.3 – für den Bauantrag den Höchstwert aus dem Datenblatt ansetzen.")
+        if k_:
+            alt_ = {"gas": "Erdgas", "oel": "Heizöl", "strom": "Strom-Direktheizung"}[k_["alt"]]
+            txt += (f" Kosten: Strom {T.f(k_['strom_wp'], 2)} €/kWh (Heizstab {T.f(k_['strom_hs'], 2)}) gegen {alt_} "
+                    f"{T.f(k_['preis_alt'], 2)} €/kWh bei η {T.f(k_['eta_alt'], 2)} = {T.f(k_['alt_eur'], 0)} €/a; "
+                    "ohne Grundgebühren, Wartung und Förderung.")
         pdf.multi_cell(184, 3.8, pdf.t(txt), new_x="LMARGIN", new_y="NEXT")
     pdf.h2("Haftungsausschluss")
     pdf.schrift_(7.4, False, GRAU)

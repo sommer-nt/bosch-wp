@@ -72,6 +72,13 @@ Preise (auch nicht im Ausdruck), ohne Expertenmodus, ohne VDI-Vergleichstabelle 
    Dazu die Tabelle **Deckungsanteil nach Bivalenzpunkt** (DIN V 4701-10 / VDI 4650) mit markierter Spalte.
 9. **Mindestleistung (Modulation):** Herstellerdaten unverändert; Stufen (z. B. CS3800 O-S, Temperaturbänder) werden
    nicht geglättet und im Diagramm erläutert. In der Kaskade gilt die Mindestleistung eines Geräts.
+10. **Kennzahlen** auf einen Blick: Jahreswärme, Deckungsanteil (VDI 4650), SCOP und Aufteilung WP-Strom / Heizstab /
+    Umweltwärme (`rechnen.energie`).
+11. **Geräuschpegel** (`rechnen.schall`): Lp = LWA + 10·lg n + DΩ − 20·lg s − 11 dB (TA Lärm A.2.4.3, vereinfacht) mit dem
+    Schallleistungspegel nach ErP aus dem Katalog; DΩ frei 3 / Wand 6 / Ecke 9 dB; Vergleich mit den Immissionsrichtwerten
+    TA Lärm 6.1 (Tag/Nacht je Gebiet).
+12. **Energiekosten** (`rechnen.kosten`): WP-Strom und Heizstab gegen Erdgas, Heizöl oder Strom-Direktheizung
+    (Jahreswärme / Nutzungsgrad · Preis); Vorgabepreise 0,28 / 0,35 €/kWh Strom, Gas 0,12 (η 0,90), Öl 0,11 (η 0,85) – im Tool änderbar.
 
 ## MFH-Bestellvorschläge (Musterlösungen)
 
@@ -171,7 +178,8 @@ Nach Änderungen an `katalog.json`: `python tools/excel_import.py --nur-einbette
 
 ## Offen
 
-- CS3800iAW 10/13 O-T: Kurven aus dem Excel, Katalogdaten (SCOP, Schall) noch offen.
+- CS3800iAW 10/13 O-T: Kurven aus dem Excel, Katalogdaten (SCOP, Schall) noch offen – ohne sie keine Strom-, Kosten- und Schallwerte.
+- CS8800iAW 11/13/15 O-T: SCOP aus den Bosch-Bestellvorschlägen (Produktdaten) ergänzt.
 - CS5001AW 30 und CS5000 AW 22/38: keine Leistungsdaten im Excel. CS7000i/CS7400i nur als Kurven (Katalog: Pakete).
 - Sole/Wasser bei 55 °C: Nennwärmeleistung (ErP) statt max. Leistung angesetzt; Kaskaden bei Sole noch nicht freigegeben.
 

@@ -163,7 +163,10 @@
    "masse": "1050 × 1350 × 540 mm",
    "gewicht_kg": 217,
    "vl_max": 75,
-   "phasen": "3~"
+   "phasen": "3~",
+   "scop35": 5.4,
+   "scop55": 4.12,
+   "scop_quelle": "Bosch-Bestellvorschläge (Produktdaten, SCOP mittleres Klima)"
   },
   "CS8800iAW 13 O-T": {
    "artnr": "7738602872",
@@ -178,7 +181,10 @@
    "masse": "1050 × 1350 × 540 mm",
    "gewicht_kg": 217,
    "vl_max": 75,
-   "phasen": "3~"
+   "phasen": "3~",
+   "scop35": 5.37,
+   "scop55": 4.13,
+   "scop_quelle": "Bosch-Bestellvorschläge (Produktdaten, SCOP mittleres Klima)"
   },
   "CS8800iAW 15 O-T": {
    "artnr": "7738602873",
@@ -193,7 +199,10 @@
    "masse": "1050 × 1350 × 540 mm",
    "gewicht_kg": 217,
    "vl_max": 75,
-   "phasen": "3~"
+   "phasen": "3~",
+   "scop35": 5.02,
+   "scop55": 3.99,
+   "scop_quelle": "Bosch-Bestellvorschläge (Produktdaten, SCOP mittleres Klima)"
   },
   "CS5001 AW22": {
    "artnr": "7724002124",

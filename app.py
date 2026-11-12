@@ -99,6 +99,133 @@ def neu_setzen(*pfade):
         ss.pop("w_" + p_, None)
 
 
+def kennzahlen_html(r: dict, e: dict) -> str:
+    """Blaue Kennzahlen-Kachel wie energieHtml() in index.html."""
+    en, g = r["energie"], r["gewaehlt"]
+    q = en["waerme_kwh"] or 0
+    pz = lambda x: x / q * 100 if q > 0 else 0   # noqa: E731
+    t_ = "font-size:12px;opacity:.9"
+    v_ = "font-size:28px;font-weight:700;line-height:1.25"
+    s_ = "font-size:12px;opacity:.85"
+    herk = "aus dem Verbrauch" if r["heizlast"]["methode"] == "verbrauch" else f"QH · {T.f(e['heizlast']['vbh'], 0)} h/a"
+    biv = "ohne Heizstab" if g.get("bivalenz") is None else f"Bivalenzpunkt {T.ft(g['bivalenz'])} °C"
+    kopf = [("Jahreswärme Heizung + Warmwasser", f"{T.f(q, 0)} <small style='font-size:13px;font-weight:400'>kWh/Jahr</small>",
+             f"{herk} + Warmwasser {T.f(en['ww_kwh'], 0)} kWh"),
+            ("Deckungsanteil Wärmepumpe", f"{T.f(g['deckung'] * 100, 1)} <small style='font-size:13px;font-weight:400'>%</small>",
+             f"VDI 4650 · {biv}")]
+    if en.get("scop"):
+        kopf.append(("Jahresarbeitszahl SCOP", T.f(en["scop"], 2), f"EN 14825, mittleres Klima · Vorlauf {T.f(r['vl'], 0)} °C"))
+    h = ("<div style='background:#007BC0;color:#fff;padding:20px 24px;margin-bottom:8px'>"
+         "<div style='display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px'>")
+    h += "".join(f"<div><div style='{t_}'>{a}</div><div style='{v_}'>{b}</div><div style='{s_}'>{c}</div></div>" for a, b, c in kopf)
+    h += "</div>"
+    if en.get("scop"):
+        teile = [("WP-Strom", en["strom_wp_kwh"], "#FFFFFF"), ("Heizstab", en["strom_heizstab_kwh"], "#FFCF00"),
+                 ("Erdwärme" if r["waermequelle"] == "sole" else "Umweltwärme", en["umwelt_kwh"], "#00884A")]
+        h += "<div style='margin-top:16px;display:grid;gap:6px'>"
+        for n_, v, c in teile:
+            h += (f"<div style='display:grid;grid-template-columns:120px 1fr 190px;gap:10px;align-items:center;font-size:13px'>"
+                  f"<span><i style='display:inline-block;width:10px;height:10px;margin-right:6px;border:1px solid #fff;background:{c}'></i>{n_}</span>"
+                  f"<span style='height:10px;background:rgba(255,255,255,.25)'><b style='display:block;height:100%;width:{pz(v):.1f}%;background:{c}'></b></span>"
+                  f"<span style='text-align:right'>{T.f(v, 0)} kWh/Jahr · {T.f(pz(v), 1)} %</span></div>")
+        h += f"</div><div style='{t_};margin-top:14px'>Energiebilanz – woher die Wärme kommt</div>"
+        h += "<div style='display:flex;height:16px;background:rgba(255,255,255,.25);margin-top:4px'>"
+        h += "".join(f"<b style='display:block;height:100%;width:{pz(v):.2f}%;background:{c}' title='{n_}'></b>" for n_, v, c in teile)
+        h += "</div>"
+    return h + "</div>"
+
+
+ALLTAG = ((30, "Flüstern"), (40, "Bibliothek"), (50, "Kühlschrank"), (60, "Gespräch"), (70, "Staubsauger"))
+
+
+def schall_skala(lp: float) -> str:
+    """Skala der Alltagsgeräusche mit Markierung der Wärmepumpe (wie schallSkala() in index.html)."""
+    x = lambda d: 20 + (min(80, max(20, d)) - 20) / 60 * 720   # noqa: E731
+    xl = x(lp)
+    sv = ("<svg viewBox='0 0 760 86' width='100%' style='max-width:760px;display:block;margin:12px 0 6px'>"
+          "<defs><linearGradient id='skalaVerlauf'><stop offset='0' stop-color='#00884A'/><stop offset='.5' stop-color='#FFCF00'/>"
+          "<stop offset='1' stop-color='#ED0007'/></linearGradient></defs><rect x='20' y='36' width='720' height='8' fill='url(#skalaVerlauf)'/>")
+    for d, t in ALLTAG:
+        sv += (f"<line x1='{x(d)}' x2='{x(d)}' y1='32' y2='48' stroke='currentColor'/>"
+               f"<text x='{x(d)}' y='62' text-anchor='middle' font-size='12' fill='currentColor'>{d} dB</text>"
+               f"<text x='{x(d)}' y='78' text-anchor='middle' font-size='11' fill='currentColor'>{t}</text>")
+    sv += (f"<polygon points='{xl - 7},18 {xl + 7},18 {xl},32' fill='#007BC0'/><text x='{min(690, max(70, xl))}' y='13' "
+           f"text-anchor='middle' font-size='12' font-weight='700' fill='currentColor'>Wärmepumpe {T.f(lp, 1)} dB(A)</text></svg>")
+    return sv
+
+
+def schall_bereich(r: dict, e: dict) -> None:
+    st.markdown("**Berechneter Geräuschpegel**", help=T.GLOSSAR["schall"])
+    if r["waermequelle"] == "sole":
+        st.caption("Sole/Wasser-Wärmepumpen stehen im Gebäude – es gibt kein Außengeräusch für die Nachbarschaft. "
+                   "Schallschutz im Aufstellraum beachten.")
+        return
+    e.setdefault("schall", {"abstand_m": 5.0, "aufstellung": "frei"})
+    c = st.columns(2)
+    with c[0]:
+        zahl("Abstand Außeneinheit – Immissionsort [m]", "schall.abstand_m", min_value=1.0, step=0.5)
+    with c[1]:
+        wahl("Aufstellung der Außeneinheit", "schall.aufstellung",
+             {"frei": "frei auf dem Boden", "wand": "vor einer Wand", "ecke": "in einer Ecke"}, radio=False)
+    s_ = r["schall"] = R.schall(e, r, KAT)   # Eingaben stehen unter dem Ergebnis – hier nachrechnen
+    if not s_:
+        st.caption(f"Für {r['gewaehlt']['geraet']} ist im Katalog noch kein Schallleistungspegel (ErP) hinterlegt – Wert aus dem Datenblatt ergänzen.")
+        return
+    g = r["gewaehlt"]
+    auf = {"frei": "frei aufgestellt", "wand": "vor einer Wand", "ecke": "in einer Ecke"}[s_["aufstellung"]]
+    nachts = [x for x in s_["gebiete"] if x["nacht_ok"]]
+    wohn = next(x for x in s_["gebiete"] if x["gebiet"] == "allgemeines Wohngebiet")
+    k = st.columns(3)
+    k[0].metric("Schallleistung LWA (ErP)", f"{T.f(s_['lw_db'], 0)} dB(A)",
+                help=f"{g['n']} Geräte zusammen {T.f(s_['lw_gesamt_db'], 1)} dB(A)" if g["n"] > 1 else "Katalogwert der Außeneinheit")
+    k[1].metric(f"Schalldruckpegel in {T.f(s_['abstand_m'], 1)} m", f"{T.f(s_['lp_db'], 1)} dB(A)",
+                help=f"{auf} (DΩ = {T.f(s_['domega_db'], 0)} dB)")
+    k[2].metric("Nachts eingehalten bis", nachts[-1]["gebiet"] if nachts else "kein Gebiet",
+                help=f"allgemeines Wohngebiet nachts {wohn['nacht']} dB(A): " + ("eingehalten" if wohn["nacht_ok"] else "überschritten"))
+    st.markdown(schall_skala(s_["lp_db"]), unsafe_allow_html=True)
+    zeichen = lambda ok: " ✓" if ok else " ✗"   # noqa: E731
+    st.dataframe([{"Gebiet (Immissionsrichtwerte TA Lärm 6.1)": x["gebiet"],
+                   "Tag 6–22 Uhr": f"{x['tag']} dB(A){zeichen(x['tag_ok'])}",
+                   "Nacht 22–6 Uhr": f"{x['nacht']} dB(A){zeichen(x['nacht_ok'])}"} for x in s_["gebiete"]], hide_index=True)
+    st.caption("Vereinfachte Abschätzung nach TA Lärm A.2.4.3 mit dem Schallleistungspegel nach ErP (Katalog), ohne Zuschläge für "
+               "Tonhaltigkeit, weitere Reflexionen und Vorbelastung. Für Bauantrag und Nachbarschaft den Höchstwert aus dem "
+               "Datenblatt ansetzen und die Landesbauordnung (Abstandsflächen) beachten.")
+
+
+def kosten_bereich(r: dict, e: dict) -> None:
+    st.markdown("**Geschätzte Energiekosten und Einsparung**", help=T.GLOSSAR["kosten"])
+    e.setdefault("kosten", {"strom_wp": 0.28, "strom_hs": 0.35, "alt": "gas", "preis_alt": 0.12, "eta_alt": 0.90})
+    c = st.columns(5)
+    with c[0]:
+        if wahl("Bisherige Heizung", "kosten.alt", {"gas": "Erdgas", "oel": "Heizöl", "strom": "Strom-Direktheizung"}, radio=False):
+            e["kosten"]["preis_alt"], e["kosten"]["eta_alt"] = R.KOSTEN_ALT[e["kosten"]["alt"]]
+            neu_setzen("kosten.preis_alt", "kosten.eta_alt")
+    with c[1]:
+        zahl("Preis bisher [€/kWh]", "kosten.preis_alt", min_value=0.0, step=0.01, format="%.2f")
+    with c[2]:
+        zahl("Nutzungsgrad η bisher", "kosten.eta_alt", min_value=0.3, max_value=1.1, step=0.01, format="%.2f")
+    with c[3]:
+        zahl("Strom WP-Tarif [€/kWh]", "kosten.strom_wp", min_value=0.0, step=0.01, format="%.2f")
+    with c[4]:
+        zahl("Strom Heizstab [€/kWh]", "kosten.strom_hs", min_value=0.0, step=0.01, format="%.2f")
+    k = r["kosten"] = R.kosten(e, r)   # Eingaben stehen unter dem Ergebnis – hier nachrechnen
+    if not k:
+        st.caption(f"Für {r['gewaehlt']['geraet']} ist im Katalog noch kein SCOP hinterlegt – ohne SCOP keine Strom- und Kostenschätzung.")
+        return
+    alt = {"gas": "Erdgas", "oel": "Heizöl", "strom": "Strom-Direktheizung"}[k["alt"]]
+    spar = k["ersparnis_eur"] >= 0
+    m = st.columns(3)
+    m[0].metric("Wärmepumpe pro Jahr", f"{T.f(k['neu_eur'], 0)} €",
+                help=f"WP-Strom {T.f(k['wp_eur'], 0)} € + Heizstab {T.f(k['hs_eur'], 0)} €")
+    m[1].metric(f"Bisher ({alt}) pro Jahr", f"{T.f(k['alt_eur'], 0)} €",
+                help=f"{T.f(k['alt_kwh'], 0)} kWh · {T.f(k['preis_alt'], 2)} €/kWh · η {T.f(k['eta_alt'], 2)}")
+    anteil = f"{T.f(abs(k['ersparnis_eur']) / k['alt_eur'] * 100, 0)} %" if k["alt_eur"] > 0 else None
+    m[2].metric("Einsparung pro Jahr" if spar else "Mehrkosten pro Jahr", f"{T.f(abs(k['ersparnis_eur']), 0)} €",
+                delta=(f"−{anteil}" if spar else f"+{anteil}") if anteil else None, delta_color="inverse")
+    st.caption("Schätzung ohne Grund- und Zählergebühren, Wartung, Preisentwicklung und Förderung. "
+               "Bisheriger Bedarf = Jahreswärme / Nutzungsgrad; Heizöl: 1 l ≈ 10 kWh.")
+
+
 def mfh_bereich(r: dict, e: dict) -> None:
     v, MD = r["mfh"], D.mfh()
     a_ = MD["annahmen"][v["tabelle"]]
@@ -611,16 +738,14 @@ with rechts:
                 st.caption(f"Bivalenzpunkt {T.ft(g['bivalenz'])} °C: αH,a parallel ≈ {T.f(vb['alpha_parallel'], 2)}, "
                            f"alternativ ≈ {T.f(vb['alpha_alternativ'], 2)} (linear interpoliert).")
 
-        en = r.get("energie")
-        if en:
-            st.markdown("**Jahresbilanz (Schätzung)**")
-            if True:
-                c = st.columns(4)
-                c[0].metric("Jahreswärme Heizung + WW", f"{T.f(en['waerme_kwh'], 0)} kWh/a")
-                if en.get("scop"):
-                    c[1].metric("Strom Wärmepumpe", f"{T.f(en['strom_wp_kwh'], 0)} kWh/a", help=f"SCOP ≈ {T.f(en['scop'], 2)}")
-                    c[2].metric("Strom Heizstab", f"{T.f(en['strom_heizstab_kwh'], 0)} kWh/a")
-                    c[3].metric("Umweltwärme", f"{T.f(en['umwelt_kwh'], 0)} kWh/a")
+        if r.get("energie") and g:
+            st.markdown("**Alle Kennzahlen auf einen Blick**", help=T.GLOSSAR["scop"])
+            st.markdown(kennzahlen_html(r, E), unsafe_allow_html=True)
+            st.caption("Grobe Schätzung: Strom = Wärme · Deckungsanteil / SCOP (EN 14825, mittleres Klima, zwischen 35 und 55 °C "
+                       "interpoliert); Heizstab = Wärme · (1 − Deckungsanteil). Ohne SCOP im Katalog nur Jahreswärme und Deckungsanteil.")
+        if g:
+            schall_bereich(r, E)
+            kosten_bereich(r, E)
 
     with t_ger:
         st.markdown("**Mögliche Wärmepumpen** – kleinste passende Größe je Gerät (★ kleinste der Baureihe)")

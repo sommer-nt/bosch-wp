@@ -39,7 +39,9 @@ def szenarien():
         {"name": "huelle_monovalent", "eingaben": e_mit(heizlast__methode="huelle", heizlast__huell_a_m2=420, heizlast__ht=0.45,
                                                         heizlast__volumen_m3=480, auslegung="monovalent", vl=35, klima__nat=-14)},
         {"name": "mfh_gross_5001", "eingaben": e_mit(heizlast__vorgabe_kw=95, tww__personen=40, vl=65, serien=["CS5001", "CS8800"])},
-        {"name": "hybrid", "eingaben": e_mit(heizlast__vorgabe_kw=30, auslegung="hybrid", vl=60)},
+        {"name": "hybrid", "eingaben": e_mit(heizlast__vorgabe_kw=30, auslegung="hybrid", vl=60,
+                                             schall__abstand_m=3.5, schall__aufstellung="ecke", kosten__alt="oel", kosten__preis_alt=0.105,
+                                             kosten__eta_alt=0.82, kosten__strom_wp=0.25, kosten__strom_hs=0.4)},
         {"name": "manuell_kaskade", "eingaben": e_mit(heizlast__vorgabe_kw=18, heizkreise=[{"typ": "hk"}, {"typ": "fbh"}, {"typ": "konvektor"}], auswahl__geraet="CS8800iAW 11 O-T", auswahl__anzahl=2,
                                                       sperrzeit_h=6, tww__bezug="flaeche", tww__qwb=0.0343, tww__flaeche_m2=200,
                                                       tww__methode="nachheizzeit", tww__td=3)},
@@ -345,3 +347,19 @@ def test_prototyp_aktuell_und_ohne_preise():
     for feld in ("uvp", "ep", "summe"):   # keine Preise im Prototyp (auch nicht im MFH-Bestellvorschlag)
         assert not __import__("re").search(rf'"{feld}":\s*\d', soll), feld
     assert '"uvp":null' in soll
+
+
+def test_schall_und_kosten():
+    """TA Lärm A.2.4.3: Lp = LWA + 10·lg n + DΩ − 20·lg s − 11; Kosten WP + Heizstab gegen bisheriges System."""
+    from wp import hydraulik as HY
+    from wp import mfh as M
+    L = next(x for x in D.hydraulik()["loesungen"] if x["id"] == "2.1.3.6")      # 2 × CS8800 AW15 (LWA 50 dB)
+    e = HY.uebernehmen(P.neu(), L)
+    e["schall"] = {"abstand_m": 5.0, "aufstellung": "wand"}
+    r = M.rechne(e, D.geraete(), D.katalog(), D.mfh())
+    s = r["schall"]
+    assert s["lw_db"] == 50 and abs(s["lp_db"] - (50 + 10 * math.log10(2) + 6 - 20 * math.log10(5) - 11)) < 1e-9
+    assert [g["nacht_ok"] for g in s["gebiete"]][3] == (s["lp_db"] <= 40)
+    k, en = r["kosten"], r["energie"]
+    assert abs(k["neu_eur"] - (en["strom_wp_kwh"] * 0.28 + en["strom_heizstab_kwh"] * 0.35)) < 1e-6
+    assert abs(k["alt_eur"] - en["waerme_kwh"] / 0.90 * 0.12) < 1e-6 and abs(k["ersparnis_eur"] - (k["alt_eur"] - k["neu_eur"])) < 1e-9
