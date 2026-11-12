@@ -19,6 +19,8 @@ from . import rechnen as R
 from . import schema as S
 from . import texte as T
 
+ZWEITER = {"gas": "Gaskessel", "oel": "Ölkessel", "pellet": "Pelletkessel"}
+
 BILDER = Path(__file__).resolve().parent.parent / "daten" / "bilder"
 ENTWICKLER = "Entwickelt von Daniel Sommer · HC/SDE3-PSD"
 ROT = (226, 0, 21)
@@ -755,7 +757,9 @@ def pdf_bytes(e: dict, r: dict, daten: dict, katalog: dict) -> bytes:
         if en.get("scop"):
             q_ = en["waerme_kwh"] or 1
             werte += [("Strom Wärmepumpe", f"{T.f(en['strom_wp_kwh'], 0)} kWh/a ({T.f(en['strom_wp_kwh'] / q_ * 100, 0)} %)"),
-                      ("Strom Heizstab", f"{T.f(en['strom_heizstab_kwh'], 0)} kWh/a ({T.f(en['strom_heizstab_kwh'] / q_ * 100, 0)} %)"),
+                      ((f"Wärme {ZWEITER[r['zweiter']]}", f"{T.f(en['kessel_kwh'], 0)} kWh/a ({T.f(en['kessel_kwh'] / q_ * 100, 0)} %)")
+                       if r.get("zweiter") else
+                       ("Strom Heizstab", f"{T.f(en['strom_heizstab_kwh'], 0)} kWh/a ({T.f(en['strom_heizstab_kwh'] / q_ * 100, 0)} %)")),
                       ("Umweltwärme", f"{T.f(en['umwelt_kwh'], 0)} kWh/a ({T.f(en['umwelt_kwh'] / q_ * 100, 0)} %)")]
         s_, k_ = r.get("schall"), r.get("kosten")
         if s_ and r["waermequelle"] != "sole":
@@ -789,7 +793,9 @@ def pdf_bytes(e: dict, r: dict, daten: dict, katalog: dict) -> bytes:
                     "vereinfacht nach TA Lärm A.2.4.3 – für den Bauantrag den Höchstwert aus dem Datenblatt ansetzen.")
         if k_:
             alt_ = {"gas": "Erdgas", "oel": "Heizöl", "strom": "Strom-Direktheizung"}[k_["alt"]]
-            txt += (f" Kosten: Strom {T.f(k_['strom_wp'], 2)} €/kWh (Heizstab {T.f(k_['strom_hs'], 2)}) gegen {alt_} "
+            txt += (f" Kosten: Strom {T.f(k_['strom_wp'], 2)} €/kWh ("
+                    + (f"{ZWEITER[k_['zweiter']]} {T.f(k_['preis_kessel'], 2)} €/kWh, η {T.f(k_['eta_kessel'], 2)}" if k_.get("zweiter")
+                       else f"Heizstab {T.f(k_['strom_hs'], 2)}") + f") gegen {alt_} "
                     f"{T.f(k_['preis_alt'], 2)} €/kWh bei η {T.f(k_['eta_alt'], 2)} = {T.f(k_['alt_eur'], 0)} €/a; "
                     "ohne Grundgebühren, Wartung und Förderung.")
         pdf.multi_cell(184, 3.8, pdf.t(txt), new_x="LMARGIN", new_y="NEXT")

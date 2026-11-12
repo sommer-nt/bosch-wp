@@ -109,6 +109,9 @@ def neu_setzen(*pfade):
         ss.pop("w_" + p_, None)
 
 
+KESSEL_NAME = {"gas": "Gaskessel", "oel": "Ölkessel", "pellet": "Pelletkessel"}
+
+
 def kennzahlen_html(r: dict, e: dict) -> str:
     """Blaue Kennzahlen-Kachel wie energieHtml() in index.html."""
     en, g = r["energie"], r["gewaehlt"]
@@ -130,7 +133,8 @@ def kennzahlen_html(r: dict, e: dict) -> str:
     h += "".join(f"<div><div style='{t_}'>{a}</div><div style='{v_}'>{b}</div><div style='{s_}'>{c}</div></div>" for a, b, c in kopf)
     h += "</div>"
     if en.get("scop"):
-        teile = [("WP-Strom", en["strom_wp_kwh"], "#FFFFFF"), ("Heizstab", en["strom_heizstab_kwh"], "#FFCF00"),
+        teile = [("WP-Strom", en["strom_wp_kwh"], "#FFFFFF"),
+                 (KESSEL_NAME[r["zweiter"]], en["kessel_kwh"], "#FFCF00") if r.get("zweiter") else ("Heizstab", en["strom_heizstab_kwh"], "#FFCF00"),
                  ("Erdwärme" if r["waermequelle"] == "sole" else "Umweltwärme", en["umwelt_kwh"], "#00884A")]
         h += "<div style='margin-top:16px;display:grid;gap:6px'>"
         for n_, v, c in teile:
@@ -218,6 +222,14 @@ def kosten_bereich(r: dict, e: dict) -> None:
         zahl("Strom WP-Tarif [€/kWh]", "kosten.strom_wp", min_value=0.0, step=0.01, format="%.2f")
     with c[4]:
         zahl("Strom Heizstab [€/kWh]", "kosten.strom_hs", min_value=0.0, step=0.01, format="%.2f")
+    if r.get("zweiter"):
+        e["kosten"].setdefault("preis_kessel", R.KESSEL[r["zweiter"]][0])
+        e["kosten"].setdefault("eta_kessel", R.KESSEL[r["zweiter"]][1])
+        c2 = st.columns(5)
+        with c2[0]:
+            zahl("Brennstoff 2. WE [€/kWh]", "kosten.preis_kessel", min_value=0.0, step=0.01, format="%.2f")
+        with c2[1]:
+            zahl("Nutzungsgrad η 2. WE", "kosten.eta_kessel", min_value=0.3, max_value=1.1, step=0.01, format="%.2f")
     k = r["kosten"] = R.kosten(e, r)   # Eingaben stehen unter dem Ergebnis – hier nachrechnen
     if not k:
         st.caption(f"Für {r['gewaehlt']['geraet']} ist im Katalog noch kein SCOP hinterlegt – ohne SCOP keine Strom- und Kostenschätzung.")
@@ -226,7 +238,8 @@ def kosten_bereich(r: dict, e: dict) -> None:
     spar = k["ersparnis_eur"] >= 0
     m = st.columns(3)
     m[0].metric("Wärmepumpe pro Jahr", f"{T.f(k['neu_eur'], 0)} €",
-                help=f"WP-Strom {T.f(k['wp_eur'], 0)} € + Heizstab {T.f(k['hs_eur'], 0)} €")
+                help=f"WP-Strom {T.f(k['wp_eur'], 0)} € + " + (f"{KESSEL_NAME[k['zweiter']]} {T.f(k['kessel_eur'], 0)} €" if k.get("zweiter")
+                                                               else f"Heizstab {T.f(k['hs_eur'], 0)} €"))
     m[1].metric(f"Bisher ({alt}) pro Jahr", f"{T.f(k['alt_eur'], 0)} €",
                 help=f"{T.f(k['alt_kwh'], 0)} kWh · {T.f(k['preis_alt'], 2)} €/kWh · η {T.f(k['eta_alt'], 2)}")
     anteil = f"{T.f(abs(k['ersparnis_eur']) / k['alt_eur'] * 100, 0)} %" if k["alt_eur"] > 0 else None
@@ -404,7 +417,14 @@ with links:
                 M.eingaben_folgen(E, "mfh.system")
                 neu_setzen("auslegung")
                 st.rerun()
-            st.caption("Monoenergetisch = Wärmepumpe mit Heizstab. Hybrid = Gas-Brennwertgerät und Wärmepumpe CS5800/6800 über das Hybridmodul MH200 (Bestand, 6–8 WE). Bivalent = Gaskessel und Wärmepumpe CS5001 über den Kaskadenregler CC8000 (Bestand, ab 10 WE). Hybrid und bivalent werden nach dem GEG-Hybrid-Kriterium ausgelegt (Wärmepumpe mind. 30 % der Heizlast).")
+            st.caption("Monoenergetisch = Wärmepumpe mit Heizstab. Hybrid = Gas-Brennwertgerät und Wärmepumpe CS5800/6800 über das Hybridmodul MH200 (Bestand, 6–8 WE). Bivalent = Kessel (Gas, Öl oder Pellet) und Wärmepumpe CS5001 über den Kaskadenregler CC8000 (Bestand, ab 10 WE). Hybrid und bivalent werden nach dem GEG-Hybrid-Kriterium ausgelegt (Wärmepumpe mind. 30 % der Heizlast).")
+            if anl_akt != "mono":
+                E.setdefault("zweiter", "gas")
+                if wahl("Zweiter Wärmeerzeuger", "zweiter", {"gas": "Gas-Brennwert", "oel": "Öl-Brennwert", "pellet": "Pellet"}, radio=False):
+                    E["kosten"]["preis_kessel"], E["kosten"]["eta_kessel"] = R.KESSEL[E["zweiter"]]
+                    neu_setzen("kosten.preis_kessel", "kosten.eta_kessel")
+                    st.rerun()
+                st.caption("Für Öl- und Pelletkessel sind keine Produkte hinterlegt – Kessel nach Herstellerunterlage planen. Die Restwärme (1 − Deckungsanteil) liefert der Kessel statt eines Heizstabs.")
             st.caption("MFH-Musterlösungen: je WE 80 m² und 3,5 Personen (Personen und Wohnfläche werden vorbelegt). "
                        "Zentral = Frischwasserstation mit eigenem Puffer (> 60 °C), dezentral = Wohnungsstationen (HIU, 2-Leiter, "
                        "< 60 °C), ohne = elektrische Durchlauferhitzer je Wohnung, Speicher = Warmwasserspeicher an der Wärmepumpe – "
@@ -770,7 +790,7 @@ with rechts:
             st.markdown("**Alle Kennzahlen auf einen Blick**", help=T.GLOSSAR["scop"])
             st.markdown(kennzahlen_html(r, E), unsafe_allow_html=True)
             st.caption("Grobe Schätzung: Strom = Wärme · Deckungsanteil / SCOP (EN 14825, mittleres Klima, zwischen 35 und 55 °C "
-                       "interpoliert); Heizstab = Wärme · (1 − Deckungsanteil). Ohne SCOP im Katalog nur Jahreswärme und Deckungsanteil.")
+                       "interpoliert); Restwärme = Wärme · (1 − Deckungsanteil) über Heizstab bzw. Kessel (Hybrid / bivalent). Ohne SCOP im Katalog nur Jahreswärme und Deckungsanteil.")
         if g:
             schall_bereich(r, E)
             kosten_bereich(r, E)

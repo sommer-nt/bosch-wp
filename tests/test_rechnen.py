@@ -52,6 +52,10 @@ def szenarien():
         {"name": "sole_gross", "eingaben": e_mit(heizlast__vorgabe_kw=40, waermequelle="sole", auslegung="monovalent", vl=35)},
         {"name": "liter_grossanlage", "eingaben": e_mit(heizlast__vorgabe_kw=60, tww__personen=30, tww__liter_p=40,
                                                         aufstellung__entfernung_m=25, vl=50)},
+        {"name": "mfh_bivalent_oel", "eingaben": e_mit(heizlast__vorgabe_kw=45, auslegung="hybrid", vl=55, zweiter="oel",
+                                                       mfh__art="mfh", mfh__system="bivalent", kosten__preis_kessel=0.10, kosten__eta_kessel=0.9)},
+        {"name": "mfh_hybrid_pellet", "eingaben": e_mit(heizlast__vorgabe_kw=25, auslegung="hybrid", vl=55, zweiter="pellet",
+                                                        mfh__art="mfh", mfh__system="hybrid")},
         {"name": "din18599_personen", "eingaben": e_mit(heizlast__vorgabe_kw=8, tww__bezug="personen", tww__qwb=1.1,
                                                         tww__methode="auto", aufstellung__entfernung_m=0)},
     ]
@@ -386,3 +390,14 @@ def test_schall_und_kosten():
     k, en = r["kosten"], r["energie"]
     assert abs(k["neu_eur"] - (en["strom_wp_kwh"] * 0.28 + en["strom_heizstab_kwh"] * 0.35)) < 1e-6
     assert abs(k["alt_eur"] - en["waerme_kwh"] / 0.90 * 0.12) < 1e-6 and abs(k["ersparnis_eur"] - (k["alt_eur"] - k["neu_eur"])) < 1e-9
+
+
+def test_zweiter_waermeerzeuger():
+    """Hybrid / bivalent: Restwärme liefert der Kessel (nicht der Heizstab) – Kosten mit Brennstoffpreis und Nutzungsgrad."""
+    r = rechne(sz("mfh_bivalent_oel"))
+    en, k = r["energie"], r["kosten"]
+    assert r["zweiter"] == "oel" and en["strom_heizstab_kwh"] == 0
+    assert abs(en["kessel_kwh"] - en["waerme_kwh"] * (1 - r["gewaehlt"]["deckung"])) < 1e-6
+    assert abs(k["kessel_eur"] - en["kessel_kwh"] / 0.9 * 0.10) < 1e-6 and abs(k["neu_eur"] - k["wp_eur"] - k["kessel_eur"]) < 1e-9
+    r2 = rechne(e_mit(heizlast__vorgabe_kw=45, auslegung="hybrid", mfh__art="mfh", mfh__system="mono"))   # Kriterium allein: kein Kessel
+    assert r2["zweiter"] is None and r2["energie"]["kessel_kwh"] == 0

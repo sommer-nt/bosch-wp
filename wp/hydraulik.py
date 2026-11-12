@@ -18,7 +18,7 @@ WW_ERGAENZEN = {"friwa": "Frischwasserstation mit eigenem Warmwasser-Puffer erg�
                 "dle": "Warmwasserteil entfällt – Durchlauferhitzer je Wohnung",
                 "speicher": "Warmwasserspeicher an der Wärmepumpe ergänzen"}
 SYSTEM_TEXT = {"mono": "monoenergetisch/monovalent", "hybrid": "Hybrid MH200 (Gas-Brennwert + Wärmepumpe)",
-               "bivalent": "bivalent CC8000 (Gaskessel + Wärmepumpe)"}
+               "bivalent": "bivalent CC8000 (Kessel + Wärmepumpe)"}
 SYSTEM_ERGAENZEN = {"hybrid": "Gas-Brennwertgerät als Hybrid über das Hybridmodul MH200 einbinden",
                     "bivalent": "Gaskessel bivalent über den Kaskadenregler CC8000 einbinden",
                     "mono": "zweiten Wärmeerzeuger des Schemas weglassen (monoenergetisch mit Heizstab)"}
@@ -90,6 +90,11 @@ def hinweise(e: dict, r: dict, lib: dict) -> list[str]:
         t.append("Wohnungsstationen mit E-Nacherwärmung (HPS): Das Heiznetz läuft nur mit ca. 45 °C, ein Durchlauferhitzer "
                  "(ca. 13 kW) in jeder Station heizt das Warmwasser nach. Die Wärmepumpe arbeitet dadurch effizienter, "
                  "dafür kommt Strom in den Wohnungen dazu.")
+    if system_art(e, lib) != "mono" and e.get("zweiter") in ("oel", "pellet"):
+        k = {"oel": "Ölkessel", "pellet": "Pelletkessel"}[e["zweiter"]]
+        t.append(f"Zweiter Wärmeerzeuger {k}: Die Hydrauliken der Musterlösungen zeigen einen Gaskessel – den {k} an gleicher "
+                 f"Stelle einbinden{' (mit Pufferspeicher für den Pelletkessel)' if e['zweiter'] == 'pellet' else ''}; "
+                 "Kessel nach Herstellerunterlage planen.")
     if not any(x["passend"] for x in schemata(e, r, lib)):
         t.append("Für diese Kombination enthalten die Musterlösungen keine Hydraulikzeichnung (bei einigen Ordnern liegen dort nur "
                  "die Auslegungen bei). Vorgeschlagen ist die ähnlichste Hydraulik als Vorlage – was anzupassen ist, steht darunter.")

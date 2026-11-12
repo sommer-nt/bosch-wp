@@ -36,7 +36,8 @@ STANDARD: dict = {
     "preise_drucken": False,
     "ansicht": {"t_marke": None},   # Ablese-Linie im Diagramm (None = θe), nur Anzeige
     "schall": {"abstand_m": 5.0, "aufstellung": "frei"},
-    "kosten": {"strom_wp": 0.28, "strom_hs": 0.35, "alt": "gas", "preis_alt": 0.12, "eta_alt": 0.90},
+    "kosten": {"strom_wp": 0.28, "strom_hs": 0.35, "alt": "gas", "preis_alt": 0.12, "eta_alt": 0.90, "preis_kessel": 0.12, "eta_kessel": 0.95},
+    "zweiter": "gas",   # zweiter Wärmeerzeuger bei Hybrid / bivalent: gas, oel, pellet
 }
 
 

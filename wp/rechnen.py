@@ -389,6 +389,15 @@ def werte_im_bereich(k, ts: list, n: int) -> list:
     return [n * k[0](t) if k[1] - 1e-9 <= t <= k[2] + 1e-9 else None for t in ts]
 
 
+def anlagenart(e: dict) -> str:
+    """mono / hybrid / bivalent: Wahl beim Mehrfamilienhaus (auch aus der übernommenen Musterlösung), sonst Betriebsweise.
+    Nicht das Kriterium allein – die Excel-Auslegungen nutzen GEG-Hybrid auch bei monoenergetischen Anlagen."""
+    m = e.get("mfh") or {}
+    if m.get("art") == "mfh" and m.get("system") in ("mono", "hybrid", "bivalent"):
+        return m["system"]
+    return "hybrid" if e.get("auslegung") == "hybrid" else "mono"
+
+
 def rechne(e: dict, daten: dict, katalog: dict | None = None) -> dict:
     """Komplette Auslegung zu den Eingaben e (Format siehe STANDARD in wp/projekt.py)."""
     k = e["klima"]
@@ -405,7 +414,8 @@ def rechne(e: dict, daten: dict, katalog: dict | None = None) -> dict:
     mindest = FAKTOR[krit] * (qh if krit == "hybrid" else qges)
     r = {"nat": nat, "heizgrenze": thg, "innen": float(k["innen"]), "vl": vl, "heizlast": hl["d"], "qh": qh,
          "qtw": qtw, "tww_kwh": tww_jahresenergie(e), "qsperr": qsperr, "waermequelle": quelle, "qges": qges, "kriterium": krit,
-         "faktor": FAKTOR[krit], "mindestleistung": mindest, "hinweise": list(hl["hinweise"])}
+         "faktor": FAKTOR[krit], "mindestleistung": mindest, "hinweise": list(hl["hinweise"]),
+         "zweiter": (e.get("zweiter") if e.get("zweiter") in KESSEL else "gas") if anlagenart(e) != "mono" else None}
     tw = tww_temperaturen(e)
     tw.update(aktiv=bool(e["tww"].get("aktiv", True)), methode=tww_methode, kw_person=tww_kwp,
               qwb_person=tww_qwb_person(e) if e["tww"].get("bezug") != "flaeche" else None)
@@ -557,6 +567,8 @@ TA_LAERM = (("Industriegebiet", 70, 70), ("Gewerbegebiet", 65, 50), ("Kern-, Dor
             ("allgemeines Wohngebiet", 55, 40), ("reines Wohngebiet", 50, 35), ("Kurgebiet, Krankenhaus", 45, 35))
 # Vorgabewerte Energiekosten (€/kWh, Nutzungsgrad) – im Tool überschreibbar
 KOSTEN_ALT = {"gas": (0.12, 0.90), "oel": (0.11, 0.85), "strom": (0.35, 1.0)}
+# Zweiter Wärmeerzeuger bei Hybrid / bivalent: Brennstoffpreis €/kWh und Jahresnutzungsgrad (Vorgabe, im Tool änderbar)
+KESSEL = {"gas": (0.12, 0.95), "oel": (0.11, 0.93), "pellet": (0.08, 0.88)}
 
 
 def schall(e: dict, r: dict, katalog: dict | None) -> dict | None:
@@ -588,9 +600,14 @@ def kosten(e: dict, r: dict) -> dict | None:
     p_alt = float(k.get("preis_alt") if k.get("preis_alt") is not None else KOSTEN_ALT[alt][0])
     eta = float(k.get("eta_alt") if k.get("eta_alt") is not None else KOSTEN_ALT[alt][1])
     wp, hs = en["strom_wp_kwh"] * p_wp, en["strom_heizstab_kwh"] * p_hs
+    zw = r.get("zweiter")
+    p_k = float(k.get("preis_kessel") if k.get("preis_kessel") is not None else KESSEL[zw or "gas"][0])
+    eta_k = float(k.get("eta_kessel") if k.get("eta_kessel") is not None else KESSEL[zw or "gas"][1])
+    kes = en.get("kessel_kwh", 0.0) / max(eta_k, 0.1) * p_k if zw else 0.0
     bedarf_alt = en["waerme_kwh"] / max(eta, 0.1)
-    return {"wp_eur": wp, "hs_eur": hs, "neu_eur": wp + hs, "alt": alt, "alt_kwh": bedarf_alt, "alt_eur": bedarf_alt * p_alt,
-            "ersparnis_eur": bedarf_alt * p_alt - wp - hs, "strom_wp": p_wp, "strom_hs": p_hs, "preis_alt": p_alt, "eta_alt": eta}
+    return {"wp_eur": wp, "hs_eur": hs, "kessel_eur": kes, "neu_eur": wp + hs + kes, "alt": alt, "alt_kwh": bedarf_alt,
+            "alt_eur": bedarf_alt * p_alt, "ersparnis_eur": bedarf_alt * p_alt - wp - hs - kes, "strom_wp": p_wp, "strom_hs": p_hs,
+            "preis_alt": p_alt, "eta_alt": eta, "zweiter": zw, "preis_kessel": p_k, "eta_kessel": eta_k}
 
 
 def energie(e: dict, r: dict, katalog: dict | None) -> dict | None:
@@ -607,13 +624,15 @@ def energie(e: dict, r: dict, katalog: dict | None) -> dict | None:
     q = q_heiz + q_ww
     kat = (katalog or {}).get("geraete", {}).get(g["geraet"], {})
     s35, s55 = kat.get("scop35"), kat.get("scop55")
+    # Restwärme: Heizstab (monoenergetisch) bzw. Kessel des zweiten Wärmeerzeugers (Hybrid / bivalent)
+    q_rest = q * (1 - g["deckung"])
+    kessel = q_rest if r.get("zweiter") else 0.0
     if s35 is None or s55 is None:
-        return {"waerme_kwh": q, "heiz_kwh": q_heiz, "ww_kwh": q_ww, "scop": None}
+        return {"waerme_kwh": q, "heiz_kwh": q_heiz, "ww_kwh": q_ww, "scop": None, "kessel_kwh": kessel}
     w = min(1.0, max(0.0, (r["vl"] - 35) / 20))
     scop = s35 + (s55 - s35) * w
     q_wp = q * g["deckung"]
     strom_wp = q_wp / scop
-    strom_hs = q - q_wp
     return {"waerme_kwh": q, "heiz_kwh": q_heiz, "ww_kwh": q_ww, "scop": scop, "strom_wp_kwh": strom_wp,
-            "strom_heizstab_kwh": strom_hs, "umwelt_kwh": q_wp - strom_wp}
+            "strom_heizstab_kwh": q_rest - kessel, "kessel_kwh": kessel, "umwelt_kwh": q_wp - strom_wp}
 

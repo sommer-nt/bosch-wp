@@ -205,7 +205,8 @@ def schema_svg(r: dict, ie: dict | None, kreise: list[dict], F: dict, W: int = 9
         s += box(xG, yB, 70, 50, 8)
         s += (f'<path d="M{xG + 35},{yB + 40} C{xG + 22},{yB + 34} {xG + 26},{yB + 22} {xG + 35},{yB + 10} '
               f'C{xG + 44},{yB + 22} {xG + 48},{yB + 34} {xG + 35},{yB + 40} Z" fill="none" stroke="{F["ink"]}" stroke-width="2"/>')
-        s += lab(xG + 35, "Gas-Wärmeerzeuger", "Hybrid / bivalent", "")
+        s += lab(xG + 35, {"gas": "Gas-Brennwertgerät", "oel": "Öl-Brennwertkessel", "pellet": "Pelletkessel"}.get(r.get("zweiter"), "Gas-Brennwertgerät"),
+                 "2. Wärmeerzeuger", "")
         s += ln(f"M{xG + 70},{yB + 10} L{xP},{yB + 10}", F["vl"]) + ln(f"M{xG + 70},{yB + 40} L{xP},{yB + 40}", F["rl"], True)
 
     if hiu:

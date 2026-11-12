@@ -24,7 +24,7 @@
  "systeme": {
   "mono": "Monoenergetisch",
   "hybrid": "Hybrid MH200 (Gas-Brennwert + Wärmepumpe)",
-  "bivalent": "Bivalent CC8000 (Gaskessel + Wärmepumpe, Kaskadenregler)"
+  "bivalent": "Bivalent CC8000 (Kessel + Wärmepumpe, Kaskadenregler)"
  },
  "zellen": [
   {
