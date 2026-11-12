@@ -17,6 +17,11 @@ WW_ERGAENZEN = {"friwa": "Frischwasserstation mit eigenem Warmwasser-Puffer erg�
                 "hiu": "Wohnungsstationen (HIU) über ein 2-Leiter-Netz ab dem Heizungspuffer ergänzen",
                 "dle": "Warmwasserteil entfällt – Durchlauferhitzer je Wohnung",
                 "speicher": "Warmwasserspeicher an der Wärmepumpe ergänzen"}
+SYSTEM_TEXT = {"mono": "monoenergetisch/monovalent", "hybrid": "Hybrid MH200 (Gas-Brennwert + Wärmepumpe)",
+               "bivalent": "bivalent CC8000 (Gaskessel + Wärmepumpe)"}
+SYSTEM_ERGAENZEN = {"hybrid": "Gas-Brennwertgerät als Hybrid über das Hybridmodul MH200 einbinden",
+                    "bivalent": "Gaskessel bivalent über den Kaskadenregler CC8000 einbinden",
+                    "mono": "zweiten Wärmeerzeuger des Schemas weglassen (monoenergetisch mit Heizstab)"}
 
 
 def ww_art(e: dict, r: dict) -> str:
@@ -29,12 +34,16 @@ def ww_art(e: dict, r: dict) -> str:
 
 
 def system_art(e: dict, lib: dict | None = None) -> str:
-    """Anlagenart: aus der übernommenen Musterlösung (deren Excel-Auslegung nutzt oft das GEG-Hybrid-Kriterium auch bei
-    monoenergetischen Anlagen), sonst aus der Betriebsweise (GEG-Hybrid → Hybrid mit zweitem Wärmeerzeuger)."""
+    """Anlagenart mono / hybrid (MH200) / bivalent (CC8000): aus der übernommenen Musterlösung (deren Excel-Auslegung nutzt
+    oft das GEG-Hybrid-Kriterium auch bei monoenergetischen Anlagen), sonst aus der Wahl beim Mehrfamilienhaus, sonst aus der
+    Betriebsweise (GEG-Hybrid → Hybrid mit zweitem Wärmeerzeuger)."""
     nr = (e.get("hydraulik") or {}).get("loesung")
     L = next((x for x in (lib or {}).get("loesungen", []) if x["id"] == nr), None) if nr else None
     if L:
-        return "mono" if L["system"] == "mono" else "hybrid"
+        return L["system"]
+    m = e.get("mfh") or {}
+    if m.get("art") == "mfh" and m.get("system") in SYSTEM_TEXT:
+        return m["system"]
     return "hybrid" if e.get("auslegung") == "hybrid" else "mono"
 
 
@@ -42,7 +51,7 @@ def bewerte(e: dict, r: dict, s: dict, lib: dict | None = None) -> dict:
     g = r["gewaehlt"]
     sys_ = system_art(e, lib)
     passt = {"serie": g["serie"] in s["serien"], "anzahl": g["n"] in s["anzahl"], "ww": ww_art(e, r) in s["ww"],
-             "system": sys_ in s["system"] or (sys_ == "hybrid" and "bivalent" in s["system"])}
+             "system": sys_ in s["system"]}
     punkte = sum(p for k, _, p in MERKMALE if passt[k])
     passend = all(passt.values())
     return {"id": s["id"], "titel": s["titel"], "loesungen": s["loesungen"], "passt": passt, "punkte": punkte,
@@ -62,8 +71,7 @@ def anpassen(passt: dict, g: dict, s: dict, ww: str, sys_: str) -> list[str]:
     if not passt["ww"]:
         t.append("Warmwasser: " + WW_ERGAENZEN[ww])
     if not passt["system"]:
-        t.append("Betriebsweise: " + ("zweiten Wärmeerzeuger (Gas) als Hybrid ergänzen" if sys_ == "hybrid"
-                                      else "zweiten Wärmeerzeuger des Schemas weglassen (monoenergetisch mit Heizstab)"))
+        t.append("Anlagenart: " + SYSTEM_ERGAENZEN[sys_])
     return t
 
 
@@ -83,8 +91,8 @@ def hinweise(e: dict, r: dict, lib: dict) -> list[str]:
                  "(ca. 13 kW) in jeder Station heizt das Warmwasser nach. Die Wärmepumpe arbeitet dadurch effizienter, "
                  "dafür kommt Strom in den Wohnungen dazu.")
     if not any(x["passend"] for x in schemata(e, r, lib)):
-        t.append("Für diese Kombination enthalten die Musterlösungen keine Hydraulikzeichnung (bei FriWa, HIU und bivalent liegen "
-                 "dort nur die Auslegungen bei). Vorgeschlagen ist die ähnlichste Hydraulik als Vorlage – was anzupassen ist, steht darunter.")
+        t.append("Für diese Kombination enthalten die Musterlösungen keine Hydraulikzeichnung (bei einigen Ordnern liegen dort nur "
+                 "die Auslegungen bei). Vorgeschlagen ist die ähnlichste Hydraulik als Vorlage – was anzupassen ist, steht darunter.")
     return t
 
 
@@ -147,7 +155,7 @@ def uebernehmen(e: dict, L: dict) -> dict:
     else:
         n["heizlast"].update(methode="vorgabe", vorgabe_kw=a.get("vorgabe_kw") or (a.get("qges") or 0.0))
     n["heizlast"]["gebaeudeart"], n["heizlast"]["vbh"] = "MFH", 2000
-    n["mfh"].update(art="mfh", we=L["we"] or n["mfh"]["we"], ww=L["ww"], zelle="", system="mono" if L["system"] == "mono" else "hybrid")
+    n["mfh"].update(art="mfh", we=L["we"] or n["mfh"]["we"], ww=L["ww"], zelle="", system=L["system"])
     n["tww"].update(aktiv=a.get("personen", 0) > 0, system="speicher" if L["ww"] == "speicher" else "friwa",
                     personen=a.get("personen") or 0, methode="personen", kw_person=a.get("kw_person") or 0.1)
     n["sperrzeit_h"] = int(a.get("sperrzeit_h") or 0)

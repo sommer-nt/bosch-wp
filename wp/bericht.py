@@ -405,7 +405,10 @@ def mfh_seite(pdf: Ausdruck, e: dict, r: dict, v: dict, preise: bool) -> None:
                                        "Anlage individuell planen."), new_x="LMARGIN", new_y="NEXT")
     for a in v["auswahl"]:
         z = a["zelle"]
-        pdf.h2(f"{z.get('erzeuger') or 'Monoenergetisch'} · {z['we']} WE / {z['kw']} kW" + (f" · {z['variante']}" if z.get("variante") else ""))
+        pdf.h2(f"{D.mfh()['systeme'][z['system']]} · {z['we']} WE / {z['kw']} kW" + (f" · {z['komponenten'][0]}" if z["system"] != "mono" else ""))
+        pdf.schrift_(8.4, False)
+        pdf.multi_cell(184, 4.2, pdf.t(f"Musterlösung {z.get('loesung') or '–'} · Bestellvorschlag-Nr. {D.bv_nr(z.get('loesung')) or '–'}"),
+                       new_x="LMARGIN", new_y="NEXT")
         pdf.schrift_(8.4, True)
         pdf.multi_cell(184, 4.2, pdf.t(" · ".join(z["komponenten"]) + (f"   (Summe netto {T.euro(z['summe'])})" if preise else "")),
                        new_x="LMARGIN", new_y="NEXT")
@@ -637,7 +640,7 @@ def pdf_bytes(e: dict, r: dict, daten: dict, katalog: dict) -> bytes:
     if hg and D.hydraulik_bild(hg["id"]).exists():
         pdf.schrift_(8.4, True)
         pdf.multi_cell(184, 4.2, pdf.t(f"Hydraulik: {hg['titel']} ({'ausgewählt' if hg['manuell'] else 'vorgeschlagen'}"
-                                       f" · {HY.STUFE_TEXT[hg['stufe']]} · Musterlösungen {', '.join(hg['loesungen'])})"),
+                                       f" · {HY.STUFE_TEXT[hg['stufe']]} · Musterlösungen {', '.join(D.mit_bv(n_) for n_ in hg['loesungen'])})"),
                        new_x="LMARGIN", new_y="NEXT")
         if hg["anpassen"]:
             pdf.schrift_(7.6)

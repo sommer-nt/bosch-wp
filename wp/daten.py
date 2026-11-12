@@ -71,3 +71,14 @@ def hydraulik() -> dict:
 
 def hydraulik_bild(sid: str):
     return DATEN / "hydrauliken" / f"{sid}.png"
+
+
+def bv_nr(loesung: str | None) -> str:
+    """Bestellvorschlag-Nr. (10-stellig, 4000…) einer Musterlösung, sonst ''."""
+    return next((L.get("bv_nr") or "" for L in hydraulik()["loesungen"] if L["id"] == loesung), "") if loesung else ""
+
+
+def mit_bv(loesung: str) -> str:
+    """Musterlösung mit Bestellvorschlag-Nr. (wie mitBv() in index.html)."""
+    nr = bv_nr(loesung)
+    return f"{loesung} (Bestellvorschlag-Nr. {nr})" if nr else loesung

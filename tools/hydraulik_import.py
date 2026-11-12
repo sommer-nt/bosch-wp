@@ -10,7 +10,7 @@ Durchsucht die entpackten ZIP-Ordner (z. B. „1.1_Monoenergetisch/…/1.1.3.7_1
   W/m², Fläche bzw. kW, Personen, Lastprofil, Sperrzeit, Kriterium, Vorlauf, Wärmepumpe) für den Rechenkern,
 und schreibt daten/hydrauliken.json. Ordnerstruktur: 1.x Bestand, 2.x Neubau; x.1 monoenergetisch, 1.2 bivalent,
 1.3 Hybrid, x.4/2.2 Fernwärme (ohne Wärmepumpe, nicht übernommen); Warmwasser aus dem Unterordner (Zentral = FriWa,
-Dezentral = HIU, Ohne WW = DLE, Speicher). Bestellvorschläge und Checklisten werden nicht übernommen.
+Dezentral = HIU, Ohne WW = DLE, Speicher). Von Bestellvorschlägen wird nur die Bestellvorschlagsnummer übernommen (bv_nr), Checklisten nicht.
 Braucht pdftotext/pdftoppm (poppler-utils) und Pillow.
 """
 from __future__ import annotations
@@ -41,8 +41,10 @@ def art(f: Path) -> str | None:
     n = f.name.lower()
     if f.suffix.lower() != ".pdf":
         return None
-    if re.match(r"4000\d{3,}", n) or "checkliste" in n or "news" in n or "deckungsanteil" in n:
-        return None                       # Bestellvorschläge / Checklisten / Infoblätter nicht übernehmen
+    if re.match(r"4000\d{3,}", n):
+        return "bv"                       # Bestellvorschlag: nur die Bestellvorschlagsnummer übernehmen
+    if "checkliste" in n or "news" in n or "deckungsanteil" in n:
+        return None                       # Checklisten / Infoblätter nicht übernehmen
     if n.startswith("hiu"):
         return "hiu"
     if "tww" in n or n.startswith("ww-"):
@@ -50,6 +52,13 @@ def art(f: Path) -> str | None:
     if "auslegung" in n:
         return "wp"
     return "schema"
+
+
+def bestellvorschlag(pdf: Path) -> str | None:
+    """Bestellvorschlagsnummer (10-stellig, 4000…) von Seite 1 des Bestellvorschlags – Dateinamen sind oft gekürzt."""
+    t = subprocess.run(["pdftotext", "-l", "1", str(pdf), "-"], capture_output=True, text=True).stdout
+    m = re.search(r"Bestellvorschlagsnummer[^\n]*\n\s*\n?\s*(4000\d{6})", t)
+    return m.group(1) if m else None
 
 
 # ------------------------------------------------------------------------------------------------ Einordnung
@@ -189,9 +198,13 @@ def main(ordner: list[str]) -> None:
                 continue
             if not info["geraet"]:
                 info["geraet"], info["n"] = matrix_geraet(info)
-            L = loesungen.setdefault(nr, {**info, "schemata": [], "auslegung": None, "tww": [], "hiu": []})
+            L = loesungen.setdefault(nr, {**info, "bv_nr": None, "schemata": [], "auslegung": None, "tww": [],
+                                                 "hiu": []})
             a = art(f)
-            if a == "wp":
+            if a == "bv":
+                if not L["bv_nr"]:
+                    L["bv_nr"] = bestellvorschlag(f)
+            elif a == "wp":
                 if L["auslegung"]:
                     continue                                          # zweite (gleiche) Auslegung im Ordner
                 L["auslegung"] = auslegung(f)

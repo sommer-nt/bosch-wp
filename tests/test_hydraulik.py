@@ -80,7 +80,15 @@ def faelle():
            for we in (4, 10, 16) for a in ("monoenergetisch", "hybrid")]
     e = mfh_eingabe("neubau", 10, "dle")
     e["hydraulik"]["schema"] = "6721896658"
-    return out + [e] + [HY.uebernehmen(P.neu(), L) for L in LIB["loesungen"] if L["auslegung"]][:12]
+    anl = []   # Anlagenart gewählt: Hybrid MH200 (6–8 WE) und bivalent CC8000 (ab 10 WE)
+    for sys_, we in (("hybrid", 6), ("hybrid", 8), ("bivalent", 10), ("bivalent", 16), ("mono", 12)):
+        for ww in ("friwa", "hiu", "dle"):
+            x = mfh_eingabe("sanierung", we, ww)
+            x["mfh"]["system"] = sys_
+            M.eingaben_folgen(x, "mfh.system")
+            anl.append(x)
+    ueb = [HY.uebernehmen(P.neu(), L) for L in LIB["loesungen"] if L["auslegung"]]
+    return out + [e] + anl + ueb[:12] + [x for x in ueb if x["mfh"]["system"] != "mono"]
 
 
 @pytest.mark.skipif(shutil.which("node") is None, reason="node nicht installiert")
@@ -97,3 +105,35 @@ def test_hydraulik_python_gleich_html(tmp_path):
                "hinweise": HY.hinweise(e, r, LIB)}, j)
     for nr, j in zip(loes, js["uebernehmen"]):
         gleich(HY.uebernehmen(P.neu(), next(L for L in LIB["loesungen"] if L["id"] == nr)), j)
+
+
+def test_bestellvorschlag_und_anlagenart():
+    """Jede Musterlösung hat ihre Bestellvorschlag-Nr.; die Kostenübersicht verweist auf die Musterlösung mit gleicher Anlagenart."""
+    import re
+    loes = {L["id"]: L for L in LIB["loesungen"]}
+    assert all(re.fullmatch(r"4000\d{6}", L["bv_nr"] or "") for L in loes.values())
+    assert len({L["bv_nr"] for L in loes.values()}) == len(loes)
+    for z in D.mfh()["zellen"]:
+        L = loes[z["loesung"]]
+        assert (z["system"], z["ww"], z["we"]) == (L["system"], L["ww"], L["we"]), z["id"]
+        assert z["tabelle"] == L["gebaeude"]
+    assert {z["system"] for z in D.mfh()["zellen"]} == {"mono", "hybrid", "bivalent"}
+    assert D.mit_bv("1.2.1.1") == "1.2.1.1 (Bestellvorschlag-Nr. 4000161192)"
+
+
+def test_bivalent_eigene_hydraulik():
+    """Bivalent (CC8000) und Hybrid (MH200) sind getrennt: jede Musterlösung findet ihr eigenes Schema, nicht das der anderen Art."""
+    for L in LIB["loesungen"]:
+        if L["system"] == "mono" or not L["auslegung"]:
+            continue
+        e = HY.uebernehmen(P.neu(), L)
+        r = rechne(e)
+        assert HY.system_art(e, LIB) == L["system"]
+        g = HY.gewaehlt(e, r, LIB)
+        assert g and g["stufe"] == "passt" and L["system"] in next(s for s in LIB["schemata"] if s["id"] == g["id"])["system"], L["id"]
+    x = mfh_eingabe("sanierung", 14, "friwa")
+    x["mfh"]["system"] = "bivalent"
+    M.eingaben_folgen(x, "mfh.system")
+    r = rechne(x)
+    assert x["auslegung"] == "hybrid" and r["mfh"]["system"] == "bivalent"
+    assert all(a["zelle"]["system"] == "bivalent" for a in r["mfh"]["auswahl"])

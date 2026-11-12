@@ -29,7 +29,7 @@ def kurzbericht(e: dict, r: dict, katalog: dict) -> str:
     h = HY.gewaehlt(e, r, D.hydraulik()) if r.get("gewaehlt") else None
     if h:
         z += ["", "Hydraulik", f"- {h['titel']} ({'ausgewählt' if h['manuell'] else 'vorgeschlagen'} · "
-              f"{HY.STUFE_TEXT[h['stufe']]}) – Musterlösungen {', '.join(h['loesungen'])}"]
+              f"{HY.STUFE_TEXT[h['stufe']]}) – Musterlösungen {', '.join(D.mit_bv(x) for x in h['loesungen'])}"]
         z += ["- Anpassen: " + t for t in h["anpassen"]]
     return "\r\n".join(z) + "\r\n"
 

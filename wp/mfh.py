@@ -27,12 +27,15 @@ def eingaben_folgen(e: dict, k: str) -> None:
     beide mit Puffer); Wohneinheiten → Personen (3,5 je WE) und Wohnfläche (80 m² je WE) wie in den Musterlösungen.
     """
     m = e["mfh"]
-    if k in ("mfh.art", "mfh.ww", "mfh.we", "gebaeude.typ", "auslegung"):
+    if k in ("mfh.art", "mfh.ww", "mfh.we", "mfh.system", "gebaeude.typ", "auslegung"):
         m["zelle"] = ""
-    if k in ("mfh.art", "mfh.ww", "gebaeude.typ", "auslegung") and e.get("hydraulik"):
+    if k in ("mfh.art", "mfh.ww", "mfh.system", "gebaeude.typ", "auslegung") and e.get("hydraulik"):
         e["hydraulik"]["loesung"] = ""   # Bezug zur übernommenen Musterlösung lösen
     if k == "auslegung":
         m["system"] = ""
+    if k == "mfh.system":   # Anlagenart: Hybrid und bivalent nach GEG-Hybrid-Kriterium, sonst Standard je Wärmequelle
+        e["auslegung"] = "hybrid" if m["system"] in ("hybrid", "bivalent") else (
+            "monovalent" if e.get("waermequelle") == "sole" else "monoenergetisch")
     if m.get("art") != "mfh":
         return
     if k in ("mfh.art", "mfh.ww"):

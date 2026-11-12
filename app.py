@@ -40,6 +40,16 @@ if _pw and not ss.get("angemeldet"):
 if "e" not in ss:
     ss.e = P.neu()
 E = ss.e
+# Ein-/Zweifamilienhaus vorerst aus (Hydrauliken in Arbeit): immer Mehrfamilienhaus – wie nurMfh() in index.html.
+# Leere Eingaben bleiben leer, geladene Projekte behalten ihre Heizlast.
+EFH_AKTIV = False
+if not EFH_AKTIV and E["mfh"].get("art") != "mfh":
+    _leer = not (E["heizlast"].get("vorgabe_kw") or E["heizlast"].get("flaeche_m2") or E["heizlast"].get("menge")
+                 or E["heizlast"].get("huell_a_m2") or E["projekt"].get("name") or E["projekt"].get("plz"))
+    E["mfh"]["art"] = "mfh"
+    if _leer:
+        M.eingaben_folgen(E, "mfh.art")
+        E["mfh"]["we"], E["heizlast"]["flaeche_m2"], E["tww"]["personen"] = "", 0.0, 0
 DATEN, KAT = D.geraete(), D.katalog()
 
 # Bosch-Gestaltung wie index.html: Tokens des Bosch Frontend-Kits (blue-50 #007BC0, gray-95 #EFF1F2, green-50, red-50,
@@ -238,7 +248,7 @@ def mfh_bereich(r: dict, e: dict) -> None:
         return
     ids = [z_["id"] for z_ in v["zellen"]]
     gew = {a["zelle"]["id"] for a in v["auswahl"]}
-    beschr = {z_["id"]: f"{z_['we']} WE · {z_['kw']} kW" + (f" · {z_['variante'].replace('Gas-Brennwert ', '')}" if z_.get("variante") else "")
+    beschr = {z_["id"]: f"{z_['we']} WE · {z_['kw']} kW" + (f" · {z_['komponenten'][0]}" if z_["system"] != "mono" else "")
               for z_ in v["zellen"]}
     wahl_ = st.radio("Musterlösung", ["auto"] + ids, horizontal=True, key="mfh_zelle",
                      index=(ids.index(e["mfh"]["zelle"]) + 1) if e["mfh"].get("zelle") in ids else 0,
@@ -252,8 +262,13 @@ def mfh_bereich(r: dict, e: dict) -> None:
     for a in v["auswahl"]:
         z_ = a["zelle"]
         st.markdown(f"<div style='font-size:12px;font-weight:700;color:#4a5866;text-transform:uppercase;margin-top:8px'>"
-                    f"{z_.get('erzeuger') or 'Monoenergetisch'} · {z_['we']} WE / {z_['kw']} kW{' · ' + z_['variante'] if z_.get('variante') else ''}</div>"
+                    f"{MD['systeme'][z_['system']]} · {z_['we']} WE / {z_['kw']} kW{' · ' + z_['komponenten'][0] if z_['system'] != 'mono' else ''}</div>"
                     f"<b>{' · '.join(z_['komponenten'])}</b> · Summe netto {T.euro(z_['summe'])}", unsafe_allow_html=True)
+        bv_ = D.bv_nr(z_.get("loesung"))
+        c_bv1, c_bv2 = st.columns([2, 1])
+        c_bv1.markdown(f"Musterlösung **{z_.get('loesung') or '–'}** · Bestellvorschlag-Nr.:")
+        if bv_:
+            c_bv2.code(bv_, language=None)   # mit Kopier-Symbol
         st.caption(f"Muster-Heizlast {z_['we']} WE · {a_['flaeche_we']} m² · {a_['spez_w_m2']} W/m² = {T.f(a['muster_qh'], 1)} kW · "
                    f"Prüfung mit Ihren Eingaben: {M.pruef_text(a, r)}")
         if g_ and g_["geraet"] == z_["geraet"] and g_["n"] == z_["n"]:
@@ -278,7 +293,7 @@ def hydraulik_bereich(r: dict, e: dict) -> None:
     passend = [x for x in liste if x["passend"]]
     gew = HY.gewaehlt(e, r, lib)
     st.caption(f"Maschine: {(str(g_['n']) + ' × ') if g_['n'] > 1 else ''}{g_['geraet']} · {HY.WW_TEXT[HY.ww_art(e, r)]} · "
-               f"{'Hybrid (mit zweitem Wärmeerzeuger)' if HY.system_art(e, lib) == 'hybrid' else 'monoenergetisch/monovalent'}"
+               f"{HY.SYSTEM_TEXT[HY.system_art(e, lib)]}"
                + (f" · {len(passend)} passende Hydraulik(en) aus den Musterlösungen." if passend else "."))
     for t_ in HY.hinweise(e, r, lib):
         st.warning(t_)
@@ -301,7 +316,7 @@ def hydraulik_bereich(r: dict, e: dict) -> None:
         c_b.image(str(D.hydraulik_bild(x["id"])), width="stretch")
         c_t.markdown(f"**{x['titel']}** · {stufe(x)}  \n" + " · ".join(f"{'✅' if x['passt'][k] else '❌'} {t}" for k, t, _ in HY.MERKMALE)
                      + "".join("  \n– " + t_ for t_ in x["anpassen"])
-                     + f"  \nMusterlösungen: {', '.join(x['loesungen'])}")
+                     + f"  \nMusterlösungen: {', '.join(D.mit_bv(n_) for n_ in x['loesungen'])}")
         aktiv = gew and gew["id"] == x["id"] and gew["manuell"]
         if c_t.button("Auswahl aufheben" if aktiv else "Diese Hydraulik wählen", key="hyd_" + x["id"]):
             e["hydraulik"] = {**(e.get("hydraulik") or {}), "schema": "" if aktiv else x["id"]}
@@ -314,7 +329,7 @@ def hydraulik_bereich(r: dict, e: dict) -> None:
         for L in ls:
             a = L["auslegung"]
             c_a, c_b = st.columns([4, 1])
-            c_a.caption(f"{L['id']} · {'Neubau' if L['gebaeude'] == 'neubau' else 'Bestand'} · {L['we'] or '–'} WE · "
+            c_a.caption(f"{L['id']}{' · Bestellvorschlag-Nr. ' + L['bv_nr'] if L.get('bv_nr') else ''} · {'Neubau' if L['gebaeude'] == 'neubau' else 'Bestand'} · {L['we'] or '–'} WE · "
                         f"{(str(L['n']) + ' × ') if L['n'] > 1 else ''}{L['geraet']} · QGES {T.f(a['qges'], 1)} kW · Vorlauf "
                         f"{T.f(a['vl'], 0)} °C{' (angenommen)' if a.get('vl_angenommen') else ''} · "
                         f"{ {'hybrid': 'GEG-Hybrid (0,3 · Q)', 'monoenergetisch': 'monoenergetisch', 'monovalent': 'monovalent'}.get(a['auslegung'], '–')} · "
@@ -361,13 +376,16 @@ with links:
             neu_setzen("klima.heizgrenze", "vl", "heizlast.methode", "heizlast.spez_w_m2", "heizlast.flaeche_m2", "heizlast.gebaeudeart", "heizlast.vbh", "tww.personen", "tww.system")
             st.rerun()
         # Mehrfamilienhaus: Wohneinheiten und Warmwasserbereitung gleich zu Beginn (MFH-Musterbestellvorschläge)
-        if wahl("Gebäudegröße", "mfh.art", {"efh": "Ein-/Zweifamilienhaus", "mfh": "Mehrfamilienhaus"}):
-            M.eingaben_folgen(E, "mfh.art")
-            neu_setzen("heizlast.methode", "heizlast.spez_w_m2", "heizlast.flaeche_m2", "heizlast.gebaeudeart", "heizlast.vbh", "tww.personen", "tww.system")
-            st.rerun()
+        if EFH_AKTIV:
+            if wahl("Gebäudegröße", "mfh.art", {"efh": "Ein-/Zweifamilienhaus", "mfh": "Mehrfamilienhaus"}):
+                M.eingaben_folgen(E, "mfh.art")
+                neu_setzen("heizlast.methode", "heizlast.spez_w_m2", "heizlast.flaeche_m2", "heizlast.gebaeudeart", "heizlast.vbh", "tww.personen", "tww.system")
+                st.rerun()
+        else:
+            st.caption("Gebäudegröße: **Mehrfamilienhaus** · Ein-/Zweifamilienhaus folgt (Hydrauliken in Arbeit)")
         if E["mfh"]["art"] == "mfh":
-            we_neu = st.number_input("Wohneinheiten [WE]", 2, 40, int(E["mfh"]["we"]), key="mfh_we")
-            if we_neu != E["mfh"]["we"]:
+            we_neu = st.number_input("Wohneinheiten [WE]", 2, 40, int(E["mfh"]["we"]) if E["mfh"]["we"] else None, key="mfh_we")
+            if we_neu is not None and we_neu != E["mfh"]["we"]:
                 E["mfh"]["we"] = int(we_neu)
                 M.eingaben_folgen(E, "mfh.we")
                 neu_setzen("heizlast.methode", "heizlast.spez_w_m2", "heizlast.flaeche_m2", "heizlast.gebaeudeart", "heizlast.vbh", "tww.personen", "tww.system")
@@ -377,6 +395,16 @@ with links:
                 M.eingaben_folgen(E, "mfh.ww")
                 neu_setzen("heizlast.methode", "heizlast.spez_w_m2", "heizlast.flaeche_m2", "heizlast.gebaeudeart", "heizlast.vbh", "tww.personen", "tww.system")
                 st.rerun()
+            anl = {"mono": "Monoenergetisch", "hybrid": "Hybrid · MH200", "bivalent": "Bivalent · CC8000"}
+            anl_akt = HY.system_art(E, D.hydraulik())   # ohne Wahl: aus der Betriebsweise
+            anl_neu = st.radio("Anlagenart", list(anl), index=list(anl).index(anl_akt), format_func=anl.get, horizontal=True,
+                               key=f"anl_{anl_akt}")
+            if anl_neu != anl_akt:
+                E["mfh"]["system"] = anl_neu
+                M.eingaben_folgen(E, "mfh.system")
+                neu_setzen("auslegung")
+                st.rerun()
+            st.caption("Monoenergetisch = Wärmepumpe mit Heizstab. Hybrid = Gas-Brennwertgerät und Wärmepumpe CS5800/6800 über das Hybridmodul MH200 (Bestand, 6–8 WE). Bivalent = Gaskessel und Wärmepumpe CS5001 über den Kaskadenregler CC8000 (Bestand, ab 10 WE). Hybrid und bivalent werden nach dem GEG-Hybrid-Kriterium ausgelegt (Wärmepumpe mind. 30 % der Heizlast).")
             st.caption("MFH-Musterlösungen: je WE 80 m² und 3,5 Personen (Personen und Wohnfläche werden vorbelegt). "
                        "Zentral = Frischwasserstation mit eigenem Puffer (> 60 °C), dezentral = Wohnungsstationen (HIU, 2-Leiter, "
                        "< 60 °C), ohne = elektrische Durchlauferhitzer je Wohnung, Speicher = Warmwasserspeicher an der Wärmepumpe – "

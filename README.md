@@ -89,6 +89,16 @@ dann die kleinste Lösung mit mindestens so vielen WE, deren Muster-Heizlast die
 umschaltbar). Die Wärmepumpe der Musterlösung wird mit dem Rechenkern gegen die eigene Anlage geprüft und bei „Beste
 Lösung“ übernommen.
 
+Anlagenart (Eingabe beim MFH, `mfh.system`): **monoenergetisch**, **Hybrid** (Gas-Brennwertgerät + CS5800/6800 über das
+Hybridmodul MH200, Ordner 1.3) oder **bivalent** (Gaskessel + CS5001 über den Kaskadenregler CC8000, Ordner 1.2). Hybrid und
+bivalent sind getrennte Merkmale bei Kostenübersicht und Hydraulik-Auswahl; beide werden nach dem GEG-Hybrid-Kriterium
+ausgelegt. Jede Zelle der Kostenübersicht verweist auf ihre Musterlösung (`loesung`), jede Musterlösung trägt ihre
+Bestellvorschlag-Nr. (`bv_nr`, 10-stellig 4000…, vom Importer aus Seite 1 des Bestellvorschlags gelesen) – angezeigt in
+der MFH-Karte (mit Kopieren), bei den Hydrauliken, im Druck und im Kurzbericht.
+
+Ein-/Zweifamilienhaus ist vorerst ausgeschaltet (`EFH_AKTIV` in index.html und app.py), bis die Hydrauliken dafür vorliegen;
+das Tool startet als Mehrfamilienhaus, geladene Projekte behalten ihre Heizlast.
+
 Kaskaden: CS8800 mit Kaskadenregler HPC800i C bis 3 Geräte (wie Musterlösungen), CS5001 mit HPC 301 C bis 14.
 Im Schema hängt die Frischwasserstation an einem eigenen FriWa-Puffer, nicht am Trennpuffer der Heizung;
 Wohnungsstationen (HIU) hängen über das 2-Leiter-Netz am Puffer, bei DLE zeigt das Schema die Durchlauferhitzer je
