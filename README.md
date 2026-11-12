@@ -90,8 +90,9 @@ Wohnung, bei GEG-Hybrid den Gas-Brennwertkessel als zweiten Wärmeerzeuger am Pu
 ## Hydraulik-Auswahl (Musterlösungen)
 
 Im Reiter „Hydraulik & Warmwasser“ wählt man zur ausgelegten Maschine die passende Hydraulik aus den Musterlösungen
-(Techn. Doku der Musterlösungs-Ordner aus den ZIP-Daten): 12 Hydraulikschemata (Bosch-Schemata 6721… und
-Planungszeichnungen „…_1ug“) zu 42 Musterlösungen, davon 40 mit Excel-WP-Auslegung. Bewertet werden Baureihe, Anzahl
+(Techn. Doku der Musterlösungs-Ordner aus den ZIP-Daten und Nachlieferungen): 47 Hydraulikschemata (Bosch-Schemata
+6721… und Planungszeichnungen) zu 57 Musterlösungen, alle mit Excel-WP-Auslegung; gleiche Zeichnungen in mehreren Ordnern
+werden am Inhalt erkannt und zusammengefasst. Fernwärme ist noch nicht im Tool. Bewertet werden Baureihe, Anzahl
 (Kaskade), Warmwasser (FriWa, HIU, ohne/DLE, Speicher) und Anlagenart; vorgeschlagen wird die passende Hydraulik, deren
 Musterlösung in WE und Gerät am nächsten liegt – jede andere lässt sich von Hand wählen. „Auslegung übernehmen“ setzt die
 Eingaben der Excel-Auslegung einer Musterlösung (PLZ, θe, Heizgrenze, W/m² und Fläche, Personen, Lastprofil, Sperrzeit,

@@ -15,6 +15,7 @@ Braucht pdftotext/pdftoppm (poppler-utils) und Pillow.
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 import subprocess
@@ -40,9 +41,9 @@ def art(f: Path) -> str | None:
     n = f.name.lower()
     if f.suffix.lower() != ".pdf":
         return None
-    if re.match(r"4000\d{6}", n) or "checkliste" in n:
-        return None                       # Bestellvorschläge / Checklisten nicht übernehmen
-    if "hiu_auslegung" in n:
+    if re.match(r"4000\d{3,}", n) or "checkliste" in n or "news" in n or "deckungsanteil" in n:
+        return None                       # Bestellvorschläge / Checklisten / Infoblätter nicht übernehmen
+    if n.startswith("hiu"):
         return "hiu"
     if "tww" in n or n.startswith("ww-"):
         return "tww"
@@ -118,13 +119,28 @@ def auslegung(pdf: Path) -> dict | None:
 
 
 # ------------------------------------------------------------------------------------------------ Schema
-def schema_titel(pdf: Path) -> str:
+def schema_titel(pdf: Path, ordner: str = "", nr: str = "") -> str:
     t = text(pdf)
     zeilen = [z.strip() for z in t.splitlines() if z.strip()]
     for i, z in enumerate(zeilen):
         if z.startswith("Hydraulikschema") and i + 1 < len(zeilen):
             return zeilen[i + 1]
+    if re.fullmatch(r"[A-Za-z0-9_-]{3,8}\d", pdf.stem) and ordner:     # Kurzname (HPC8001, CC80001 …): Titel aus dem Ordner
+        return re.sub(r"[_ ]+", " ", ordner[len(nr) + 1:]).strip()
     return re.sub(r"_1u?g.*$", "", pdf.stem).replace("_", " ")
+
+
+def schema_id(pdf: Path, nr: str, vorhanden: dict, inhalt: dict) -> str:
+    """Gleicher Inhalt = gleiches Schema (auch in mehreren Ordnern); gleicher Dateiname mit anderem Inhalt bekommt die
+    Ordnernummer angehängt (die Nachlieferungen heißen oft nur HPC8001.PDF, CC80001.PDF …)."""
+    md5 = hashlib.md5(pdf.read_bytes()).hexdigest()
+    if md5 in inhalt:
+        return inhalt[md5]
+    sid = re.sub(r"[^\w-]+", "_", pdf.stem)
+    if sid in vorhanden:
+        sid = f"{sid}_{nr.replace('.', '-')}"
+    inhalt[md5] = sid
+    return sid
 
 
 def hydraulik_seite(pdf: Path) -> int:
@@ -141,11 +157,11 @@ def bild(pdf: Path, ziel: Path) -> None:
     from PIL import Image
     seite = str(hydraulik_seite(pdf))
     with tempfile.TemporaryDirectory() as tmp:
-        subprocess.run(["pdftoppm", "-r", "110", "-f", seite, "-l", seite, "-png", str(pdf), str(Path(tmp) / "s")], check=True)
+        subprocess.run(["pdftoppm", "-r", "100", "-f", seite, "-l", seite, "-png", str(pdf), str(Path(tmp) / "s")], check=True)
         png = next(Path(tmp).glob("s*.png"))
         im = Image.open(png).convert("RGB")
-        im.thumbnail((1600, 1600))
-        im.save(ziel, "JPEG", quality=72, optimize=True)
+        im.thumbnail((1400, 1400))
+        im.save(ziel, "JPEG", quality=62, optimize=True, progressive=True)
 
 
 def matrix_geraet(info: dict) -> tuple[str | None, int]:
@@ -158,7 +174,7 @@ def matrix_geraet(info: dict) -> tuple[str | None, int]:
 
 def main(ordner: list[str]) -> None:
     BILDER.mkdir(parents=True, exist_ok=True)
-    loesungen, schemata = {}, {}
+    loesungen, schemata, inhalt = {}, {}, {}
     for o in ordner:
         for f in sorted(Path(o).rglob("*")):
             if not f.is_file():
@@ -174,7 +190,9 @@ def main(ordner: list[str]) -> None:
                 info["geraet"], info["n"] = matrix_geraet(info)
             L = loesungen.setdefault(nr, {**info, "schemata": [], "auslegung": None, "tww": [], "hiu": []})
             a = art(f)
-            if a == "wp" and not L["auslegung"]:
+            if a == "wp":
+                if L["auslegung"]:
+                    continue                                          # zweite (gleiche) Auslegung im Ordner
                 L["auslegung"] = auslegung(f)
                 if L["auslegung"] and L["auslegung"]["vl"] is None:   # CS5001-Blatt ohne Vorlauf im Diagrammtitel
                     L["auslegung"]["vl"] = 55.0 if info["gebaeude"] == "bestand" else 35.0
@@ -182,10 +200,10 @@ def main(ordner: list[str]) -> None:
             elif a in ("tww", "hiu"):
                 L[a].append(f.name)
             else:
-                sid = re.sub(r"[^\w-]+", "_", f.stem)
+                sid = schema_id(f, nr, schemata, inhalt)
                 if sid not in schemata:
                     bild(f, BILDER / f"{sid}.jpg")
-                    schemata[sid] = {"id": sid, "datei": f.name, "titel": schema_titel(f), "loesungen": []}
+                    schemata[sid] = {"id": sid, "datei": f.name, "titel": schema_titel(f, info["ordner"], nr), "loesungen": []}
                 if nr not in schemata[sid]["loesungen"]:
                     schemata[sid]["loesungen"].append(nr)
                 if sid not in L["schemata"]:
