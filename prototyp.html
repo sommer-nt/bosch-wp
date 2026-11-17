@@ -290,7 +290,8 @@
   .proto{font-size:12px;font-weight:800;letter-spacing:.8px;color:#fff;background:#e20015;border-radius:6px;padding:4px 10px}
   .proto-hinweis{background:#fff1f2;border:1px solid #f5c2c7;color:#9b1c24;border-radius:8px;padding:8px 12px;margin:0 0 14px;font-size:13px}
   [data-theme="dark"] .proto-hinweis{background:#3a1418;border-color:#6b2730;color:#ffb3ba}
-  .dk-proto{position:absolute;top:0;right:0;font-size:8pt;font-weight:800;color:#e20015;letter-spacing:.6px}
+  .dk-proto{position:absolute;top:1mm;left:50%;transform:translateX(-50%);font-size:8pt;font-weight:800;color:#e20015;letter-spacing:.6px}
+  .dk-band{position:relative} .dk-band .dk-proto{top:50%;transform:translate(-50%,-50%);color:#fff;font-size:9pt;letter-spacing:1.5px}
 </style>
 </head>
 <body>
@@ -2360,7 +2361,11 @@ function oeffnen(ev) {
   wpKarte = r => wpKarteOrig(r).replace(/<div>UVP \(intern\)<b>[\s\S]*?<\/b><\/div>/, '');
   baueDruck = function () {
     E.preise_drucken = false; druckOrig();
-    document.querySelectorAll('#druck .seite').forEach(s => s.insertAdjacentHTML('afterbegin', '<div class="dk-proto">PROTOTYP</div>'));
+    // Kennzeichnung mittig: Seite 1 im Farbbalken unter der Überschrift, sonst in der Kopfzeile zwischen Logo und Titel
+    document.querySelectorAll('#druck .seite').forEach((s, i) => {
+      const band = i === 0 && s.querySelector('.dk-band');
+      (band || s).insertAdjacentHTML('afterbegin', '<div class="dk-proto">PROTOTYP</div>');
+    });
   };
   window.addEventListener('beforeprint', baueDruck);
   const akt = aktualisiere;
