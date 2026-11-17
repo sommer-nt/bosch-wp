@@ -961,15 +961,16 @@
    "we": 6,
    "kw": 19,
    "komponenten": [
-    "CS5800 AW12",
+    "CS8800 AW15",
     "BP750-7EM",
     "F7002 45 MHPS"
    ],
    "summe": 51300,
-   "geraet": "CS5800/6800iAW 12 OR-T",
+   "geraet": "CS8800iAW 15 O-T",
    "n": 1,
    "id": "N-mono-hiu-6",
-   "loesung": "2.1.2.2"
+   "loesung": "2.1.2.2",
+   "hinweis": "Kostenübersicht nannte CS5800 AW12 – laut Bestellvorschlag 4000194156 CS8800i AW 15 O-T"
   },
   {
    "tabelle": "neubau",
