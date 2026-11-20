@@ -1,13 +1,12 @@
-# Bosch-Blau als Akzent – getrennt für Hell und Dunkel, damit der Schalter im Tool umschalten kann
-[theme.light]
+# Immer hell im Bosch-Stil (Frontend-Kit blue-50) – unabhängig von der Hell/Dunkel-Einstellung des Systems.
+# Ein zusätzlicher [theme.dark]-Abschnitt würde dem System folgen; Besucher könnten dann nicht umschalten.
+[theme]
+base = "light"
 primaryColor = "#007BC0"
 font = "sans serif"
-
-[theme.dark]
-primaryColor = "#56B0FF"
 
 [browser]
 gatherUsageStats = false
 
 [client]
-toolbarMode = "minimal"   # kein „Deploy“-Knopf, nur das Menü
+toolbarMode = "minimal"   # kein „Deploy“-Knopf
