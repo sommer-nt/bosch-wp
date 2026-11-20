@@ -1912,7 +1912,7 @@ function produktBilder(g, ie, h) {
   if (!b.length) return '';
   return `<div class="bilder">${b.map(([k, t]) => `<figure><img src="${BILDER_DATEN[k]}" alt="${esc(t)}" style="max-height:${h}px"><figcaption>${esc(t)}</figcaption></figure>`).join('')}</div>`;
 }
-let KAND_ALLE = false;   // ungeeignete Geräte in der Geräteauswahl zeigen (nur Ansicht)
+let KAND_ALLE = true;   // ungeeignete Geräte zeigen (unten als „nicht geeignet“), per Knopf ausblendbar
 function kandidatenTabelle(r, preise, nurPassend) {
   const g = r.gewaehlt, emp = new Set(r.empfehlung_je_serie);
   let liste = nurPassend ? r.kandidaten.filter(c => emp.has(c.geraet + '|' + c.n) || (g && c.geraet === g.geraet)) : r.kandidaten;
@@ -1941,7 +1941,7 @@ function kandidatenTabelle(r, preise, nurPassend) {
       ${preise ? `<td class="z preis">${k.uvp ? euro(k.uvp * c.n) : '–'}</td>` : ''}${nurPassend ? '' : `<td>${esc(c.grund || (c.ueberdimensioniert ? 'überdimensioniert' : ''))}</td>`}</tr>`;
   }
   const rest = r.kandidaten.length - liste.length;
-  if (nUngeeignet) h += `<tr><td></td><td colspan="${preise ? 10 : 9}"><button type="button" data-kand-alle>${KAND_ALLE ? 'Ungeeignete Geräte ausblenden' : nUngeeignet + ' ungeeignete Geräte zeigen'}</button></td></tr>`;
+  if (nUngeeignet) h += `<tr><td></td><td colspan="${preise ? 10 : 9}"><button type="button" data-kand-alle>${KAND_ALLE ? 'Nicht geeignete Geräte ausblenden' : nUngeeignet + ' nicht geeignete Geräte zeigen'}</button></td></tr>`;
   else if (rest && nurPassend) h += `<tr><td></td><td colspan="${preise ? 10 : 9}" class="hint">${rest} weitere Größen/Geräte siehe Werkzeug.</td></tr>`;
   return h + '</tbody>';
 }

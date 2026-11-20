@@ -974,7 +974,7 @@ with rechts:
         def ungeeignet(c):
             return not (c["moeglich"] and c["ok"]) and not (g and c["geraet"] == g["geraet"])
         n_ung = sum(1 for c in r["kandidaten"] if ungeeignet(c))
-        alle_k = st.toggle(f"Auch ungeeignete Geräte zeigen ({n_ung})", key="kand_alle") if n_ung else False
+        alle_k = st.toggle(f"Nicht geeignete Geräte zeigen ({n_ung})", value=True, key="kand_alle") if n_ung else False
         liste = sorted([c for c in r["kandidaten"] if alle_k or not ungeeignet(c)],
                        key=lambda c: (1 if ungeeignet(c) else 0, 0 if g and c["serie"] == g["serie"] else 1))
         for c in liste:
