@@ -491,15 +491,9 @@ links, rechts = st.columns([1, 2.2], gap="large")
 
 # ================================================================== Eingaben (Reihenfolge der Schnellauslegung)
 with links:
-    with st.expander("① Projekt, Gebäude & Standort", expanded=True):
-        E["projekt"]["name"] = st.text_input("Projekt / Bauvorhaben", E["projekt"]["name"])
-        E["projekt"]["kunde"] = st.text_input("Kunde / Interessent", E["projekt"]["kunde"])
-        c_s1, c_s2 = st.columns([3, 1])
-        E["projekt"]["strasse"] = c_s1.text_input("Straße", E["projekt"].get("strasse", ""))
-        E["projekt"]["hausnr"] = c_s2.text_input("Nr.", E["projekt"].get("hausnr", ""))
-        if EX:
-            E["projekt"]["bearbeiter"] = st.text_input("Bearbeiter", E["projekt"]["bearbeiter"])
-        if wahl("Gebäude", "gebaeude.typ", {"neubau": "Neubau", "sanierung": "Sanierung / Bestand"}):
+    with st.expander("① Gebäude & Standort", expanded=True, key="ex_1"):
+        if wahl("Gebäude · Mehrfamilienhaus", "gebaeude.typ", {"neubau": "Neubau", "sanierung": "Sanierung / Bestand"},
+                help=None if EFH_AKTIV else "Ein-/Zweifamilienhaus folgt (Hydrauliken in Arbeit)."):
             neubau = E["gebaeude"]["typ"] == "neubau"
             E["klima"]["heizgrenze"] = 12.0 if neubau else 15.0
             E["heizkreise"] = [{"typ": "fbh" if neubau else "hk"}]
@@ -516,11 +510,12 @@ with links:
                 M.eingaben_folgen(E, "mfh.art")
                 neu_setzen("heizlast.methode", "heizlast.spez_w_m2", "heizlast.flaeche_m2", "heizlast.gebaeudeart", "heizlast.vbh", "tww.personen", "tww.system")
                 st.rerun()
-        else:
-            st.caption("Gebäudegröße: **Mehrfamilienhaus** · Ein-/Zweifamilienhaus folgt (Hydrauliken in Arbeit)")
         if E["mfh"]["art"] == "mfh":
-            we_neu = st.number_input("Wohneinheiten [WE]", 2, 40, int(E["mfh"]["we"]) if E["mfh"]["we"] else None, key="mfh_we")
-            if we_neu is not None and we_neu != E["mfh"]["we"]:
+            # Startwert 8 nur angezeigt (Plus/Minus sofort nutzbar – ein leeres Feld sperrt sie); übernommen wird erst eine Änderung
+            we_start = int(E["mfh"]["we"]) if E["mfh"]["we"] else 8
+            we_neu = st.number_input("Wohneinheiten [WE]", 2, 40, we_start, key="mfh_we",
+                                     help=None if E["mfh"]["we"] else "Mit + / − oder Eingabe wählen – erst dann rechnet das Tool.")
+            if we_neu is not None and (we_neu != we_start or E["mfh"]["we"]) and we_neu != E["mfh"]["we"]:
                 E["mfh"]["we"] = int(we_neu)
                 M.eingaben_folgen(E, "mfh.we")
                 neu_setzen("heizlast.methode", "heizlast.spez_w_m2", "heizlast.flaeche_m2", "heizlast.gebaeudeart", "heizlast.vbh", "tww.personen", "tww.system")
@@ -551,11 +546,15 @@ with links:
                     neu_setzen("kosten.preis_kessel", "kosten.eta_kessel")
                     st.rerun()
         arten = {a: a for a in R.VOLLBENUTZUNGSSTUNDEN}
-        if wahl("Gebäudeart", "heizlast.gebaeudeart", arten, radio=False):
-            E["heizlast"]["vbh"] = float(R.VOLLBENUTZUNGSSTUNDEN[E["heizlast"]["gebaeudeart"]])
-            neu_setzen("heizlast.vbh")
-        zahl("Raumtemperatur θi [°C]", "klima.innen", step=1.0)
-        plz = st.text_input("PLZ", E["projekt"]["plz"], max_chars=5)
+        c_ga, c_ti = st.columns(2)
+        with c_ga:
+            if wahl("Gebäudeart", "heizlast.gebaeudeart", arten, radio=False):
+                E["heizlast"]["vbh"] = float(R.VOLLBENUTZUNGSSTUNDEN[E["heizlast"]["gebaeudeart"]])
+                neu_setzen("heizlast.vbh")
+        with c_ti:
+            zahl("Raumtemperatur θi [°C]", "klima.innen", step=1.0)
+        c_plz, c_ort = st.columns([1, 2])
+        plz = c_plz.text_input("PLZ", E["projekt"]["plz"], max_chars=5)
         if plz != E["projekt"]["plz"]:
             E["projekt"]["plz"] = plz
             treffer = D.plz_suche(plz) if len(plz) >= 4 else None
@@ -563,14 +562,14 @@ with links:
                 E["projekt"]["ort"], E["klima"]["nat"] = treffer
                 neu_setzen("klima.nat")
                 st.rerun()
-        E["projekt"]["ort"] = st.text_input("Ort", E["projekt"]["ort"])
+        E["projekt"]["ort"] = c_ort.text_input("Ort", E["projekt"]["ort"])
         c1, c2 = st.columns(2)
         with c1:
             zahl("Norm-Außentemp. θe [°C]", "klima.nat", step=0.5, help="Über die PLZ vorbelegt (DIN/TS 12831-1)")
         with c2:
             zahl("Heizgrenze [°C]", "klima.heizgrenze", step=1.0, help="Neubau 12 °C, Bestand 15 °C")
 
-    with st.expander("② Wärmebedarf", expanded=True):
+    with st.expander("② Wärmebedarf", expanded=True, key="ex_2"):
         h = E["heizlast"]
         methoden = {"vorgabe": "Heizlast kW", "flaeche": "W/m²", "verbrauch": "Jahresverbrauch"}
         if EX or h["methode"] == "huelle":
@@ -608,7 +607,9 @@ with links:
             erkl("Excel-Blatt „DIN EN 12831 Heizlast nach Verbrauch mit TWW“: Øh,in = Øh,g + Ew,g,in / (td · 365). "
                        "Der Warmwasser-Zuschlag läuft dabei automatisch über die Nachheizzeit.")
 
-    with st.expander("③ Heizkreise & Wärmeverteilung", expanded=True):
+    hk_kurz = T.heizkreis_liste(E)
+    with st.expander(f"③ Heizkreise · {len(hk_kurz)} Kreis{'e' if len(hk_kurz) > 1 else ''} · Vorlauf {T.f(E['vl'], 0)} °C",
+                     expanded=False, key="ex_3"):
         kreise = T.heizkreis_liste(E)
         neu_kreise = []
         for h_ in kreise:
@@ -630,7 +631,9 @@ with links:
              help="Vorschlag aus dem Heizkreis mit dem höchsten Vorlauf: FBH 35 °C, Konvektoren 45 °C, Heizkörper 55 °C. "
                   "Kreise mit niedrigerem Vorlauf werden gemischt.")
 
-    with st.expander("④ Warmwasser", expanded=True):
+    tw_kurz = (f"{T.f(E['tww']['personen'], 0)} P · {T.f(E['tww']['zapftemp'], 0)} °C" if E["tww"].get("aktiv")
+               else "nicht über die Wärmepumpe")
+    with st.expander(f"④ Warmwasser · {tw_kurz}", expanded=False, key="ex_4"):
         t = E["tww"]
         ist_mfh = E["mfh"]["art"] == "mfh"
         if ist_mfh:
@@ -667,7 +670,8 @@ with links:
                 if t["bezug"] == "flaeche":
                     zahl("Nutzfläche ANGF [m²]", "tww.flaeche_m2", min_value=0.0)
 
-    with st.expander("⑤ Wärmepumpe & Aufstellung", expanded=True):
+    wq_kurz = "Luft/Wasser" if E["waermequelle"] == "luft" else "Sole/Wasser"
+    with st.expander(f"⑤ Wärmequelle · {wq_kurz}" + (" · Expertenwerte" if EX else ""), expanded=EX, key="ex_5"):
         if wahl("Wärmequelle", "waermequelle", {"luft": "Luft/Wasser", "sole": "Sole/Wasser"}):
             E["auslegung"] = "monovalent" if E["waermequelle"] == "sole" else "monoenergetisch"
             E["auswahl"].update(geraet="", anzahl=1, inneneinheit="")
@@ -696,7 +700,9 @@ with links:
             alle_ids = andere + gew
             E["serien"] = [] if set(alle_ids) == {s_["id"] for s_ in DATEN["serien"]} else alle_ids
 
-    with st.expander("⑥ Produktwahl", expanded=True):
+    pw_kurz = ((f"{E['auswahl']['anzahl']} × " if E["auswahl"]["anzahl"] > 1 else "") + E["auswahl"]["geraet"]) if E["auswahl"]["geraet"] \
+        else "Beste Lösung"
+    with st.expander(f"⑥ Produktwahl · {pw_kurz}", expanded=False, key="ex_6"):
         R_ = R.rechne(E, DATEN, KAT)
         modus = st.radio("Auswahl", ["auto", "manuell"], horizontal=True, index=1 if E["auswahl"]["geraet"] else 0,
                          format_func={"auto": "Beste Lösung", "manuell": "Produkt wählen"}.get)
@@ -732,6 +738,16 @@ with links:
         E["projekt"]["notiz"] = st.text_area("Notiz", E["projekt"]["notiz"], height=70)
         R_ = R.rechne(E, DATEN, KAT)
 
+    with st.expander("Projektangaben für Ausdruck" + (f" · {E['projekt']['name']}" if E["projekt"]["name"] else ""),
+                     expanded=False, key="ex_projekt"):
+        c_p1, c_p2 = st.columns(2)
+        E["projekt"]["name"] = c_p1.text_input("Projekt / Bauvorhaben", E["projekt"]["name"])
+        E["projekt"]["kunde"] = c_p2.text_input("Kunde / Interessent", E["projekt"]["kunde"])
+        c_s1, c_s2 = st.columns([3, 1])
+        E["projekt"]["strasse"] = c_s1.text_input("Straße", E["projekt"].get("strasse", ""))
+        E["projekt"]["hausnr"] = c_s2.text_input("Nr.", E["projekt"].get("hausnr", ""))
+        if EX:
+            E["projekt"]["bearbeiter"] = st.text_input("Bearbeiter", E["projekt"]["bearbeiter"])
     st.divider()
     if not E["projekt"]["datum"]:
         E["projekt"]["datum"] = date.today().isoformat()
