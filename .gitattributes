@@ -1,0 +1,4 @@
+# GitHub-Sprachstatistik: die HTML-Fassungen enthalten eingebettete Daten und Bilder (je ~10 MB) und
+# würden sonst den Python-Code (Rechenkern, Streamlit) überdecken. Am Inhalt ändert das nichts.
+index.html linguist-detectable=false
+prototyp.html linguist-generated=true linguist-detectable=false
