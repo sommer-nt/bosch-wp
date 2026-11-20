@@ -1914,10 +1914,11 @@ function kandidatenTabelle(r, preise, nurPassend) {
   if (g) liste = [...liste.filter(c => c.serie === g.serie && !ungeeignet(c)), ...liste.filter(c => c.serie !== g.serie && !ungeeignet(c)),
     ...liste.filter(c => c.serie === g.serie && ungeeignet(c)), ...liste.filter(c => c.serie !== g.serie && ungeeignet(c))];
   const spalten = 9 + (preise ? 1 : 0) + (nurPassend ? 0 : 1);
-  let trenner = false;
+  let trenner = false, trennerUng = false;
   let h = `<thead><tr><th></th><th>Wärmepumpe</th><th class="z">Anz.</th><th class="z">${r.waermequelle === 'sole' ? 'B0' : 'A-7'}/W${f(r.vl, 0)}</th><th class="z">bei θe</th><th class="z">Abdeckung</th><th class="z">Bivalenzpunkt</th><th class="z">Heizstab</th><th class="z">Deckung</th>${preise ? '<th class="z">UVP</th>' : ''}${nurPassend ? '' : '<th>Hinweis</th>'}</tr></thead><tbody>`;
   if (g && liste.length && liste[0].serie === g.serie) h += `<tr><td colspan="${spalten}" class="sub" style="padding-top:8px">Gewählte Baureihe · ${esc(g.serienname)}</td></tr>`;
   for (const c of liste) {
+    if (ungeeignet(c) && !trennerUng) { trennerUng = true; trenner = true; h += `<tr><td colspan="${spalten}" class="sub" style="padding-top:12px">Nicht geeignet – reicht auch als Kaskade nicht</td></tr>`; }
     if (g && c.serie !== g.serie && !trenner) { trenner = true; h += `<tr><td colspan="${spalten}" class="sub" style="padding-top:12px">Alternativen aus anderen Baureihen</td></tr>`; }
     const sel = g && c.geraet === g.geraet;
     const amp = !c.moeglich ? 'aus' : (c.ok ? 'ok' : 'bad');

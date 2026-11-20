@@ -979,7 +979,8 @@ with rechts:
                        key=lambda c: (1 if ungeeignet(c) else 0, 0 if g and c["serie"] == g["serie"] else 1))
         for c in liste:
             zeilen.append({"": "🟢" if c["ok"] else ("⚪" if not c["moeglich"] else "🔴"),
-                           "Gruppe": "gewählte Baureihe" if g and c["serie"] == g["serie"] else "Alternative",
+                           "Gruppe": "nicht geeignet" if ungeeignet(c) else ("gewählte Baureihe" if g and c["serie"] == g["serie"]
+                                                                              else "Alternative"),
                            "Bild": D.bild_uri(KAT.get("bilder", {}).get(c["geraet"])),
                            "Wärmepumpe": c["geraet"] + (" ★" if f"{c['geraet']}|{c['n']}" in emp else ""), "Anz.": c["n"],
                            f"{'B0' if r['waermequelle'] == 'sole' else 'A-7'}/W{T.f(r['vl'], 0)} [kW]": round(c["q_a7"], 2) if c["moeglich"] else None,
