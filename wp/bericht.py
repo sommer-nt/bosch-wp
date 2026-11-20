@@ -194,7 +194,28 @@ def diagramm(pdf: Ausdruck, r: dict, daten: dict, x: float, y: float, w: float, 
     L, Rr, B = 12, 28, 10
     t0, t1 = k["t"][0], k["t"][-1]
     X = lambda t: x + L + (t - t0) / (t1 - t0) * (w - L - Rr)  # noqa: E731
-    Y = lambda q: y + h - B - q / qmax * (h - B - 3)  # noqa: E731
+    # Beschriftungen der senkrechten Marken in einem Band über dem Diagramm (wie index.html) – nie über Kurven
+    ab = R.ablesen(r, t_marke)
+    marken = [(r["nat"], "θe " + T.ft(r["nat"]) + " °C", GRAU, False)]
+    if g["bivalenz_art"] == "punkt":
+        marken.append((g["bivalenz"], "Bivalenzpunkt " + T.ft(g["bivalenz"]) + " °C", (179, 92, 0), True))
+    if g.get("taktgrenze") is not None and r["nat"] < g["taktgrenze"] <= t1:
+        marken.append((g["taktgrenze"], "Taktgrenze ≈ " + T.ft(g["taktgrenze"]) + " °C", BLAU, False))
+    if ab and abs(ab["t"] - r["nat"]) > 1e-9:
+        marken.append((ab["t"], "Ablesen " + T.ft(ab["t"]) + " °C", VIOLETT, True))
+    reihen, platz = [], []
+    for mt, txt, farbe, fett in sorted(marken):
+        pdf.schrift_(6.5, fett, farbe)
+        bw = pdf.get_string_width(pdf.t(txt)) + 2
+        xm = min(max(X(min(max(mt, t0), t1)), X(t0) + bw / 2), X(t1) - bw / 2)
+        ri = next((i for i, re_ in enumerate(reihen) if all(xm + bw / 2 < u or xm - bw / 2 > v for u, v in re_)), None)
+        if ri is None:
+            reihen.append([])
+            ri = len(reihen) - 1
+        reihen[ri].append((xm - bw / 2, xm + bw / 2))
+        platz.append((xm, bw, ri, txt, farbe, fett))
+    band = 3.6 * len(reihen) + 1
+    Y = lambda q: y + h - B - q / qmax * (h - B - 3 - band)  # noqa: E731
     pdf.set_line_width(0.15)
     pdf.set_draw_color(*GRID)
     pdf.schrift_(6.5, False, GRAU)
@@ -225,8 +246,6 @@ def diagramm(pdf: Ausdruck, r: dict, daten: dict, x: float, y: float, w: float, 
     pdf.set_dash_pattern(0.6, 0.9)
     pdf.line(X(r["nat"]), Y(0), X(r["nat"]), Y(qmax))
     pdf.set_dash_pattern()
-    pdf.set_xy(X(r["nat"]) + 1, Y(qmax))
-    pdf.cell(25, 3.5, pdf.t("θe " + T.ft(r["nat"]) + " °C"))
 
     def linie(qs, farbe, breite, strich=None):
         pdf.set_draw_color(*farbe)
@@ -267,44 +286,36 @@ def diagramm(pdf: Ausdruck, r: dict, daten: dict, x: float, y: float, w: float, 
     pdf.set_line_width(0.3)
     if g["bivalenz_art"] == "punkt":
         qb = R.last(g["bivalenz"], r["qh"] + r["qsperr"], r["qtw"], r["nat"], r["heizgrenze"])
-        pdf.set_fill_color(*BLAU)
+        pdf.set_fill_color(242, 140, 40)
         pdf.set_draw_color(255, 255, 255)
         pdf.ellipse(X(g["bivalenz"]) - 1.3, Y(qb) - 1.3, 2.6, 2.6, style="DF")
-        pdf.schrift_(6.5)
-        links_ = X(g["bivalenz"]) < x + L + 45
-        pdf.set_xy(X(g["bivalenz"]) + (2 if links_ else -40), Y(qb) + 2)
-        pdf.cell(38, 3.5, pdf.t("Bivalenzpunkt " + T.ft(g["bivalenz"]) + " °C"), align="L" if links_ else "R")
     if g.get("taktgrenze") is not None and r["nat"] < g["taktgrenze"] <= t1:
         qt = R.last(g["taktgrenze"], r["qh"] + r["qsperr"], r["qtw"], r["nat"], r["heizgrenze"])
         pdf.set_fill_color(255, 255, 255)
         pdf.set_draw_color(*BLAU)
         pdf.ellipse(X(g["taktgrenze"]) - 1, Y(qt) - 1, 2, 2, style="DF")
-        pdf.schrift_(6.5, False, GRAU)
-        pdf.set_xy(X(g["taktgrenze"]) - 20, Y(qt) - 5.5)
-        pdf.cell(40, 3.5, pdf.t("Taktgrenze ≈ " + T.ft(g["taktgrenze"]) + " °C"), align="C")
-    # Ablese-Linie (violett, Standard θe – wie im HTML verschiebbar, hier die gewählte Stellung)
-    ab = R.ablesen(r, t_marke)
+    # Ablese-Linie (violett, Standard θe – wie im HTML verschiebbar, hier die gewählte Stellung); Werte unter dem Diagramm
     if ab:
         pdf.set_draw_color(*VIOLETT)
         pdf.set_line_width(0.5)
         pdf.line(X(ab["t"]), Y(0), X(ab["t"]), Y(qmax))
-        pdf.schrift_(6.2, True, VIOLETT)
-        links = X(ab["t"]) > x + w * 0.6
-        txt = [f"Ablesen {T.ft(ab['t'])} °C", f"Bedarf {T.f(ab['bedarf'], 1)} kW"]
-        if ab["wp_max"] is not None:
-            txt.append(f"WP max. {T.f(ab['wp_max'], 1)} kW")
-            txt.append(f"Heizstab {T.f(ab['heizstab'], 1)} kW" if ab["heizstab"] else "WP deckt allein")
-        pdf.set_fill_color(255, 255, 255)
-        for i, z in enumerate(txt):
-            pdf.schrift_(6.2, i == 0, VIOLETT if i == 0 else (0, 0, 0))
-            breite = pdf.get_string_width(pdf.t(z)) + 1.2
-            pdf.set_xy(X(ab["t"]) - 1 - breite if links else X(ab["t"]) + 1, Y(qmax) + 6 + i * 3)
-            pdf.cell(breite, 3, pdf.t(z), align="R" if links else "L", fill=True)
         for q_, farbe in ((ab["bedarf"], (20, 30, 41)), (ab["wp_max"], BLAU)):
             if q_ is not None:
                 pdf.set_fill_color(*farbe)
                 pdf.ellipse(X(ab["t"]) - 1.1, Y(q_) - 1.1, 2.2, 2.2, style="F")
         pdf.set_line_width(0.2)
+        satz = (f"Ablese-Linie bei {T.ft(ab['t'])} °C{' (θe)' if abs(ab['t'] - r['nat']) < 1e-9 else ''}: Bedarf {T.f(ab['bedarf'], 1)} kW"
+                f" · Wärmepumpe max. {T.f(ab['wp_max'], 1) + ' kW' if ab['wp_max'] is not None else '–'} · "
+                + (f"Heizstab {T.f(ab['heizstab'], 1)} kW" if ab["heizstab"] else
+                   ("Wärmepumpe deckt allein" if ab["wp_max"] is not None else "außerhalb der Herstellerdaten")))
+        pdf.schrift_(6.5, False, GRAU)
+        pdf.set_xy(x + L, y + h + 0.5)
+        pdf.cell(w - L - Rr, 3.5, pdf.t(satz))
+    # Beschriftungsband
+    for xm, bw, ri, txt, farbe, fett in platz:
+        pdf.schrift_(6.5, fett, farbe)
+        pdf.set_xy(xm - bw / 2, y + 0.3 + ri * 3.6)
+        pdf.cell(bw, 3.4, pdf.t(txt), align="C")
 
 def heizkurve(pdf: Ausdruck, r: dict, x: float, y: float, w: float, h: float):
     """Heizkurve (DIN EN 442) wie heizkurveSvg() in index.html."""
@@ -552,11 +563,12 @@ def pdf_bytes(e: dict, r: dict, daten: dict, katalog: dict) -> bytes:
     if r.get("kennlinien"):
         pdf.h2(f"Heizleistung über der Außentemperatur – Vorlauf {T.f(r['vl'], 0)} °C")
         pdf.schrift_(6.8, False, GRAU)
-        pdf.cell(0, 4, pdf.t(f"Blau: {(str(g['n']) + ' × ') if g['n'] > 1 else ''}{g['geraet']} (max., gestrichelt Mindestleistung) · "
-                             "grau: weitere Größen der Baureihe · schwarz: Gebäudekennlinie · violett: Ablese-Linie (Standard θe)"), new_x="LMARGIN", new_y="NEXT")
+        pdf.multi_cell(184, 3.4, pdf.t(f"Blau: {(str(g['n']) + ' × ') if g['n'] > 1 else ''}{g['geraet']} (max., gestrichelt Mindestleistung) · "
+                                       "grau: weitere Größen der Baureihe · schwarz: Gebäudekennlinie · orange: Bivalenzpunkt · "
+                                       "violett: Ablese-Linie (Standard θe)"), new_x="LMARGIN", new_y="NEXT")
         y = pdf.get_y() + 1
         diagramm(pdf, r, daten, 13, y, 184, 92, (e.get("ansicht") or {}).get("t_marke"))
-        pdf.set_y(y + 96)
+        pdf.set_y(y + 100)
     if r.get("heizkurve"):
         hk = r["heizkurve"]
         pdf.h2("Heizkurve (DIN EN 442)")

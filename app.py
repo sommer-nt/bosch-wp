@@ -347,6 +347,29 @@ def kosten_bereich(r: dict, e: dict) -> None:
                "Bisheriger Bedarf = Jahreswärme / Nutzungsgrad; Heizöl: 1 l ≈ 10 kWh.")
 
 
+@st.cache_data(show_spinner=False)
+def hyd_bild_voll(sid: str) -> str:
+    """Hydraulikbild in voller Auflösung (2600 px) als <img> – st.image würde es auf 1460 px verkleinern, und bei Bildern
+    mit Farbpalette rechnet Pillow dabei nur „nächster Nachbar“: dünne Linien und Schrift werden unscharf."""
+    import base64
+    b64 = base64.b64encode(D.hydraulik_bild(sid).read_bytes()).decode()
+    return (f"<img src='data:image/png;base64,{b64}' alt='Hydraulikschema {sid}' "
+            "style='width:100%;height:auto;background:#fff;border:1px solid #E0E2E5'>")
+
+
+@st.cache_data(show_spinner=False)
+def hyd_vorschau(sid: str, breite: int = 1000) -> bytes:
+    """Vorschaubild: in Vollfarbe umwandeln und mit Lanczos verkleinern (scharf, kleiner als Streamlits Grenze)."""
+    import io
+    from PIL import Image
+    with Image.open(D.hydraulik_bild(sid)) as im:
+        im = im.convert("RGB")
+        im.thumbnail((breite, breite), Image.Resampling.LANCZOS)
+        buf = io.BytesIO()
+        im.save(buf, "JPEG", quality=90, optimize=True)
+        return buf.getvalue()
+
+
 def mfh_bereich(r: dict, e: dict) -> None:
     v, MD = r["mfh"], D.mfh()
     a_ = MD["annahmen"][v["tabelle"]]
@@ -418,13 +441,14 @@ def hydraulik_bereich(r: dict, e: dict) -> None:
         st.markdown(f"**{'Ausgewählt' if gew['manuell'] else 'Vorgeschlagen'}: {gew['titel']}** · {stufe(gew)}")
         if gew["anpassen"]:
             st.markdown("**Anpassen:**\n" + "\n".join("- " + t_ for t_ in gew["anpassen"]))
-        st.image(str(D.hydraulik_bild(gew["id"])), width="stretch")
-        st.caption("Musterlösungen mit diesem Schema: " + ", ".join(gew["loesungen"]))
+        st.markdown(hyd_bild_voll(gew["id"]), unsafe_allow_html=True)
+        st.caption("Musterlösungen mit diesem Schema: " + ", ".join(D.mit_bv(n_) for n_ in gew["loesungen"])
+)
     alle = st.toggle(f"Alle {len(liste)} Hydrauliken zeigen", key="hyd_alle")
     zeigen = liste if alle else (passend or liste[:4])
     for x in zeigen:
         c_b, c_t = st.columns([1, 2])
-        c_b.image(str(D.hydraulik_bild(x["id"])), width="stretch")
+        c_b.image(hyd_vorschau(x["id"]), width="stretch")
         c_t.markdown(f"**{x['titel']}** · {stufe(x)}  \n" + " · ".join(f"{'✅' if x['passt'][k] else '❌'} {t}" for k, t, _ in HY.MERKMALE)
                      + "".join("  \n– " + t_ for t_ in x["anpassen"])
                      + f"  \nMusterlösungen: {', '.join(D.mit_bv(n_) for n_ in x['loesungen'])}")
@@ -792,6 +816,11 @@ with rechts:
         if r.get("kennlinien"):
             kl = r["kennlinien"]
             fig = go.Figure()
+            # Modulationsbereich zwischen Mindest- und Maximalleistung (wie index.html)
+            if kl["min"]:
+                fig.add_scatter(x=kl["t"], y=kl["min"], mode="lines", line=dict(width=0), hoverinfo="skip", showlegend=False)
+                fig.add_scatter(x=kl["t"], y=kl["max"], mode="lines", line=dict(width=0), fill="tonexty",
+                                fillcolor="rgba(0,123,192,0.08)", hoverinfo="skip", showlegend=False)
             for d_ in DATEN["geraete"]:
                 if d_["serie"] == g["serie"] and d_["id"] != g["geraet"]:
                     kk = R.kurve_bei_vl(d_["max"], r["vl"])
@@ -801,25 +830,48 @@ with rechts:
             if kl["min"]:
                 fig.add_scatter(x=kl["t"], y=kl["min"], name="Mindestleistung (1 Gerät)", mode="lines", line=dict(color=BLAU, dash="dash"))
             fig.add_scatter(x=kl["t"], y=kl["last"], name="Gebäudekennlinie", mode="lines", line=dict(color="#141e29", width=2.5))
-            fig.add_scatter(x=kl["t"], y=kl["max"], name=g["geraet"] + " (max.)", mode="lines", line=dict(color=BLAU, width=3.5))
+            fig.add_scatter(x=kl["t"], y=kl["max"], name=(f"{g['n']} × " if g["n"] > 1 else "") + g["geraet"] + " (max.)", mode="lines",
+                            line=dict(color=BLAU, width=3.5))
+            t0_, t1_ = kl["t"][0], kl["t"][-1]
+            marken = [(r["nat"], f"θe {T.ft(r['nat'])} °C", "#4a5866")]
             if g["bivalenz_art"] == "punkt":
+                fig.add_vrect(x0=g["bivalenz"] - 0.8, x1=g["bivalenz"] + 0.8, fillcolor="#f28c28", opacity=0.22, line_width=0)
                 qb = R.last(g["bivalenz"], r["qh"] + r["qsperr"], r["qtw"], r["nat"], r["heizgrenze"])
-                fig.add_scatter(x=[g["bivalenz"]], y=[qb], mode="markers+text", text=[f"Bivalenzpunkt {T.ft(g['bivalenz'])} °C"],
-                                textposition="bottom left", marker=dict(size=11, color=BLAU), showlegend=False)
-            fig.add_vline(x=r["nat"], line_dash="dot", line_color="#78889a", annotation_text=f"θe {T.ft(r['nat'])} °C")
-            # Ablese-Linie (verschiebbar, Standard θe) – wie im HTML, nur Veranschaulichung
+                fig.add_scatter(x=[g["bivalenz"]], y=[qb], mode="markers", marker=dict(size=12, color="#f28c28", line=dict(color="white", width=2)),
+                                name="Bivalenzpunkt", hoverinfo="skip")
+                marken.append((g["bivalenz"], f"<b>Bivalenzpunkt {T.ft(g['bivalenz'])} °C</b>", "#B35C00"))
+            if g.get("taktgrenze") is not None and r["nat"] < g["taktgrenze"] <= t1_:
+                qt = R.last(g["taktgrenze"], r["qh"] + r["qsperr"], r["qtw"], r["nat"], r["heizgrenze"])
+                fig.add_scatter(x=[g["taktgrenze"]], y=[qt], mode="markers", marker=dict(size=9, color="white", line=dict(color=BLAU, width=2)),
+                                name="Taktgrenze", hoverinfo="skip")
+                marken.append((g["taktgrenze"], f"Taktgrenze ≈ {T.ft(g['taktgrenze'])} °C", BLAU))
+            fig.add_vline(x=r["nat"], line_dash="dot", line_color="#78889a")
+            # Ablese-Linie (verschiebbar, Standard θe) – Werte stehen unter dem Diagramm
             tm_ = (E.get("ansicht") or {}).get("t_marke")
             ab_ = R.ablesen(r, tm_)
             if ab_:
-                fig.add_vline(x=ab_["t"], line_color=VIOLETT, line_width=2, annotation_text=f"Ablesen {T.ft(ab_['t'])} °C",
-                              annotation_font_color=VIOLETT, annotation_position="top left")
+                fig.add_vline(x=ab_["t"], line_color=VIOLETT, line_width=2)
                 fig.add_scatter(x=[ab_["t"]] * (2 if ab_["wp_max"] is not None else 1),
                                 y=[ab_["bedarf"]] + ([ab_["wp_max"]] if ab_["wp_max"] is not None else []), mode="markers",
                                 marker=dict(size=9, color=["#141e29", BLAU][:2 if ab_["wp_max"] is not None else 1]), showlegend=False)
-            if g["bivalenz_art"] == "punkt":
-                fig.add_vrect(x0=g["bivalenz"] - 0.8, x1=g["bivalenz"] + 0.8, fillcolor="#f28c28", opacity=0.14, line_width=0)
-            fig.update_layout(height=420, margin=dict(l=10, r=10, t=30, b=10), xaxis_title="Außentemperatur in °C",
-                              yaxis_title="Heizleistung in kW", yaxis_rangemode="tozero", legend=dict(orientation="h", y=1.12), template="plotly_white")
+                if abs(ab_["t"] - r["nat"]) > 1e-9:
+                    marken.append((ab_["t"], f"<b>Ablesen {T.ft(ab_['t'])} °C</b>", VIOLETT))
+            # Beschriftungsband über dem Diagramm: Marken nach x sortiert, bei Platzmangel in die nächste Zeile
+            spanne = max(1e-9, t1_ - t0_)
+            reihen = []
+            for x_, txt_, farbe_ in sorted(marken):
+                w_ = (len(txt_.replace("<b>", "").replace("</b>", "")) * 7.0 + 10) / 900 * spanne
+                xm_ = min(max(x_, t0_ + w_ / 2), t1_ - w_ / 2)
+                ri_ = next((i_ for i_, re_ in enumerate(reihen) if all(xm_ + w_ / 2 < u_ or xm_ - w_ / 2 > v_ for u_, v_ in re_)), None)
+                if ri_ is None:
+                    reihen.append([])
+                    ri_ = len(reihen) - 1
+                reihen[ri_].append((xm_ - w_ / 2, xm_ + w_ / 2))
+                fig.add_annotation(x=xm_, y=1, xref="x", yref="paper", yanchor="bottom", yshift=4 + 18 * (len(marken) and ri_), text=txt_,
+                                   showarrow=False, font=dict(size=12, color=farbe_))
+            fig.update_layout(height=430 + 18 * len(reihen), margin=dict(l=10, r=10, t=14 + 20 * len(reihen), b=10),
+                              xaxis_title="Außentemperatur in °C", yaxis_title="Heizleistung in kW", yaxis_rangemode="tozero",
+                              legend=dict(orientation="h", y=-0.18), template="plotly_white")
             st.plotly_chart(fig, width="stretch")
             if ab_:
                 c_s, c_b = st.columns([4, 1])
@@ -915,7 +967,10 @@ with rechts:
                            "Deckung [%]": round(c["deckung"] * 100, 1) if c["moeglich"] else None,
                            "UVP [€]": KAT["geraete"].get(c["geraet"], {}).get("uvp", 0) * c["n"] or None,
                            "Hinweis": c["grund"] or ("überdimensioniert" if c.get("ueberdimensioniert") else "")})
-        st.dataframe(zeilen, hide_index=True, width="stretch", column_config={"Bild": st.column_config.ImageColumn("", width="small")})
+        st.dataframe(zeilen, hide_index=True, width="stretch",
+                     column_config={"Bild": st.column_config.ImageColumn("", width="small"),
+                                    "Gruppe": st.column_config.TextColumn("Gruppe", width=150),            # „gewählte Baureihe“ ganz lesbar
+                                    "Wärmepumpe": st.column_config.TextColumn("Wärmepumpe", width=190)})
         erkl("A-7/W.. = Heizleistung bei −7 °C Außenluft und Auslegungsvorlauf (Prüfpunkt nach EN 14511, Bezug der Mindestleistung); "
                    "B0/W.. bei Sole/Wasser = Sole 0 °C. θe = Norm-Außentemperatur.")
 

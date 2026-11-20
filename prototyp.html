@@ -2092,7 +2092,7 @@ function legende(r) {
     ${r.kennlinien.min ? '<span><i style="border-color:var(--bosch-blue);border-top-style:dashed"></i>Mindestleistung (1 Gerät)</span>' : ''}
     <span><i style="border-color:var(--chart-other);border-top-style:dotted"></i>weitere Größen der Baureihe</span>
     <span><i style="border-color:var(--chart-ink)"></i>Gebäudekennlinie QGES</span>
-    <span><i style="border-color:#7a3e9d"></i>Ablese-Linie (verschiebbar, Standard θe)</span><span><i style="border-color:#f28c28;border-top-width:8px;opacity:.5"></i>Bivalenzpunkt</span>`;
+    <span><i style="border-color:#7a3e9d"></i>Ablese-Linie (verschiebbar, Standard θe)</span><span><i style="border-color:#f28c28;border-top-width:8px;opacity:.6"></i>Bivalenzpunkt</span>`;
 }
 // ------------------------------------------------------------------ Erklärungen (Klartext, Glossar, Reiter)
 const RECHENWEG = [
@@ -2152,6 +2152,13 @@ function heizkurveSvg(r, o) {
 
 // Ablese-Linie: gewählte Außentemperatur (E.ansicht.t_marke) oder θe des Standorts
 function markeT(r) { const t = (E.ansicht || {}).t_marke; return t === null || t === undefined || t === '' ? r.nat : +t + 0; }
+// Ablesewerte als Satz unter dem Diagramm im Druck (am Bildschirm: Zeile mit dem Regler)
+function ablesenSatz(r) {
+  const a = r.kennlinien ? RK.ablesen(r, markeT(r)) : null;
+  if (!a) return '';
+  return `<p class="hint" style="margin:1mm 0 0">Ablese-Linie bei ${fT(a.t)} °C${Math.abs(a.t - r.nat) < 1e-9 ? ' (θe)' : ''}: Bedarf ${f(a.bedarf, 1)} kW · Wärmepumpe max. ${a.wp_max !== null ? f(a.wp_max, 1) + ' kW' : '–'}`
+    + ` · ${a.heizstab ? 'Heizstab ' + f(a.heizstab, 1) + ' kW' : (a.wp_max !== null ? 'Wärmepumpe deckt allein' : 'außerhalb der Herstellerdaten')}</p>`;
+}
 function ablesenZeigen(r) {
   const k = r.kennlinien, a = k ? RK.ablesen(r, markeT(r)) : null, z = $('#ablesenZeile');
   if (!z) return;
@@ -2184,8 +2191,23 @@ function diagrammZiehen() {
 function diagramm(r, o) {
   const k = r.kennlinien, g = r.gewaehlt;
   if (!k) return '<p class="hint">Kein Diagramm – keine Wärmepumpe mit Leistungsdaten beim gewählten Vorlauf.</p>';
-  const W = o.breite, H = o.hoehe, L = 52, Rr = 130, T = 14, B = 40;
-  const t0 = k.t[0], t1 = k.t[k.t.length - 1];
+  const W = o.breite, L = 52, Rr = 130, B = 40, t0 = k.t[0], t1 = k.t[k.t.length - 1];
+  const a = RK.ablesen(r, markeT(r));
+  // Beschriftungen der senkrechten Marken stehen in einem Band über dem Diagramm – nie über Kurven oder übereinander
+  const marken = [[r.nat, `θe ${fT(r.nat)} °C`, 'var(--ink-soft)', 400]];
+  if (g.bivalenz_art === 'punkt') marken.push([g.bivalenz, `Bivalenzpunkt ${fT(g.bivalenz)} °C`, '#B35C00', 700]);
+  if (g.taktgrenze != null && g.taktgrenze > r.nat && g.taktgrenze <= t1) marken.push([g.taktgrenze, `Taktgrenze ≈ ${fT(g.taktgrenze)} °C`, 'var(--bosch-blue)', 400]);
+  if (a && Math.abs(a.t - r.nat) > 1e-9) marken.push([a.t, `Ablesen ${fT(a.t)} °C`, '#7a3e9d', 700]);
+  const xr = t => L + (Math.min(Math.max(t, t0), t1) - t0) / (t1 - t0) * (W - L - Rr), breite = txt => txt.length * 6.1 + 8;
+  const reihen = [];   // je Reihe belegte Bereiche [x0, x1]
+  const platz = marken.sort((m1, m2) => m1[0] - m2[0]).map(m => {
+    const w = breite(m[1]), x = Math.min(Math.max(xr(m[0]), L + w / 2), W - Rr - w / 2);
+    let i = reihen.findIndex(re => re.every(([u, v]) => x + w / 2 < u || x - w / 2 > v));
+    if (i < 0) { reihen.push([]); i = reihen.length - 1; }
+    reihen[i].push([x - w / 2, x + w / 2]);
+    return {m, x, i};
+  });
+  const T = 10 + 16 * Math.max(1, reihen.length), H = o.hoehe + T - 14;
   // weitere Größen der Baureihe (gleiche Anzahl), nur im erfassten Datenbereich
   const andere = D.geraete.filter(x => x.serie === g.serie && x.id !== g.geraet).map(x => {
     const kk = RK.kurveBeiVl(x.max, r.vl);
@@ -2209,9 +2231,9 @@ function diagramm(r, o) {
     if (idx.length > 1) s += `<path d="M${idx.map(i => X(k.t[i]).toFixed(1) + ',' + Y(k.max[i]).toFixed(1)).join('L')}L${idx.slice().reverse().map(i => X(k.t[i]).toFixed(1) + ',' + Y(k.min[i]).toFixed(1)).join('L')}Z" fill="var(--bosch-blue)" opacity=".08"/>`;
   }
   // Bivalenzbereich (Excel: orange)
-  if (g.bivalenz_art === 'punkt' && g.bivalenz > t0) s += `<rect x="${X(g.bivalenz - 0.8)}" y="${T}" width="${X(g.bivalenz + 0.8) - X(g.bivalenz - 0.8)}" height="${H - B - T}" fill="#f28c28" opacity=".14"/>`;
+  if (g.bivalenz_art === 'punkt' && g.bivalenz > t0) s += `<rect x="${X(g.bivalenz - 0.8)}" y="${T}" width="${X(g.bivalenz + 0.8) - X(g.bivalenz - 0.8)}" height="${H - B - T}" fill="#f28c28" opacity=".22"/>`;
   // NAT
-  s += `<line x1="${X(r.nat)}" x2="${X(r.nat)}" y1="${T}" y2="${H - B}" stroke="var(--ink-faint)" stroke-dasharray="2 3"/><text x="${X(r.nat) + 4}" y="${T + 10}" font-size="11" fill="var(--ink-soft)">θe ${fT(r.nat)} °C</text>`;
+  s += `<line x1="${X(r.nat)}" x2="${X(r.nat)}" y1="${T}" y2="${H - B}" stroke="var(--ink-faint)" stroke-dasharray="2 3"/>`;
   const ende = [];
   for (const a of andere) { s += `<path d="${pfad(k.t, a.q)}" fill="none" stroke="var(--chart-other)" stroke-width="1.2" stroke-dasharray="2 3"/>`; ende.push([letzter(a.q), a.kurz, 'var(--ink-faint)', 400]); }
   if (k.min) { s += `<path d="${pfad(k.t, k.min)}" fill="none" stroke="var(--bosch-blue)" stroke-width="1.6" stroke-dasharray="6 4"/>`; ende.push([letzter(k.min), 'Min.-Leistung', 'var(--bosch-blue)', 400]); }
@@ -2222,24 +2244,22 @@ function diagramm(r, o) {
   for (const [q, txt, col, wt] of ende) { let y = Math.max(Y(q) + 4, yl + 13); yl = y; s += `<text x="${W - Rr + 6}" y="${y}" font-size="11" fill="${col}" font-weight="${wt}">${esc(txt)}</text>`; }
   if (g.bivalenz_art === 'punkt') {
     const qb = RK.last(g.bivalenz, r.qh + r.qsperr, r.qtw, r.nat, r.heizgrenze);
-    s += `<circle cx="${X(g.bivalenz)}" cy="${Y(qb)}" r="5.5" fill="var(--bosch-blue)" stroke="#fff" stroke-width="2"/><text x="${X(g.bivalenz) < L + 140 ? X(g.bivalenz) + 8 : X(g.bivalenz) - 8}" y="${Y(qb) + 20}" text-anchor="${X(g.bivalenz) < L + 140 ? 'start' : 'end'}" font-size="11" fill="var(--ink)" paint-order="stroke" stroke="var(--paper)" stroke-width="4">Bivalenzpunkt ${fT(g.bivalenz)} °C</text>`;
+    s += `<circle cx="${X(g.bivalenz)}" cy="${Y(qb)}" r="5.5" fill="#f28c28" stroke="#fff" stroke-width="2"/>`;
   }
   if (g.taktgrenze != null && g.taktgrenze > r.nat && g.taktgrenze <= t1) {
     const qt = RK.last(g.taktgrenze, r.qh + r.qsperr, r.qtw, r.nat, r.heizgrenze);
-    s += `<circle cx="${X(g.taktgrenze)}" cy="${Y(qt)}" r="4" fill="#fff" stroke="var(--bosch-blue)" stroke-width="2"/><text x="${X(g.taktgrenze)}" y="${Y(qt) - 10}" font-size="11" text-anchor="middle" fill="var(--ink-soft)" paint-order="stroke" stroke="var(--paper)" stroke-width="4">Taktgrenze ≈ ${fT(g.taktgrenze)} °C</text>`;
+    s += `<circle cx="${X(g.taktgrenze)}" cy="${Y(qt)}" r="4" fill="#fff" stroke="var(--bosch-blue)" stroke-width="2"/>`;
   }
   if (g.t_daten_min > t0) s += `<text x="${X(g.t_daten_min) + 3}" y="${H - B - 6}" font-size="10" fill="var(--ink-faint)">Herstellerdaten ab ${fT(g.t_daten_min)} °C</text>`;
-  // Ablese-Linie (verschiebbar, Standard θe): Bedarf und WP-Leistung bei dieser Außentemperatur
-  const a = RK.ablesen(r, markeT(r));
+  // Ablese-Linie (verschiebbar, Standard θe) mit Punkten für Bedarf und WP-Leistung; die Werte stehen unter dem Diagramm
   if (a) {
-    const xm = X(a.t), links = xm > L + (W - L - Rr) * 0.6, tx = links ? xm - 8 : xm + 8, anker = links ? 'end' : 'start';
-    const zeilen = [`Ablesen ${fT(a.t)} °C`, `Bedarf ${f(a.bedarf, 1)} kW`, a.wp_max !== null ? `WP max. ${f(a.wp_max, 1)} kW` : 'WP: keine Herstellerdaten',
-      a.heizstab ? `Heizstab ${f(a.heizstab, 1)} kW` : (a.wp_max !== null ? 'WP deckt allein' : '')].filter(Boolean);
+    const xm = X(a.t);
     s += `<line x1="${xm}" x2="${xm}" y1="${T}" y2="${H - B}" stroke="#7a3e9d" stroke-width="2"/>`
       + `<circle cx="${xm}" cy="${Y(a.bedarf)}" r="4.5" fill="var(--chart-ink)" stroke="#fff" stroke-width="1.5"/>`
-      + (a.wp_max !== null ? `<circle cx="${xm}" cy="${Y(a.wp_max)}" r="4.5" fill="var(--bosch-blue)" stroke="#fff" stroke-width="1.5"/>` : '')
-      + zeilen.map((z, i) => `<text x="${tx}" y="${T + 26 + i * 14}" font-size="11" text-anchor="${anker}" font-weight="${i ? 400 : 700}" fill="${i ? 'var(--ink)' : '#7a3e9d'}" paint-order="stroke" stroke="var(--paper)" stroke-width="3">${z}</text>`).join('');
+      + (a.wp_max !== null ? `<circle cx="${xm}" cy="${Y(a.wp_max)}" r="4.5" fill="var(--bosch-blue)" stroke="#fff" stroke-width="1.5"/>` : '');
   }
+  // Beschriftungsband
+  for (const {m, x, i: reihe} of platz) s += `<text x="${x.toFixed(1)}" y="${10 + reihe * 16 + 2}" font-size="11" text-anchor="middle" fill="${m[2]}" font-weight="${m[3]}">${esc(m[1])}</text>`;
   s += `<line x1="${L}" x2="${W - Rr}" y1="${H - B}" y2="${H - B}" stroke="var(--ink-faint)"/></svg>`;
   return s.replace('<svg ', `<svg data-t0="${t0}" data-t1="${t1}" data-l="${L}" data-r="${W - Rr}" data-w="${W}" `);
 }
@@ -2302,7 +2322,7 @@ function baueDruck() {
     ${fuss(1, n)}</div>`;
   h += `<div class="seite">${klein}<div class="dk-h">Leistungsdaten</div>
     <div class="dk-h2">Heizleistung über der Außentemperatur – Vorlauf ${f(r.vl, 0)} °C</div>
-    <div class="legende">${legende(r)}${minHinweis(r)}</div>${diagramm(r, {breite: 760, hoehe: 340})}
+    <div class="legende">${legende(r)}${minHinweis(r)}</div>${diagramm(r, {breite: 760, hoehe: 340})}${ablesenSatz(r)}
     <div class="dk-h2">Heizkurve (DIN EN 442)</div>${heizkurveSvg(r, {breite: 760, hoehe: 200})}${fuss(2, n)}</div>`;
   h += `<div class="seite">${klein}<div class="dk-h">Geräteauswahl und E-Heizer</div>
     <div class="dk-h2">Passende Wärmepumpen je Baureihe (kleinste passende Größe) und gewählte Wärmepumpe</div>
