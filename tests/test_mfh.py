@@ -127,3 +127,14 @@ def test_auto_waehlt_muster_wp():
     e["auswahl"].update(geraet="CS5001 AW22", anzahl=1)
     r = M.rechne(e, D.geraete(), D.katalog(), MD)
     assert not r["mfh_wp"] and r["gewaehlt"]["geraet"] == "CS5001 AW22"
+
+
+def test_ww_wechsel_hebt_handauswahl_auf():
+    """Neue Warmwasserbereitung: von Hand gewählte Hydraulik und Wärmepumpe passen nicht mehr – wieder vorschlagen."""
+    e = mfh_eingabe("neubau", 3, "hiu")
+    e["hydraulik"]["schema"] = "4WE_2L_CS5800_BP7EM_HPS"
+    e["auswahl"].update(geraet="CS3800iAW 7 O-S", anzahl=1)
+    e["mfh"]["ww"] = "dle"
+    M.eingaben_folgen(e, "mfh.ww")
+    assert e["hydraulik"]["schema"] == "" and e["auswahl"]["geraet"] == ""
+    assert not e["tww"]["aktiv"]

@@ -937,10 +937,13 @@ const MFK = (() => {
     const m = e.mfh;
     if (['mfh.art', 'mfh.ww', 'mfh.we', 'mfh.system', 'gebaeude.typ', 'auslegung'].includes(k)) m.zelle = '';
     if (['mfh.art', 'mfh.ww', 'mfh.system', 'gebaeude.typ', 'auslegung'].includes(k) && e.hydraulik) e.hydraulik.loesung = '';   // Bezug zur übernommenen Musterlösung lösen
+    if (['mfh.art', 'mfh.ww', 'mfh.we', 'mfh.system', 'gebaeude.typ', 'auslegung'].includes(k) && e.hydraulik) e.hydraulik.schema = '';   // von Hand gewählte Hydraulik passt nicht mehr – neu vorschlagen
     if (k === 'auslegung') m.system = '';
     if (k === 'mfh.system')   // Anlagenart: Hybrid und bivalent nach GEG-Hybrid-Kriterium, sonst Standard je Wärmequelle
       e.auslegung = ['hybrid', 'bivalent'].includes(m.system) ? 'hybrid' : (e.waermequelle === 'sole' ? 'monovalent' : 'monoenergetisch');
     if (m.art !== 'mfh') return;
+    // andere Musterlösung: Wärmepumpe wieder aus der Musterlösung („Beste Lösung“) statt der alten Handauswahl
+    if (['mfh.art', 'mfh.ww', 'mfh.we', 'mfh.system', 'gebaeude.typ'].includes(k)) { e.auswahl.geraet = ''; e.auswahl.anzahl = 1; e.auswahl.inneneinheit = ''; }
     if (k === 'mfh.art' || k === 'mfh.ww') { e.tww.aktiv = m.ww !== 'dle'; e.tww.system = m.ww === 'speicher' ? 'speicher' : 'friwa'; }
     if (k === 'mfh.art' || k === 'gebaeude.typ') { e.heizlast.methode = 'flaeche'; e.heizlast.spez_w_m2 = MUSTER_SPEZ[e.gebaeude.typ === 'neubau' ? 'neubau' : 'bestand']; }
     if (k === 'mfh.art' || k === 'mfh.we') {

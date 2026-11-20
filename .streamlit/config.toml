@@ -5,6 +5,9 @@ base = "light"
 primaryColor = "#007BC0"
 font = "sans serif"
 
+[runner]
+magicEnabled = false   # schneller: kein Umbau des Skripts bei jedem Lauf (die App nutzt keine „Magic“-Ausgaben)
+
 [browser]
 gatherUsageStats = false
 

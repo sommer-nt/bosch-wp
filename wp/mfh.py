@@ -31,6 +31,8 @@ def eingaben_folgen(e: dict, k: str) -> None:
         m["zelle"] = ""
     if k in ("mfh.art", "mfh.ww", "mfh.system", "gebaeude.typ", "auslegung") and e.get("hydraulik"):
         e["hydraulik"]["loesung"] = ""   # Bezug zur übernommenen Musterlösung lösen
+    if k in ("mfh.art", "mfh.ww", "mfh.we", "mfh.system", "gebaeude.typ", "auslegung") and e.get("hydraulik"):
+        e["hydraulik"]["schema"] = ""    # von Hand gewählte Hydraulik passt nicht mehr – neu vorschlagen
     if k == "auslegung":
         m["system"] = ""
     if k == "mfh.system":   # Anlagenart: Hybrid und bivalent nach GEG-Hybrid-Kriterium, sonst Standard je Wärmequelle
@@ -38,6 +40,9 @@ def eingaben_folgen(e: dict, k: str) -> None:
             "monovalent" if e.get("waermequelle") == "sole" else "monoenergetisch")
     if m.get("art") != "mfh":
         return
+    if k in ("mfh.art", "mfh.ww", "mfh.we", "mfh.system", "gebaeude.typ"):
+        # andere Musterlösung: Wärmepumpe wieder aus der Musterlösung („Beste Lösung“) statt der alten Handauswahl
+        e["auswahl"].update(geraet="", anzahl=1, inneneinheit="")
     if k in ("mfh.art", "mfh.ww"):
         e["tww"]["aktiv"] = m["ww"] != "dle"
         e["tww"]["system"] = "speicher" if m["ww"] == "speicher" else "friwa"

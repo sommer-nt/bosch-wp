@@ -4,6 +4,7 @@ Start:  streamlit run app.py
 """
 from __future__ import annotations
 
+import copy
 import os
 import sys
 from datetime import date
@@ -1071,11 +1072,19 @@ with rechts:
         if True:
             st.table([{"Größe": a, "Formel": b, "Wert": c} for a, b, c in T.herleitung(E, r)])
 
-    pdf_ = B.pdf_bytes(E, r, DATEN, KAT)
+    # PDF und Projektmappe erst beim Klick erzeugen (nicht bei jeder Eingabe) – Stand der Eingaben von jetzt
+    e_pdf, r_pdf = copy.deepcopy(E), copy.deepcopy(r)
+
+    def _pdf():
+        return B.pdf_bytes(e_pdf, r_pdf, DATEN, KAT)
+
+    def _mappe():
+        return X.mappe_bytes(e_pdf, r_pdf, KAT, _pdf())
+
     c_p, c_m = st.columns(2)
-    c_p.download_button("📄 Auslegung als PDF", pdf_, f"WP-Auslegung_{name}{'_intern' if E['preise_drucken'] else ''}.pdf",
-                        "application/pdf", type="primary", width="stretch")
-    c_m.download_button("🗂 Projektmappe (.zip)", X.mappe_bytes(E, r, KAT, pdf_), f"WP-Auslegung_{X.dateiname(E)}.zip",
-                        "application/zip", width="stretch", help="Projektdatei, Kurzbericht, PDF der Auslegung und Bild der gewählten Hydraulik")
+    c_p.download_button("📄 Auslegung als PDF", _pdf, f"WP-Auslegung_{name}{'_intern' if E['preise_drucken'] else ''}.pdf",
+                        "application/pdf", type="primary", width="stretch", on_click="ignore")
+    c_m.download_button("🗂 Projektmappe (.zip)", _mappe, f"WP-Auslegung_{X.dateiname(E)}.zip",
+                        "application/zip", width="stretch", on_click="ignore", help="Projektdatei, Kurzbericht, PDF der Auslegung und Bild der gewählten Hydraulik")
     st.caption(f"Entwickelt von Daniel Sommer · HC/SDE3-PSD · Leistungsdaten: {DATEN['quelle']} · Katalog: Gesamtkatalog März 2026 · "
                "Ergebnis ersetzt keine Fachplanung.")
