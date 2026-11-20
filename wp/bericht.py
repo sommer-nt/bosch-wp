@@ -767,6 +767,11 @@ def pdf_bytes(e: dict, r: dict, daten: dict, katalog: dict) -> bytes:
             werte.append((f"Schalldruck in {T.f(s_['abstand_m'], 1)} m (TA Lärm)",
                           f"{T.f(s_['lp_db'], 1)} dB(A)", ))
             werte.append(("Nachts eingehalten bis", nachts[-1] if nachts else "kein Gebiet"))
+        ku_ = r.get("kuehlung")
+        if ku_ and ku_["last_kw"] > 0:
+            werte.append((f"Kühlleistung A{T.f(ku_['t'], 0)}/W{ku_['vl']} (EER {T.f(ku_['eer'], 2)})", T.f(ku_["q_kw"], 2) + " kW"))
+            werte.append((f"Kühllast {T.f(ku_['last_kw'], 1)} kW", ("gedeckt " if ku_["ok"] else "nicht gedeckt ")
+                          + T.f(ku_["abdeckung"] * 100, 0) + " %"))
         if k_:
             werte.append(("Energiekosten WP pro Jahr", T.f(k_["neu_eur"], 0) + " €"))
             werte.append(("Einsparung pro Jahr" if k_["ersparnis_eur"] >= 0 else "Mehrkosten pro Jahr",

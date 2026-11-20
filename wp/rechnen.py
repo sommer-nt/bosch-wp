@@ -470,8 +470,9 @@ def rechne(e: dict, daten: dict, katalog: dict | None = None) -> dict:
         r["energie"] = energie(e, r, katalog)
         r["schall"] = schall(e, r, katalog)
         r["kosten"] = kosten(e, r)
+        r["kuehlung"] = kuehlung(e, r, katalog)
     else:
-        r["gewaehlt"], r["kennlinien"], r["energie"], r["schall"], r["kosten"] = None, None, None, None, None
+        r["gewaehlt"], r["kennlinien"], r["energie"], r["schall"], r["kosten"], r["kuehlung"] = None, None, None, None, None, None
     r["leitung"] = leitung(e, r)
     r["heizkurve"] = heizkurve(e, r)
     r["erdreich"] = erdreich(e, r, katalog)
@@ -608,6 +609,43 @@ def kosten(e: dict, r: dict) -> dict | None:
     return {"wp_eur": wp, "hs_eur": hs, "kessel_eur": kes, "neu_eur": wp + hs + kes, "alt": alt, "alt_kwh": bedarf_alt,
             "alt_eur": bedarf_alt * p_alt, "ersparnis_eur": bedarf_alt * p_alt - wp - hs - kes, "strom_wp": p_wp, "strom_hs": p_hs,
             "preis_alt": p_alt, "eta_alt": eta, "zweiter": zw, "preis_kessel": p_k, "eta_kessel": eta_k}
+
+
+# Kühlbetrieb (EN 14511): Kühlleistung und EER bei Außentemperatur t und Kühlwasser 7 °C (Gebläsekonvektoren) bzw. 18 °C
+# (Flächenkühlung). Mit Kennlinie (CS5001) linear interpoliert, sonst Herstellerwert bei A35.
+def _lin(xs: list, ys: list, x: float) -> float:
+    if x <= xs[0]:
+        return ys[0]
+    for i in range(1, len(xs)):
+        if x <= xs[i]:
+            return ys[i - 1] + (ys[i] - ys[i - 1]) * (x - xs[i - 1]) / (xs[i] - xs[i - 1])
+    return ys[-1]
+
+
+def kuehlung(e: dict, r: dict, katalog: dict | None) -> dict | None:
+    """Kühlleistung der gewählten Wärmepumpe (n Geräte) und Prüfung gegen eine Kühllast (optional)."""
+    g = r.get("gewaehlt")
+    if not g:
+        return None
+    kd = ((katalog or {}).get("geraete", {}).get(g["geraet"]) or {}).get("kuehlung")
+    if not kd:
+        return None
+    k = e.get("kuehlung") or {}
+    vl = 7 if int(float(k.get("vl") or 18)) == 7 else 18
+    t = min(45.0, max(10.0, float(k.get("t_aussen") if k.get("t_aussen") not in (None, "") else 35.0)))
+    last = max(0.0, float(k.get("last_kw") or 0))
+    n = int(g["n"])
+    kv = (kd.get("kurven") or {}).get(str(vl))
+    if kv:
+        q1, q_min, eer = _lin(kv["t"], kv["max"], t), _lin(kv["t"], kv["min"], t), _lin(kv["t"], kv["eer_max"], t)
+    else:
+        t, q_min = 35.0, None
+        q1, eer = (kd["a35w7"], kd["eer_a35w7"]) if vl == 7 else (kd["a35w18"], kd["eer_a35w18"])
+    q = n * q1
+    nom = kd.get("a35w18_nom")
+    return {"vl": vl, "t": t, "n": n, "kurve": bool(kv), "q_kw": q, "q_geraet_kw": q1, "q_min_kw": q_min, "eer": eer,
+            "nom_kw": n * nom if (nom is not None and vl == 18) else None, "last_kw": last,
+            "ok": (q >= last - 1e-9) if last > 0 else None, "abdeckung": q / last if last > 0 else None, "quelle": kd.get("quelle", "")}
 
 
 def energie(e: dict, r: dict, katalog: dict | None) -> dict | None:

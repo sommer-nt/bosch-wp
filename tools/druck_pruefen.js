@@ -9,6 +9,7 @@ const FAELLE = {
   mfh_ueberdim: E => { E.mfh.art = 'mfh'; MFK.eingabenFolgen(E, 'mfh.art'); E.gebaeude.typ = 'neubau'; MFK.eingabenFolgen(E, 'gebaeude.typ'); E.mfh.we = 4; MFK.eingabenFolgen(E, 'mfh.we');
     E.klima.nat = -11; E.vl = 35; E.auswahl.geraet = 'CS5001 AW22'; E.auswahl.anzahl = 2; },
   mfh_bivalent: E => { E.mfh.art = 'mfh'; MFK.eingabenFolgen(E, 'mfh.art'); E.mfh.we = 14; MFK.eingabenFolgen(E, 'mfh.we'); E.mfh.system = 'bivalent'; MFK.eingabenFolgen(E, 'mfh.system'); },
+  kuehlung: E => { E.heizlast.vorgabe_kw = 40; E.tww.personen = 10; E.auswahl.geraet = 'CS5001 AW22'; E.auswahl.anzahl = 2; E.kuehlung = {last_kw: 24, vl: 7, t_aussen: 32}; },
   kaskade: E => { E.heizlast.vorgabe_kw = 25; E.tww.personen = 6; E.auswahl.geraet = 'CS8800iAW 15 O-T'; E.auswahl.anzahl = 2; },
 };
 (async () => {

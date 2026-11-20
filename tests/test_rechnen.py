@@ -31,14 +31,16 @@ def e_mit(**aend):
 
 def szenarien():
     return [
-        {"name": "vorgabe_efh", "eingaben": e_mit(heizlast__vorgabe_kw=6.34, klima__nat=-11.5, tww__aktiv=False, vl=50)},
+        {"name": "vorgabe_efh", "eingaben": e_mit(heizlast__vorgabe_kw=6.34, klima__nat=-11.5, tww__aktiv=False, vl=50,
+                                                  kuehlung__last_kw=5, kuehlung__vl=18, kuehlung__t_aussen=28)},
         {"name": "excel_verbrauch", "eingaben": e_mit(heizlast__methode="verbrauch", heizlast__menge=8830, heizlast__heizwert=10.42,
                                                       tww__personen=5, tww__bezug="personen", tww__qwb=1.1, tww__td=4)},
         {"name": "flaeche_sperrzeit", "eingaben": e_mit(heizlast__methode="flaeche", heizlast__flaeche_m2=180, heizlast__spez_w_m2=70,
                                                         sperrzeit_h=4, tww__kw_person=0.25, vl=55)},
         {"name": "huelle_monovalent", "eingaben": e_mit(heizlast__methode="huelle", heizlast__huell_a_m2=420, heizlast__ht=0.45,
                                                         heizlast__volumen_m3=480, auslegung="monovalent", vl=35, klima__nat=-14)},
-        {"name": "mfh_gross_5001", "eingaben": e_mit(heizlast__vorgabe_kw=95, tww__personen=40, vl=65, serien=["CS5001", "CS8800"])},
+        {"name": "mfh_gross_5001", "eingaben": e_mit(heizlast__vorgabe_kw=95, tww__personen=40, vl=65, serien=["CS5001", "CS8800"],
+                                                     kuehlung__last_kw=40, kuehlung__vl=7, kuehlung__t_aussen=32.5)},
         {"name": "hybrid", "eingaben": e_mit(heizlast__vorgabe_kw=30, auslegung="hybrid", vl=60,
                                              schall__abstand_m=3.5, schall__aufstellung="ecke", kosten__alt="oel", kosten__preis_alt=0.105,
                                              kosten__eta_alt=0.82, kosten__strom_wp=0.25, kosten__strom_hs=0.4)},
@@ -401,3 +403,18 @@ def test_zweiter_waermeerzeuger():
     assert abs(k["kessel_eur"] - en["kessel_kwh"] / 0.9 * 0.10) < 1e-6 and abs(k["neu_eur"] - k["wp_eur"] - k["kessel_eur"]) < 1e-9
     r2 = rechne(e_mit(heizlast__vorgabe_kw=45, auslegung="hybrid", mfh__art="mfh", mfh__system="mono"))   # Kriterium allein: kein Kessel
     assert r2["zweiter"] is None and r2["energie"]["kessel_kwh"] == 0
+
+
+def test_kuehlung():
+    """Kühlbetrieb: Kennlinie CS5001 (interpoliert, Kaskade × n), A35-Wert CS5800/6800, keine Daten CS8800."""
+    def k(geraet, n=1, **kw):
+        e = e_mit(heizlast__vorgabe_kw=20, auswahl__geraet=geraet, auswahl__anzahl=n, **{f"kuehlung__{a}": b for a, b in kw.items()})
+        return rechne(e)["kuehlung"]
+    a = k("CS5001 AW22", vl=18, t_aussen=35)
+    assert a["kurve"] and abs(a["q_kw"] - 17.55) < 1e-9 and abs(a["eer"] - 3.69) < 1e-9 and abs(a["q_min_kw"] - 11.19) < 1e-9
+    b = k("CS5001 AW22", 2, vl=7, t_aussen=32.5, last_kw=30)
+    assert abs(b["q_geraet_kw"] - (13.31 + 12.94) / 2) < 1e-9 and abs(b["q_kw"] - 2 * b["q_geraet_kw"]) < 1e-9 and b["ok"] is False
+    c = k("CS5800/6800iAW 12 OR-T", vl=7, t_aussen=28, last_kw=6)
+    assert not c["kurve"] and c["t"] == 35.0 and c["q_kw"] == 7.59 and c["eer"] == 2.30 and c["ok"] is True and c["nom_kw"] is None
+    assert k("CS5800/6800iAW 12 OR-T", vl=18)["nom_kw"] == 6.16
+    assert k("CS8800iAW 13 O-T") is None

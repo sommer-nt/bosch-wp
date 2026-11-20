@@ -80,6 +80,18 @@ Preise (auch nicht im Ausdruck), ohne Expertenmodus, ohne VDI-Vergleichstabelle 
 12. **Energiekosten** (`rechnen.kosten`): WP-Strom und Heizstab gegen Erdgas, Heizöl oder Strom-Direktheizung
     (Jahreswärme / Nutzungsgrad · Preis); Vorgabepreise 0,28 / 0,35 €/kWh Strom, Gas 0,12 (η 0,90), Öl 0,11 (η 0,85) – im Tool änderbar.
 
+## Kühlung
+
+Reiter „Kühlung“ (`rechnen.kuehlung` / `kuehlung()` im Rechenkern): Kühlleistung und EER der gewählten Wärmepumpe (× Anzahl bei
+Kaskade) bei Kühlwasser 18 °C (Flächenkühlung) oder 7 °C (Gebläsekonvektoren) und frei wählbarer Außentemperatur, optional mit
+Prüfung einer Kühllast; darunter das Arbeitsblatt „Kühldaten aller Wärmepumpen“. Daten in `katalog.json` → `kuehlung`:
+
+- CS3800iAW 4/6/7 O-S und 10/13 O-T: Technische Daten 6721110410 (2026/07) – Werte bei A35 (W7, W18 max. und nominell).
+- CS5800/6800iAW 4–12: Planungsunterlage 6721891866 (2025/04) – Werte bei A35.
+- CS5001AW 22/42: Installations-/Bedienungsanleitung 6721114790/91 (2026/02), Kennlinien Kühlen max./min. und EER über
+  10–45 °C, aus den Vektorgrafiken gelesen (±0,1 kW; Kontrolle: A35/W18 = Katalogwert ±1 %). Zwischen den Stützstellen linear.
+- Ohne Kennlinie gilt der Wert bei A35 (Außentemperatur dann fest 35 °C).
+
 ## MFH-Bestellvorschläge (Musterlösungen)
 
 Beim Mehrfamilienhaus wählt das Tool aus der Kostenübersicht der MFH-Musterlösungen (Bestand 45 W/m², Neubau
@@ -197,7 +209,8 @@ Nach Änderungen an `katalog.json`: `python tools/excel_import.py --nur-einbette
 
 ## Offen
 
-- CS3800iAW 10/13 O-T: Kurven aus dem Excel, Katalogdaten (SCOP, Schall) noch offen – ohne sie keine Strom-, Kosten- und Schallwerte.
+- CS3800iAW 10/13 O-T: SCOP, Schallleistung und Kühlung aus den Technischen Daten 6721110410 (2026/07) ergänzt.
+- Kühlung: keine Daten für CS8800iAW und CS7000/7400 in den öffentlichen Unterlagen; Kennlinien nur für CS5001.
 - CS8800iAW 11/13/15 O-T: SCOP aus den Bosch-Bestellvorschlägen (Produktdaten) ergänzt.
 - CS5001AW 30 und CS5000 AW 22/38: keine Leistungsdaten im Excel. CS7000i/CS7400i nur als Kurven (Katalog: Pakete).
 - Sole/Wasser bei 55 °C: Nennwärmeleistung (ErP) statt max. Leistung angesetzt; Kaskaden bei Sole noch nicht freigegeben.

@@ -27,7 +27,7 @@ SERIEN = [
     # Luft/Wasser – Kaskaden wie Navigation im Excel-Werkzeug: CS3800 und CS7400 nicht kaskadierbar
     {"id": "CS3800", "name": "Compress 3800i AW", "quelle": "luft", "bauart": "Monoblock", "kaeltemittel": "R290",
      "eheizer_kw": 9, "kaskade_max": 1,
-     "hinweis": "Nicht kaskadierbar. 10 O-T und 13 O-T: Kurven aus dem Excel-Werkzeug, Katalogdaten noch offen."},
+     "hinweis": "Nicht kaskadierbar. 10 O-T und 13 O-T: Kurven aus dem Excel-Werkzeug, Katalogwerte aus den Technischen Daten 2026/07."},
     {"id": "CS5800", "name": "Compress 5800i / 6800i AW", "quelle": "luft", "bauart": "Monoblock", "kaeltemittel": "R290",
      "eheizer_kw": 9, "kaskade_max": 2, "hinweis": "E-Heizer bis 9 kW, 2er-Kaskade."},
     {"id": "CS8800", "name": "Compress 8800i AW", "quelle": "luft", "bauart": "Monoblock", "kaeltemittel": "R290",

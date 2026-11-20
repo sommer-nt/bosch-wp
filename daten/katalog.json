@@ -12,12 +12,20 @@
    "a_7w35_max": 3.95,
    "scop35": 4.99,
    "scop55": 3.51,
-   "kuehl_a35w18": 3.9,
    "lw_db": 48,
    "masse": "804 × 1150 × 500 mm",
    "gewicht_kg": 111,
    "vl_max": 75,
-   "phasen": "1~"
+   "phasen": "1~",
+   "kuehlung": {
+    "a35w7": 3.33,
+    "eer_a35w7": 3.09,
+    "a35w18": 4.69,
+    "eer_a35w18": 4.22,
+    "a35w18_nom": 4.21,
+    "eer_a35w18_nom": 4.28,
+    "quelle": "Technische Daten Compress CS3800iAW, 6721110410 (2026/07)"
+   }
   },
   "CS3800iAW 6 O-S": {
    "artnr": "8755000547",
@@ -29,12 +37,20 @@
    "a_7w35_max": 5.91,
    "scop35": 4.98,
    "scop55": 3.64,
-   "kuehl_a35w18": 5.04,
    "lw_db": 48,
    "masse": "804 × 1150 × 500 mm",
    "gewicht_kg": 111,
    "vl_max": 75,
-   "phasen": "1~"
+   "phasen": "1~",
+   "kuehlung": {
+    "a35w7": 4.07,
+    "eer_a35w7": 2.98,
+    "a35w18": 5.82,
+    "eer_a35w18": 4.03,
+    "a35w18_nom": 5.17,
+    "eer_a35w18_nom": 4.12,
+    "quelle": "Technische Daten Compress CS3800iAW, 6721110410 (2026/07)"
+   }
   },
   "CS3800iAW 7 O-S": {
    "artnr": "8755000548",
@@ -46,24 +62,58 @@
    "a_7w35_max": 6.96,
    "scop35": 4.96,
    "scop55": 3.67,
-   "kuehl_a35w18": 6.17,
    "lw_db": 48,
    "masse": "804 × 1150 × 500 mm",
    "gewicht_kg": 111,
    "vl_max": 75,
-   "phasen": "1~"
+   "phasen": "1~",
+   "kuehlung": {
+    "a35w7": 4.87,
+    "eer_a35w7": 2.81,
+    "a35w18": 6.94,
+    "eer_a35w18": 3.69,
+    "a35w18_nom": 6.06,
+    "eer_a35w18_nom": 4.0,
+    "quelle": "Technische Daten Compress CS3800iAW, 6721110410 (2026/07)"
+   }
   },
   "CS3800iAW 10 O-T": {
    "artnr": "8755000551",
    "uvp": 8700,
    "vl_max": 75,
-   "hinweis": "Technische Daten im Katalog noch offen (verfügbar ab 06/2026)."
+   "hinweis": "SCOP, Schall und Kühlung aus den Technischen Daten 6721110410 (2026/07).",
+   "kuehlung": {
+    "a35w7": 7.24,
+    "eer_a35w7": 3.2,
+    "a35w18": 8.85,
+    "eer_a35w18": 3.71,
+    "a35w18_nom": 8.2,
+    "eer_a35w18_nom": 4.35,
+    "quelle": "Technische Daten Compress CS3800iAW, 6721110410 (2026/07)"
+   },
+   "scop35": 5.01,
+   "scop55": 3.92,
+   "lw_db": 49,
+   "scop_quelle": "Technische Daten Compress CS3800iAW, 6721110410 (2026/07)"
   },
   "CS3800iAW 13 O-T": {
    "artnr": "8738218798",
    "uvp": 10200,
    "vl_max": 75,
-   "hinweis": "Technische Daten im Katalog noch offen (verfügbar ab 06/2026)."
+   "hinweis": "SCOP, Schall und Kühlung aus den Technischen Daten 6721110410 (2026/07).",
+   "kuehlung": {
+    "a35w7": 7.76,
+    "eer_a35w7": 2.72,
+    "a35w18": 10.0,
+    "eer_a35w18": 3.24,
+    "a35w18_nom": 9.0,
+    "eer_a35w18_nom": 4.0,
+    "quelle": "Technische Daten Compress CS3800iAW, 6721110410 (2026/07)"
+   },
+   "scop35": 5.04,
+   "scop55": 3.88,
+   "lw_db": 51,
+   "scop_quelle": "Technische Daten Compress CS3800iAW, 6721110410 (2026/07)"
   },
   "CS5800/6800iAW 4 OR-S": {
    "artnr": "8738213464",
@@ -75,12 +125,20 @@
    "a_7w35_max": 3.92,
    "scop35": 4.58,
    "scop55": 3.32,
-   "kuehl_a35w18": 2.93,
    "lw_db": 40,
    "masse": "800 × 1100 × 540 mm",
    "gewicht_kg": 143,
    "phasen": "1~",
-   "katalogname": "AW 4 OR-S"
+   "katalogname": "AW 4 OR-S",
+   "kuehlung": {
+    "a35w7": 3.03,
+    "eer_a35w7": 2.56,
+    "a35w18": 4.36,
+    "eer_a35w18": 3.37,
+    "a35w18_nom": 2.93,
+    "eer_a35w18_nom": 3.74,
+    "quelle": "Planungsunterlage Compress CS5800iAW/CS6800iAW, 6721891866 (2025/04)"
+   }
   },
   "CS5800/6800iAW 5 OR-S": {
    "artnr": "8738213465",
@@ -92,12 +150,20 @@
    "a_7w35_max": 5.42,
    "scop35": 4.57,
    "scop55": 3.5,
-   "kuehl_a35w18": 3.47,
    "lw_db": 42,
    "masse": "800 × 1100 × 540 mm",
    "gewicht_kg": 143,
    "phasen": "1~",
-   "katalogname": "AW 5 OR-S"
+   "katalogname": "AW 5 OR-S",
+   "kuehlung": {
+    "a35w7": 3.67,
+    "eer_a35w7": 2.49,
+    "a35w18": 5.25,
+    "eer_a35w18": 3.2,
+    "a35w18_nom": 3.47,
+    "eer_a35w18_nom": 3.74,
+    "quelle": "Planungsunterlage Compress CS5800iAW/CS6800iAW, 6721891866 (2025/04)"
+   }
   },
   "CS5800/6800iAW 7 OR-S": {
    "artnr": "8738213466",
@@ -109,12 +175,20 @@
    "a_7w35_max": 6.71,
    "scop35": 4.58,
    "scop55": 3.52,
-   "kuehl_a35w18": 3.82,
    "lw_db": 42,
    "masse": "800 × 1100 × 540 mm",
    "gewicht_kg": 143,
    "phasen": "1~",
-   "katalogname": "AW 7 OR-S"
+   "katalogname": "AW 7 OR-S",
+   "kuehlung": {
+    "a35w7": 3.88,
+    "eer_a35w7": 2.44,
+    "a35w18": 5.5,
+    "eer_a35w18": 3.11,
+    "a35w18_nom": 3.82,
+    "eer_a35w18_nom": 3.7,
+    "quelle": "Planungsunterlage Compress CS5800iAW/CS6800iAW, 6721891866 (2025/04)"
+   }
   },
   "CS5800/6800iAW 10 OR-T": {
    "artnr": "8738213467",
@@ -126,12 +200,20 @@
    "a_7w35_max": 9.6,
    "scop35": 4.77,
    "scop55": 3.64,
-   "kuehl_a35w18": 5.4,
    "lw_db": 42,
    "masse": "1100 × 1350 × 540 mm",
    "gewicht_kg": 203,
    "phasen": "3~",
-   "katalogname": "AW 10 OR-T"
+   "katalogname": "AW 10 OR-T",
+   "kuehlung": {
+    "a35w7": 6.7,
+    "eer_a35w7": 2.39,
+    "a35w18": 8.9,
+    "eer_a35w18": 2.88,
+    "a35w18_nom": 5.4,
+    "eer_a35w18_nom": 3.88,
+    "quelle": "Planungsunterlage Compress CS5800iAW/CS6800iAW, 6721891866 (2025/04)"
+   }
   },
   "CS5800/6800iAW 12 OR-T": {
    "artnr": "8738213468",
@@ -143,12 +225,20 @@
    "a_7w35_max": 11.6,
    "scop35": 4.66,
    "scop55": 3.51,
-   "kuehl_a35w18": 6.16,
    "lw_db": 45,
    "masse": "1100 × 1350 × 540 mm",
    "gewicht_kg": 203,
    "phasen": "3~",
-   "katalogname": "AW 12 OR-T"
+   "katalogname": "AW 12 OR-T",
+   "kuehlung": {
+    "a35w7": 7.59,
+    "eer_a35w7": 2.3,
+    "a35w18": 9.56,
+    "eer_a35w18": 2.63,
+    "a35w18_nom": 6.16,
+    "eer_a35w18_nom": 3.79,
+    "quelle": "Planungsunterlage Compress CS5800iAW/CS6800iAW, 6721891866 (2025/04)"
+   }
   },
   "CS8800iAW 11 O-T": {
    "artnr": "7738602871",
@@ -215,14 +305,128 @@
    "cop_a_7w35": 2.78,
    "scop35": 5.2,
    "scop55": 3.96,
-   "kuehl_a35w18": 17.61,
    "lw_db": 52,
    "masse": "1517 × 1800 × 885 mm",
    "gewicht_kg": 399,
    "vl_max": 70,
    "phasen": "3~",
    "katalogname": "CS5001AW 22",
-   "hinweis": "Verfügbar ab 06/2026."
+   "hinweis": "Verfügbar ab 06/2026.",
+   "kuehlung": {
+    "a35w7": 12.94,
+    "eer_a35w7": 2.83,
+    "a35w18": 17.55,
+    "eer_a35w18": 3.69,
+    "a35w18_nom": null,
+    "eer_a35w18_nom": null,
+    "kurven": {
+     "7": {
+      "t": [
+       10,
+       15,
+       20,
+       25,
+       30,
+       35,
+       40,
+       45
+      ],
+      "max": [
+       14.09,
+       13.9,
+       13.69,
+       13.47,
+       13.31,
+       12.94,
+       12.53,
+       11.56
+      ],
+      "min": [
+       8.22,
+       8.17,
+       8.29,
+       8.33,
+       8.37,
+       8.32,
+       8.12,
+       7.51
+      ],
+      "eer_max": [
+       5.0,
+       4.58,
+       4.08,
+       3.64,
+       3.25,
+       2.83,
+       2.48,
+       2.05
+      ],
+      "eer_min": [
+       6.43,
+       5.72,
+       5.03,
+       4.43,
+       3.88,
+       3.38,
+       2.88,
+       2.34
+      ]
+     },
+     "18": {
+      "t": [
+       10,
+       15,
+       20,
+       25,
+       30,
+       35,
+       40,
+       45
+      ],
+      "max": [
+       18.78,
+       18.69,
+       18.51,
+       18.4,
+       18.13,
+       17.55,
+       16.83,
+       15.68
+      ],
+      "min": [
+       11.12,
+       11.09,
+       11.26,
+       11.34,
+       11.36,
+       11.19,
+       11.0,
+       10.28
+      ],
+      "eer_max": [
+       6.56,
+       5.96,
+       5.3,
+       4.77,
+       4.23,
+       3.69,
+       3.18,
+       2.7
+      ],
+      "eer_min": [
+       9.94,
+       8.21,
+       7.14,
+       6.16,
+       5.28,
+       4.49,
+       3.83,
+       3.17
+      ]
+     }
+    },
+    "quelle": "Installations-/Bedienungsanleitung CS5001AW 22, 6721114790 (2026/02), Kennlinien Kühlen (aus den Diagrammen gelesen, ±0,1 kW)"
+   }
   },
   "CS5001 AW42": {
    "artnr": "7724002126",
@@ -235,14 +439,128 @@
    "cop_a_7w35": 2.7,
    "scop35": 4.72,
    "scop55": 3.8,
-   "kuehl_a35w18": 30.1,
    "lw_db": 55,
    "masse": "1764 × 1970 × 1000 mm",
    "gewicht_kg": 566,
    "vl_max": 70,
    "phasen": "3~",
    "katalogname": "CS5001AW 42",
-   "hinweis": "Verfügbar ab 06/2026."
+   "hinweis": "Verfügbar ab 06/2026.",
+   "kuehlung": {
+    "a35w7": 23.86,
+    "eer_a35w7": 2.59,
+    "a35w18": 29.78,
+    "eer_a35w18": 3.39,
+    "a35w18_nom": null,
+    "eer_a35w18_nom": null,
+    "kurven": {
+     "7": {
+      "t": [
+       10,
+       15,
+       20,
+       25,
+       30,
+       35,
+       40,
+       45
+      ],
+      "max": [
+       22.57,
+       22.53,
+       22.83,
+       23.28,
+       23.11,
+       23.86,
+       23.32,
+       22.45
+      ],
+      "min": [
+       14.82,
+       14.58,
+       14.16,
+       13.74,
+       13.51,
+       12.75,
+       12.13,
+       11.29
+      ],
+      "eer_max": [
+       4.2,
+       4.0,
+       3.67,
+       3.34,
+       2.97,
+       2.59,
+       2.18,
+       1.83
+      ],
+      "eer_min": [
+       4.6,
+       4.34,
+       3.97,
+       3.6,
+       3.26,
+       2.75,
+       2.27,
+       1.79
+      ]
+     },
+     "18": {
+      "t": [
+       10,
+       15,
+       20,
+       25,
+       30,
+       35,
+       40,
+       45
+      ],
+      "max": [
+       29.56,
+       29.44,
+       29.74,
+       29.98,
+       30.03,
+       29.78,
+       29.42,
+       27.98
+      ],
+      "min": [
+       17.44,
+       17.23,
+       17.02,
+       16.58,
+       16.08,
+       15.28,
+       14.61,
+       13.77
+      ],
+      "eer_max": [
+       5.25,
+       4.96,
+       4.62,
+       4.23,
+       3.82,
+       3.39,
+       2.92,
+       2.46
+      ],
+      "eer_min": [
+       5.7,
+       5.44,
+       5.08,
+       4.62,
+       4.11,
+       3.52,
+       2.97,
+       2.38
+      ]
+     }
+    },
+    "quelle": "Installations-/Bedienungsanleitung CS5001AW 42, 6721114791 (2026/02), Kennlinien Kühlen (aus den Diagrammen gelesen, ±0,1 kW)"
+   }
   },
   "CS7800iLW 6": {
    "artnr": "8738212050",

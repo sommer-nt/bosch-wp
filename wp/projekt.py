@@ -38,6 +38,7 @@ STANDARD: dict = {
     "schall": {"abstand_m": 5.0, "aufstellung": "frei"},
     "kosten": {"strom_wp": 0.28, "strom_hs": 0.35, "alt": "gas", "preis_alt": 0.12, "eta_alt": 0.90, "preis_kessel": 0.12, "eta_kessel": 0.95},
     "zweiter": "gas",   # zweiter Wärmeerzeuger bei Hybrid / bivalent: gas, oel, pellet
+    "kuehlung": {"last_kw": 0.0, "vl": 18, "t_aussen": 35.0},   # Kühlbetrieb: Kühllast (optional), Kühlwasser 7/18 °C
 }
 
 

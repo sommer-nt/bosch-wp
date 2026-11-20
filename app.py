@@ -212,6 +212,69 @@ def schall_bereich(r: dict, e: dict) -> None:
                "Datenblatt ansetzen und die Landesbauordnung (Abstandsflächen) beachten.")
 
 
+def kuehl_bereich(r: dict, e: dict) -> None:
+    """Kühlbetrieb der gewählten Wärmepumpe und Kühldaten aller Geräte (wie kuehlHtml()/kuehlTabelle() in index.html)."""
+    st.markdown("**Kühlbetrieb der gewählten Wärmepumpe**", help=T.GLOSSAR["kuehlung"])
+    g = r.get("gewaehlt")
+    e.setdefault("kuehlung", {"last_kw": 0.0, "vl": 18, "t_aussen": 35.0})
+    c = st.columns(3)
+    with c[0]:
+        vl = st.selectbox("Kühlwasser", [18, 7], index=0 if int(e["kuehlung"].get("vl") or 18) != 7 else 1,
+                          format_func={18: "18 °C · Flächenkühlung", 7: "7 °C · Gebläsekonvektoren"}.get, key="k_vl")
+        e["kuehlung"]["vl"] = vl
+    with c[1]:
+        zahl("Außentemperatur [°C]", "kuehlung.t_aussen", min_value=10.0, max_value=45.0, step=1.0)
+    with c[2]:
+        zahl("Kühllast (optional) [kW]", "kuehlung.last_kw", min_value=0.0, step=0.5)
+    if not g:
+        st.caption("–")
+    elif r["waermequelle"] == "sole":
+        st.caption("Sole/Wasser: Kühlen passiv über die Erdsonde – keine Kühlleistung nach EN 14511 hinterlegt.")
+    else:
+        k = r["kuehlung"] = R.kuehlung(e, r, KAT)   # Eingaben stehen unter dem Ergebnis – hier nachrechnen
+        if not k:
+            st.caption(f"Für {g['geraet']} liegen noch keine Kühldaten vor.")
+        else:
+            anz = f"{k['n']} × " if k["n"] > 1 else ""
+            m = st.columns(4)
+            m[0].metric(f"Kühlleistung A{T.f(k['t'], 0)}/W{k['vl']}" + (" (max.)" if k["kurve"] else ""), f"{T.f(k['q_kw'], 2)} kW",
+                        help=(f"{anz}{T.f(k['q_geraet_kw'], 2)} kW · min. {T.f(k['q_min_kw'], 1)} kW je Gerät" if k["kurve"]
+                              else "nur Wert bei A35 vorhanden"))
+            m[1].metric("EER", T.f(k["eer"], 2))
+            if k["nom_kw"] is not None:
+                m[2].metric("Nominell A35/W18", f"{T.f(k['nom_kw'], 2)} kW")
+            if k["last_kw"] > 0:
+                m[3].metric(f"Kühllast {T.f(k['last_kw'], 1)} kW", f"{T.f(k['abdeckung'] * 100, 0)} %",
+                            delta="gedeckt" if k["ok"] else "nicht gedeckt", delta_color="normal" if k["ok"] else "inverse")
+            kv = (KAT["geraete"][g["geraet"]]["kuehlung"].get("kurven") or {}).get(str(k["vl"])) if k["kurve"] else None
+            if kv:
+                fk = go.Figure()
+                fk.add_scatter(x=kv["t"], y=[q * k["n"] for q in kv["max"]], name=f"{anz}max.", mode="lines", line=dict(color=BLAU, width=3))
+                fk.add_scatter(x=kv["t"], y=kv["min"], name="min. (1 Gerät)", mode="lines", line=dict(color=BLAU, width=2, dash="dash"))
+                if k["last_kw"] > 0:
+                    fk.add_hline(y=k["last_kw"], line_color="black", annotation_text="Kühllast")
+                fk.add_vline(x=k["t"], line_color=VIOLETT)
+                fk.update_layout(height=300, margin=dict(l=10, r=10, t=10, b=10), xaxis_title="Außentemperatur [°C]",
+                                 yaxis_title="Kühlleistung [kW]", yaxis_rangemode="tozero", legend=dict(orientation="h"))
+                st.plotly_chart(fk, width="stretch")
+            else:
+                st.caption("Nur Herstellerwert bei A35 – eine Kennlinie über der Außentemperatur liegt für dieses Gerät nicht vor.")
+            st.caption(("Flächenkühlung nur oberhalb des Taupunkts (Taupunktwächter)." if k["vl"] == 18 else
+                        "Gebläsekonvektoren mit Kondensatablauf; Leitungen diffusionsdicht dämmen.") + f" Quelle: {k['quelle']}.")
+    st.markdown("**Kühldaten aller Wärmepumpen** – EN 14511, A35 = Außenluft 35 °C")
+    zeilen = []
+    for d in DATEN["geraete"]:
+        if D.serie(d["serie"]).get("quelle", "luft") != "luft":
+            continue
+        kd = KAT["geraete"].get(d["id"], {}).get("kuehlung")
+        zeilen.append({"Wärmepumpe": d["id"] + (" ◀" if g and g["geraet"] == d["id"] else ""),
+                       "A35/W7 kW": kd and kd["a35w7"], "EER W7": kd and kd["eer_a35w7"], "A35/W18 kW": kd and kd["a35w18"],
+                       "EER W18": kd and kd["eer_a35w18"], "A35/W18 nominell": kd and kd.get("a35w18_nom"),
+                       "EER nominell": kd and kd.get("eer_a35w18_nom"),
+                       "Kennlinie": ("10–45 °C" if kd.get("kurven") else "nur A35") if kd else "keine Kühldaten"})
+    st.dataframe(zeilen, hide_index=True, width="stretch")
+
+
 def kosten_bereich(r: dict, e: dict) -> None:
     st.markdown("**Geschätzte Energiekosten und Einsparung**", help=T.GLOSSAR["kosten"])
     e.setdefault("kosten", {"strom_wp": 0.28, "strom_hs": 0.35, "alt": "gas", "preis_alt": 0.12, "eta_alt": 0.90})
@@ -645,7 +708,7 @@ g = r["gewaehlt"]
 ie = T.inneneinheit(E, r, KAT)
 with rechts:
     bestell_titel = "Musterlösung" if r.get("mfh") else "Systempakete"
-    t_ueb, t_leis, t_ger, t_hyd, t_best, t_rech = st.tabs(["Überblick", "Leistung & Heizkurve", "Geräteauswahl",
+    t_ueb, t_leis, t_kuehl, t_ger, t_hyd, t_best, t_rech = st.tabs(["Überblick", "Leistung & Heizkurve", "Kühlung", "Geräteauswahl",
                                                            "Hydraulik & Warmwasser", bestell_titel, "Rechenweg"])
     with t_ueb:
         st.markdown("**Auf einen Blick**")
@@ -800,6 +863,9 @@ with rechts:
         if g:
             schall_bereich(r, E)
             kosten_bereich(r, E)
+
+    with t_kuehl:
+        kuehl_bereich(r, E)
 
     with t_ger:
         st.markdown("**Mögliche Wärmepumpen** – kleinste passende Größe je Gerät (★ kleinste der Baureihe)")
