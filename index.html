@@ -1670,6 +1670,7 @@ function zeichne() {
   $('#tMarkeNat').onclick = () => markeSetzen(null);
   $('#heizkurve').innerHTML = heizkurveSvg(r, {breite: 900, hoehe: 250});
   $('#tabKandidaten').innerHTML = kandidatenTabelle(r, true);
+  $$('#tabKandidaten [data-kand-alle]').forEach(b => b.onclick = ev => { ev.stopPropagation(); KAND_ALLE = !KAND_ALLE; aktualisiere(); });
   $$('#tabKandidaten tr[data-g]').forEach(tr => tr.onclick = () => { E.auswahl.geraet = tr.dataset.g; E.auswahl.anzahl = +tr.dataset.n; E.auswahl.inneneinheit = ''; aktualisiere(); });
   $('#herleitung').innerHTML = herleitung(r);
   $('#schema').innerHTML = schema(r, {breite: 900});
@@ -1901,11 +1902,17 @@ function produktBilder(g, ie, h) {
   if (!b.length) return '';
   return `<div class="bilder">${b.map(([k, t]) => `<figure><img src="${BILDER_DATEN[k]}" alt="${esc(t)}" style="max-height:${h}px"><figcaption>${esc(t)}</figcaption></figure>`).join('')}</div>`;
 }
+let KAND_ALLE = false;   // ungeeignete Geräte in der Geräteauswahl zeigen (nur Ansicht)
 function kandidatenTabelle(r, preise, nurPassend) {
   const g = r.gewaehlt, emp = new Set(r.empfehlung_je_serie);
   let liste = nurPassend ? r.kandidaten.filter(c => emp.has(c.geraet + '|' + c.n) || (g && c.geraet === g.geraet)) : r.kandidaten;
-  // gewählte Baureihe zuerst, darunter die Alternativen aus anderen Baureihen
-  if (g) liste = [...liste.filter(c => c.serie === g.serie), ...liste.filter(c => c.serie !== g.serie)];
+  // ungeeignete Geräte (rot/grau) am Bildschirm nur auf Wunsch, dann ans Ende – die gewählte Wärmepumpe bleibt immer sichtbar
+  const ungeeignet = c => !(c.moeglich && c.ok) && !(g && c.geraet === g.geraet);
+  const nUngeeignet = nurPassend ? 0 : liste.filter(ungeeignet).length;
+  if (!nurPassend && !KAND_ALLE) liste = liste.filter(c => !ungeeignet(c));
+  // gewählte Baureihe zuerst, darunter die passenden Alternativen, ungeeignete zuletzt
+  if (g) liste = [...liste.filter(c => c.serie === g.serie && !ungeeignet(c)), ...liste.filter(c => c.serie !== g.serie && !ungeeignet(c)),
+    ...liste.filter(c => c.serie === g.serie && ungeeignet(c)), ...liste.filter(c => c.serie !== g.serie && ungeeignet(c))];
   const spalten = 9 + (preise ? 1 : 0) + (nurPassend ? 0 : 1);
   let trenner = false;
   let h = `<thead><tr><th></th><th>Wärmepumpe</th><th class="z">Anz.</th><th class="z">${r.waermequelle === 'sole' ? 'B0' : 'A-7'}/W${f(r.vl, 0)}</th><th class="z">bei θe</th><th class="z">Abdeckung</th><th class="z">Bivalenzpunkt</th><th class="z">Heizstab</th><th class="z">Deckung</th>${preise ? '<th class="z">UVP</th>' : ''}${nurPassend ? '' : '<th>Hinweis</th>'}</tr></thead><tbody>`;
@@ -1923,7 +1930,8 @@ function kandidatenTabelle(r, preise, nurPassend) {
       ${preise ? `<td class="z preis">${k.uvp ? euro(k.uvp * c.n) : '–'}</td>` : ''}${nurPassend ? '' : `<td>${esc(c.grund || (c.ueberdimensioniert ? 'überdimensioniert' : ''))}</td>`}</tr>`;
   }
   const rest = r.kandidaten.length - liste.length;
-  if (rest) h += `<tr><td></td><td colspan="${preise ? 10 : 9}" class="hint">${nurPassend ? rest + ' weitere Größen/Geräte siehe Werkzeug.' : rest + ' weitere Geräte.'}</td></tr>`;
+  if (nUngeeignet) h += `<tr><td></td><td colspan="${preise ? 10 : 9}"><button type="button" data-kand-alle>${KAND_ALLE ? 'Ungeeignete Geräte ausblenden' : nUngeeignet + ' ungeeignete Geräte zeigen'}</button></td></tr>`;
+  else if (rest && nurPassend) h += `<tr><td></td><td colspan="${preise ? 10 : 9}" class="hint">${rest} weitere Größen/Geräte siehe Werkzeug.</td></tr>`;
   return h + '</tbody>';
 }
 function zeile(k, formel, wert) { return `<tr><td class="k">${k}</td><td>${formel}</td><td class="r">${wert}</td></tr>`; }
