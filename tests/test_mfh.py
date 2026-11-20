@@ -138,3 +138,12 @@ def test_ww_wechsel_hebt_handauswahl_auf():
     M.eingaben_folgen(e, "mfh.ww")
     assert e["hydraulik"]["schema"] == "" and e["auswahl"]["geraet"] == ""
     assert not e["tww"]["aktiv"]
+
+
+def test_sole_keine_luft_musterloesung():
+    """Musterlösungen sind Luft/Wasser: bei Sole keine Musterlösungs-Wärmepumpe, sondern ein Sole-Gerät."""
+    e = mfh_eingabe("sanierung", 6, "friwa")
+    e["waermequelle"], e["auslegung"] = "sole", "monovalent"
+    r = M.rechne(e, D.geraete(), D.katalog(), D.mfh())
+    assert r["mfh"]["zellen"] == [] and not r["mfh_wp"]
+    assert D.serie(D.geraet(r["gewaehlt"]["geraet"])["serie"])["quelle"] == "sole"

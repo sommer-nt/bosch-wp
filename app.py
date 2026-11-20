@@ -382,7 +382,8 @@ def mfh_bereich(r: dict, e: dict) -> None:
                f"{v['we']} WE · Heizlast QH {T.f(v['qh'], 1)} kW · Musterannahmen: {a_['flaeche_we']} m² und "
                f"{T.f(a_['personen_we'], 1)} Personen je WE, {a_['spez_w_m2']} W/m²")
     if not v["zellen"]:
-        st.info("Für diese Kombination gibt es noch keine Musterlösung.")
+        st.info("Die Musterlösungen sind mit Luft/Wasser-Wärmepumpen geplant – für Sole/Wasser gibt es keine. Die Wärmepumpe wird frei aus den Sole-Geräten ausgelegt." if v.get("waermequelle") == "sole"
+                else "Für diese Kombination gibt es noch keine Musterlösung.")
         return
     ids = [z_["id"] for z_ in v["zellen"]]
     gew = {a["zelle"]["id"] for a in v["auswahl"]}

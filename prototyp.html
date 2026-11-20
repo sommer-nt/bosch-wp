@@ -962,8 +962,12 @@ const MFK = (() => {
     const m = e.mfh || {};
     if (m.art !== 'mfh') return null;
     const we = Math.max(1, Math.trunc(+m.we || 1));
-    const [tab, sys, ww, zellen] = zeile(e, matrix);
-    const out = {tabelle: tab, system: sys, ww, we, qh: r.qh, zellen, auswahl: [], ausserhalb: false, manuell: false};
+    const [tab, sys, ww, zellen0] = zeile(e, matrix);
+    // nur Musterlösungen mit Wärmepumpen der gewählten Wärmequelle (alle Musterlösungen sind Luft/Wasser)
+    const quelle = Object.fromEntries(daten.serien.map(s => [s.id, s.quelle || 'luft'])), serie = Object.fromEntries(daten.geraete.map(g => [g.id, g.serie]));
+    const wq = e.waermequelle || 'luft';
+    const zellen = zellen0.filter(z => (quelle[serie[z.geraet]] || 'luft') === wq);
+    const out = {tabelle: tab, system: sys, ww, we, qh: r.qh, zellen, auswahl: [], ausserhalb: false, manuell: false, waermequelle: wq};
     if (!zellen.length) return out;
     let gew = null;
     if (m.zelle) { gew = zellen.find(z => z.id === m.zelle) || null; out.manuell = gew !== null; }
@@ -1824,7 +1828,7 @@ function mfhHtml(r, preise, druck) {
   const M = MFH_DATEN, A = M.annahmen[v.tabelle], g = r.gewaehlt;
   let h = `<p class="hint"><b>${v.tabelle === 'neubau' ? 'Neubau' : 'Bestand'} · ${esc(M.systeme[v.system])} · ${esc(MFK.WW_TEXT[v.ww])}</b> · ${v.we} WE · Heizlast QH ${f(v.qh, 1)} kW
     · Musterannahmen: ${A.flaeche_we} m² und ${f(A.personen_we, 1)} Personen je WE, ${A.spez_w_m2} W/m²</p>`;
-  if (!v.zellen.length) return h + '<p class="hint">Für diese Kombination gibt es noch keine Musterlösung.</p>';
+  if (!v.zellen.length) return h + `<p class="hint">${v.waermequelle === 'sole' ? 'Die Musterlösungen sind mit Luft/Wasser-Wärmepumpen geplant – für Sole/Wasser gibt es keine. Die Wärmepumpe wird frei aus den Sole-Geräten ausgelegt.' : 'Für diese Kombination gibt es noch keine Musterlösung.'}</p>`;
   const gew = new Set(v.auswahl.map(a => a.zelle.id));
   if (!druck) h += '<div class="chips mfhchips">' + v.zellen.map(z => `<button data-zelle="${z.id}" class="${gew.has(z.id) ? 'on' : ''}" title="${esc(z.komponenten.join(' · '))}">${z.we} WE · ${z.kw} kW${z.system !== 'mono' ? ' · ' + esc(z.komponenten[0]) : ''}</button>`).join('') + '</div>';
   if (v.ausserhalb) h += '<div class="meldung">Heizlast bzw. Wohneinheiten liegen über den Musterlösungen – größte Musterlösung angezeigt, Anlage individuell planen.</div>';

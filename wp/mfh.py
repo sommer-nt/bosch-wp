@@ -77,8 +77,13 @@ def vorschlag(e: dict, r: dict, matrix: dict, daten: dict, katalog: dict | None 
         return None
     we = max(1, int(m.get("we") or 1))
     tab, sys_, ww, zellen = zeile(e, matrix)
+    # nur Musterlösungen mit Wärmepumpen der gewählten Wärmequelle (alle Musterlösungen sind Luft/Wasser)
+    quelle = {s["id"]: s.get("quelle", "luft") for s in daten["serien"]}
+    serie = {g["id"]: g["serie"] for g in daten["geraete"]}
+    wq = e.get("waermequelle") or "luft"
+    zellen = [z for z in zellen if quelle.get(serie.get(z["geraet"]), "luft") == wq]
     out = {"tabelle": tab, "system": sys_, "ww": ww, "we": we, "qh": r["qh"], "zellen": zellen, "auswahl": [],
-           "ausserhalb": False, "manuell": False}
+           "ausserhalb": False, "manuell": False, "waermequelle": wq}
     if not zellen:
         return out
     gewaehlt = None

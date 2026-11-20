@@ -413,7 +413,8 @@ def mfh_seite(pdf: Ausdruck, e: dict, r: dict, v: dict, preise: bool) -> None:
                                    f"{a_['flaeche_we']} m² und {T.f(a_['personen_we'], 1)} Personen je WE, {a_['spez_w_m2']} W/m²"),
                    new_x="LMARGIN", new_y="NEXT")
     if not v["zellen"]:
-        pdf.multi_cell(184, 3.8, pdf.t("Für diese Kombination gibt es noch keine Musterlösung."), new_x="LMARGIN", new_y="NEXT")
+        pdf.multi_cell(184, 3.8, pdf.t("Die Musterlösungen sind mit Luft/Wasser-Wärmepumpen geplant – für Sole/Wasser gibt es keine. Die Wärmepumpe wird frei aus den Sole-Geräten ausgelegt." if v.get("waermequelle") == "sole"
+                                       else "Für diese Kombination gibt es noch keine Musterlösung."), new_x="LMARGIN", new_y="NEXT")
         return
     if v["ausserhalb"]:
         pdf.multi_cell(184, 3.8, pdf.t("Heizlast bzw. Wohneinheiten liegen über den Musterlösungen – größte Musterlösung angezeigt, "
