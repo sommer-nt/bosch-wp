@@ -40,6 +40,8 @@ if _pw and not ss.get("angemeldet"):
 if "e" not in ss:
     ss.e = P.neu()
 E = ss.e
+for _k, _v in ss.pop("_vorbelegen", {}).items():   # vorgemerkte Feldwerte (siehe neu_setzen) vor dem Zeichnen setzen
+    ss[_k] = _v
 # Ein-/Zweifamilienhaus vorerst aus (Hydrauliken in Arbeit): immer Mehrfamilienhaus – wie nurMfh() in index.html.
 # Leere Eingaben bleiben leer, geladene Projekte behalten ihre Heizlast.
 EFH_AKTIV = False
@@ -88,7 +90,12 @@ def zahl(label, pfad, **kw):
     ziel = E
     for t in teile[:-1]:
         ziel = ziel[t]
-    ziel[teile[-1]] = st.number_input(label, value=float(ziel[teile[-1]]), key="n_" + pfad, **kw)
+    k = "n_" + pfad
+    # Feld mit Schlüssel im Session State: Wert kommt von dort (Browser hält ihn fest) – kein zweiter Vorgabewert
+    if k in ss:
+        ziel[teile[-1]] = st.number_input(label, key=k, **kw)
+    else:
+        ziel[teile[-1]] = st.number_input(label, value=float(ziel[teile[-1]]), key=k, **kw)
 
 
 def wahl(label, pfad, optionen: dict, horizontal=True, radio=True, help=None):
@@ -100,19 +107,39 @@ def wahl(label, pfad, optionen: dict, horizontal=True, radio=True, help=None):
     alt = ziel[teile[-1]]
     liste = list(optionen)
     idx = liste.index(alt) if alt in liste else 0
+    k = "w_" + pfad
+    if k in ss and ss[k] not in liste:
+        del ss[k]
+    extra = {} if k in ss else {"index": idx}
     if radio:
-        neu_ = st.radio(label, liste, index=idx, format_func=optionen.get, horizontal=horizontal, key="w_" + pfad, help=help)
+        neu_ = st.radio(label, liste, format_func=optionen.get, horizontal=horizontal, key=k, help=help, **extra)
     else:
-        neu_ = st.selectbox(label, liste, index=idx, format_func=optionen.get, key="w_" + pfad, help=help)
+        neu_ = st.selectbox(label, liste, format_func=optionen.get, key=k, help=help, **extra)
     ziel[teile[-1]] = neu_
     return neu_ != alt
 
 
+def _feld_setzen(k, v):
+    """Wert eines Eingabefelds setzen. Löschen allein genügt nicht: der Browser schickt sonst seinen alten Wert zurück.
+    Ist das Feld in diesem Lauf schon gezeichnet, wird der Wert zu Beginn des nächsten Laufs gesetzt."""
+    try:
+        ss[k] = v
+    except st.errors.StreamlitAPIException:
+        ss.setdefault("_vorbelegen", {})[k] = v
+
+
 def neu_setzen(*pfade):
-    """Nach automatischer Vorbelegung die Eingabefelder neu aus E lesen."""
+    """Nach automatischer Vorbelegung die Eingabefelder auf die Werte aus E setzen."""
     for p_ in pfade:
-        ss.pop("n_" + p_, None)
-        ss.pop("w_" + p_, None)
+        ziel = E
+        for t in p_.split(".")[:-1]:
+            ziel = ziel.get(t, {})
+        v = ziel.get(p_.split(".")[-1])
+        if isinstance(v, (int, float)) and not isinstance(v, bool):
+            _feld_setzen("n_" + p_, float(v))
+            _feld_setzen("w_" + p_, v)          # auch als Auswahlliste möglich (z. B. Gebäudestandard)
+        elif v is not None:
+            _feld_setzen("w_" + p_, v)
 
 
 KESSEL_NAME = {"gas": "Gaskessel", "oel": "Ölkessel", "pellet": "Pelletkessel"}
@@ -267,10 +294,12 @@ def kuehl_bereich(r: dict, e: dict) -> None:
         if D.serie(d["serie"]).get("quelle", "luft") != "luft":
             continue
         kd = KAT["geraete"].get(d["id"], {}).get("kuehlung")
+        z_ = lambda x: T.f(x, 2) if x is not None else "–"   # noqa: E731  deutsche Schreibweise wie index.html
+        kd_ = kd or {}
         zeilen.append({"Wärmepumpe": d["id"] + (" ◀" if g and g["geraet"] == d["id"] else ""),
-                       "A35/W7 kW": kd and kd["a35w7"], "EER W7": kd and kd["eer_a35w7"], "A35/W18 kW": kd and kd["a35w18"],
-                       "EER W18": kd and kd["eer_a35w18"], "A35/W18 nominell": kd and kd.get("a35w18_nom"),
-                       "EER nominell": kd and kd.get("eer_a35w18_nom"),
+                       "A35/W7 kW": z_(kd_.get("a35w7")), "EER W7": z_(kd_.get("eer_a35w7")), "A35/W18 kW": z_(kd_.get("a35w18")),
+                       "EER W18": z_(kd_.get("eer_a35w18")), "A35/W18 nominell": z_(kd_.get("a35w18_nom")),
+                       "EER nominell": z_(kd_.get("eer_a35w18_nom")),
                        "Kennlinie": ("10–45 °C" if kd.get("kurven") else "nur A35") if kd else "keine Kühldaten"})
     st.dataframe(zeilen, hide_index=True, width="stretch")
 
@@ -712,7 +741,8 @@ with rechts:
                                                            "Hydraulik & Warmwasser", bestell_titel, "Rechenweg"])
     with t_ueb:
         st.markdown("**Auf einen Blick**")
-        st.markdown("\n".join(f"- {T.STATUS_ICON[x['status']]} {x['text']}" for x in T.klartext(E, r, KAT)))
+        # neutrale Sätze ohne zusätzliches Symbol (sonst „• •“ mit dem Listenpunkt)
+        st.markdown("\n".join(f"- {(T.STATUS_ICON[x['status']] + ' ') if x['status'] else ''}{x['text']}" for x in T.klartext(E, r, KAT)))
         for m in T.meldungen(E, r, KAT):
             st.warning(m)
         abw = [] if EX else T.experten_abweichungen(E)
@@ -849,7 +879,7 @@ with rechts:
             df = pd.DataFrame(tab)
             spalte = ("+" if naechst and naechst > 0 else "") + str(naechst) if vb else None
             st.dataframe(df.style.format({c_: "{:.2f}" for c_ in df.columns[1:]}).set_properties(
-                subset=[spalte] if spalte else [], **{"background-color": "#005691", "color": "white", "font-weight": "bold"}),
+                subset=[spalte] if spalte else [], **{"background-color": "#007BC0", "color": "white", "font-weight": "bold"}),
                 hide_index=True, width="stretch")
             if vb:
                 st.caption(f"Bivalenzpunkt {T.ft(g['bivalenz'])} °C: αH,a parallel ≈ {T.f(vb['alpha_parallel'], 2)}, "
