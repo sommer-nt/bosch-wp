@@ -196,7 +196,9 @@ def diagramm(pdf: Ausdruck, r: dict, daten: dict, x: float, y: float, w: float, 
     X = lambda t: x + L + (t - t0) / (t1 - t0) * (w - L - Rr)  # noqa: E731
     # Beschriftungen der senkrechten Marken in einem Band über dem Diagramm (wie index.html) – nie über Kurven
     ab = R.ablesen(r, t_marke)
-    marken = [(r["nat"], "θe " + T.ft(r["nat"]) + " °C", GRAU, False)]
+    marken = [(r["nat"], "θe " + T.ft(r["nat"]) + " °C · Auslegungsgrenze", GRAU, False)]
+    if R.monovalent(g):
+        marken.append((r["nat"], "kein Bivalenzpunkt – WP deckt bis θe allein (monovalent)", (30, 132, 73), True))
     if g["bivalenz_art"] == "punkt":
         marken.append((g["bivalenz"], "Bivalenzpunkt " + T.ft(g["bivalenz"]) + " °C", (179, 92, 0), True))
     if g.get("taktgrenze") is not None and r["nat"] < g["taktgrenze"] <= t1:
@@ -816,7 +818,11 @@ def pdf_bytes(e: dict, r: dict, daten: dict, katalog: dict) -> bytes:
                     f"{T.f(k_['preis_alt'], 2)} €/kWh bei η {T.f(k_['eta_alt'], 2)} = {T.f(k_['alt_eur'], 0)} €/a; "
                     "ohne Grundgebühren, Wartung und Förderung.")
         pdf.multi_cell(184, 3.8, pdf.t(txt), new_x="LMARGIN", new_y="NEXT")
-    pdf.platz(40)
+    pdf.platz(60)
+    pdf.h2("Grundlagen und Datenstand")
+    pdf.schrift_(6.8, False, GRAU)
+    pdf.multi_cell(184, 3.4, pdf.t(" · ".join(f"{a}: {b} ({c})" for a, b, c in T.quellen(r, daten, katalog, D.klima(), D.mfh()))),
+                   new_x="LMARGIN", new_y="NEXT")
     pdf.h2("Haftungsausschluss")
     pdf.schrift_(7.4, False, GRAU)
     pdf.multi_cell(184, 3.8, pdf.t(T.HAFTUNG + (" Preise: unverbindliche Preisempfehlung ohne MwSt." if preise else "")),

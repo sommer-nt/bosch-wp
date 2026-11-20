@@ -622,6 +622,11 @@ def _lin(xs: list, ys: list, x: float) -> float:
     return ys[-1]
 
 
+def monovalent(g: dict | None) -> bool:
+    """Kein Bivalenzpunkt: die Wärmepumpe deckt den Bedarf bis θe allein."""
+    return bool(g and g.get("moeglich") and g.get("bivalenz_art") == "unter" and g.get("abdeckung", 0) >= 1 - 1e-9)
+
+
 def kuehlung(e: dict, r: dict, katalog: dict | None) -> dict | None:
     """Kühlleistung der gewählten Wärmepumpe (n Geräte) und Prüfung gegen eine Kühllast (optional)."""
     g = r.get("gewaehlt")

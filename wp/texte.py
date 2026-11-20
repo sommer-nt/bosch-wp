@@ -304,18 +304,19 @@ GLOSSAR = {
             "Wärmepumpe – sie schaltet dann ein und aus. Puffer bzw. ausreichend Wasservolumen beruhigen den Betrieb.",
     "a7": "A-7: Prüfpunkt nach EN 14511 – Außenluft −7 °C. A-7/W55 = Leistung bei −7 °C Luft und 55 °C Vorlauf.",
     "nat": "θe (Norm-Außentemperatur): tiefste Auslegungstemperatur am Standort nach DIN/TS 12831-1, aus der PLZ.",
-    "heizgrenze": "Heizgrenze: Außentemperatur, ab der nicht mehr geheizt wird (Neubau ca. 12 °C, Bestand ca. 15 °C). "
+    "heizgrenze": "Heizgrenztemperatur: Außentemperatur, ab der nicht mehr geheizt wird (Neubau ca. 12 °C, Bestand ca. 15 °C). "
                   "Dort endet die Gebäudekennlinie bei 0 kW.",
     "kennlinie": "Gebäudekennlinie: Bedarf über der Außentemperatur – QGES bei θe, linear fallend bis 0 kW an der "
                  "Heizgrenze. Wo die WP-Kurve darüber liegt, schafft die Wärmepumpe den Bedarf allein.",
     "heizkurve": "Heizkurve: nötige Vorlauftemperatur je Außentemperatur. Bei milderem Wetter reicht ein niedrigerer "
                  "Vorlauf – das steigert Effizienz (COP) und Leistung der Wärmepumpe.",
-    "scop": "SCOP: Jahresarbeitszahl nach EN 14825 (mittleres Klima) – Wärme je kWh Strom über das Jahr; bei 35 °C "
-            "(Fußbodenheizung) höher als bei 55 °C (Heizkörper).",
+    "scop": "SCOP: saisonale Leistungszahl nach EN 14825 (mittleres Klima) – Normwert für die Effizienz über das Jahr; "
+            "bei 35 °C (Fußbodenheizung) höher als bei 55 °C (Heizkörper). Die Jahresarbeitszahl (JAZ) des Projekts "
+            "hängt von Gebäude und Betrieb ab.",
     "kaskade": "Kaskade: mehrere Wärmepumpen über einen Kaskadenregler (HPC800i C, HPC 301 C) – mehr Leistung, feinere "
                "Modulation und Redundanz.",
     "schall": "Geräuschpegel: Schalldruckpegel der Außeneinheit im Abstand s, abgeschätzt nach TA Lärm A.2.4.3 aus dem Schallleistungspegel (ErP, Katalog): Lp = LWA + DΩ − 20·lg s − 11 dB. Vor einer Wand +3 dB, in einer Ecke +6 dB gegenüber freier Aufstellung; doppelter Abstand −6 dB, zwei Geräte +3 dB.",
-    "kuehlung": "Kühlen: reversible Luft/Wasser-Wärmepumpe. Kühlleistung und EER nach EN 14511 bei Außenluft 35 °C (A35) und Kühlwasser 18 °C (Flächenkühlung, oberhalb des Taupunkts) bzw. 7 °C (Gebläsekonvektoren, mit Kondensat). EER = Kühlleistung / elektrische Leistung. Kaskade: Leistung × Anzahl Geräte.",
+    "kuehlung": "Kühlen: reversible Luft/Wasser-Wärmepumpe. Kühlleistung und Leistungszahl EER nach EN 14511 bei Außenluft 35 °C (A35) und Kühlwasser 18 °C (Flächenkühlung, oberhalb des Taupunkts) bzw. 7 °C (Gebläsekonvektoren, mit Kondensat). EER = Kühlleistung / elektrische Leistung. Kaskade: Leistung × Anzahl Geräte.",
     "kosten": "Energiekosten: Strom von Wärmepumpe und Heizstab mal Strompreis, verglichen mit dem bisherigen Energieträger (Jahreswärme / Nutzungsgrad · Preis). Preise und Nutzungsgrad sind Vorgaben und frei änderbar.",
 }
 
@@ -418,3 +419,32 @@ RECHENWEG = [
     ("Heizkurve und Anbindung", "Vorlauf über der Außentemperatur (DIN EN 442), Rohrdimension der Verbindungsleitung "
                                 "(v ≤ 1 m/s, R ≤ 200 Pa/m), Erdsonden-Richtwert bei Sole."),
 ]
+
+
+def datum_de(s) -> str:
+    """2026-11-10 -> 10.11.2026; andere Schreibweisen bleiben."""
+    s = str(s or "")
+    return f"{s[8:10]}.{s[5:7]}.{s[0:4]}" if len(s) == 10 and s[4] == "-" and s[7] == "-" else s
+
+
+def quellen(r: dict, geraete: dict, katalog: dict, klima: dict, mfh: dict | None = None) -> list[tuple[str, str, str]]:
+    """Grundlage (Norm/Methode) und Datenquelle mit Stand je Kennzahl – wie quellen() in index.html."""
+    g = (r or {}).get("gewaehlt")
+    stand_g = datum_de(geraete.get("stand"))
+    z = [("Norm-Außentemperatur θe", "DIN/TS 12831-1", f"Klimadaten Excel-Werkzeug, Stand {datum_de(klima.get('stand'))}"),
+         ("Heizlast QH", "Vorgabe nach DIN EN 12831-1 oder Überschlag (Fläche, Verbrauch, Hülle)", "Eingabe"),
+         ("Warmwasser QTW", "Personen × Liter je Person bzw. Nachheizzeit", "Excel-Werkzeug „WP-Auslegung_S“"),
+         ("Heizleistung, Bivalenzpunkt, Taktgrenze", "Herstellerdaten nach EN 14511",
+          f"Excel-Werkzeug „WP-Auslegung_S“, Stand {stand_g}; Sole: Gesamtkatalog"),
+         ("Deckungsanteil", "DIN V 4701-10 / VDI 4650 (Tabelle)", "aus dem Bivalenzpunkt"),
+         ("Heizkurve", "DIN EN 442", "Heizkörperexponent und Spreizung laut Eingabe"),
+         ("SCOP, Schallleistung, Abmessungen", "EN 14825 / EN 12102", str(katalog.get("quelle") or "Gesamtkatalog"))]
+    if r and r.get("schall") and r.get("waermequelle") != "sole":
+        z.append(("Geräuschpegel am Immissionsort", "TA Lärm (Abschätzung, Halbkugel)", "Schallleistung LWA aus dem Gesamtkatalog"))
+    if r and r.get("kuehlung") and r["kuehlung"].get("quelle"):
+        z.append(("Kühlleistung und EER", "EN 14511", str(r["kuehlung"]["quelle"])))
+    if r and r.get("mfh") and mfh:
+        z.append(("MFH-Musterlösung", "geprüfte Bosch-Musterlösung", str(mfh.get("quelle") or "")))
+    if g and g.get("geraet") and r.get("kosten"):
+        z.append(("Energiekosten", "Schätzung aus Jahreswärme, SCOP und Tarifen", "Eingabe"))
+    return z

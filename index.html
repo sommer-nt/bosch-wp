@@ -488,6 +488,7 @@
   <div class="card" id="mfhKarte" data-tab="bestellung"><h2>MFH-Musterlösung <span class="rechts">Musterlösungen Bosch · Kostenübersicht 20.08.2026</span></h2><div class="in" style="overflow-x:auto" id="mfh"></div></div>
   <div class="card" id="bopaKarte" data-tab="bestellung"><h2>Passende Systempakete (BOPA) <span class="rechts">Komplettpaket mit Speicher und Zubehör · Preisvorteil 6 %</span></h2><div class="in" style="overflow-x:auto" id="pakete"></div></div>
   <div class="card" data-tab="rechenweg"><h2>So rechnet die Schnellauslegung</h2><div class="in"><ol class="rechenweg" id="rechenweg"></ol></div></div>
+  <div class="card" data-tab="rechenweg"><h2>Grundlagen und Datenstand</h2><div class="in" style="overflow-x:auto"><table id="quellen"></table></div></div>
   <div class="card" data-tab="rechenweg"><h2>Herleitung Heizlast</h2><div class="in"><table class="formel" id="herleitung"></table></div></div>
   <div class="card" data-tab="rechenweg"><h2>Begriffe</h2><div class="in"><dl class="glossar" id="glossar"></dl></div></div>
 </div>
@@ -771,7 +772,11 @@ const RK = (() => {
     for (let i = 1; i < xs.length; i++) if (x <= xs[i]) return ys[i - 1] + (ys[i] - ys[i - 1]) * (x - xs[i - 1]) / (xs[i] - xs[i - 1]);
     return ys[ys.length - 1];
   }
-  function kuehlung(e, r, katalog) {
+  // monovalent: kein Bivalenzpunkt, die Wärmepumpe deckt den Bedarf bis θe allein
+function monovalent(g) {
+  return !!(g && g.moeglich && g.bivalenz_art === 'unter' && g.abdeckung >= 1 - 1e-9);
+}
+function kuehlung(e, r, katalog) {
     const g = r.gewaehlt;
     if (!g) return null;
     const kd = ((((katalog || {}).geraete || {})[g.geraet]) || {}).kuehlung;
@@ -907,7 +912,7 @@ const RK = (() => {
     const bedarf = last(t, r.qh + r.qsperr, r.qtw, r.nat, r.heizgrenze), wp = wert(k.max);
     return {t, bedarf, wp_max: wp, wp_min: wert(k.min), heizstab: wp !== null ? Math.max(0.0, bedarf - wp) : null};
   }
-  return {rechne, bewerte, kurveBeiVl, last, lastprofilAusLiter, heizkurve, ablesen, schall, kosten, kuehlung, KOSTEN_ALT, KESSEL, TA_LAERM, VDI_BIV_T, VDI_BIV_MU, VDI_BIV_PAR, VDI_BIV_ALT};
+  return {rechne, bewerte, kurveBeiVl, last, lastprofilAusLiter, heizkurve, ablesen, schall, kosten, kuehlung, monovalent, KOSTEN_ALT, KESSEL, TA_LAERM, VDI_BIV_T, VDI_BIV_MU, VDI_BIV_PAR, VDI_BIV_ALT};
 })();
 if (typeof module !== 'undefined') module.exports = RK;
 </script>
@@ -1269,13 +1274,13 @@ const GLOSSAR = {
   takt: 'Taktgrenze: Oberhalb dieser Außentemperatur braucht das Gebäude weniger als die kleinste Leistung der Wärmepumpe – sie schaltet dann ein und aus. Puffer bzw. ausreichend Wasservolumen beruhigen den Betrieb.',
   a7: 'A-7: Prüfpunkt nach EN 14511 – Außenluft −7 °C. A-7/W55 = Leistung bei −7 °C Luft und 55 °C Vorlauf.',
   nat: 'θe (Norm-Außentemperatur): tiefste Auslegungstemperatur am Standort nach DIN/TS 12831-1, aus der PLZ.',
-  heizgrenze: 'Heizgrenze: Außentemperatur, ab der nicht mehr geheizt wird (Neubau ca. 12 °C, Bestand ca. 15 °C). Dort endet die Gebäudekennlinie bei 0 kW.',
+  heizgrenze: 'Heizgrenztemperatur: Außentemperatur, ab der nicht mehr geheizt wird (Neubau ca. 12 °C, Bestand ca. 15 °C). Dort endet die Gebäudekennlinie bei 0 kW.',
   kennlinie: 'Gebäudekennlinie: Bedarf über der Außentemperatur – QGES bei θe, linear fallend bis 0 kW an der Heizgrenze. Wo die WP-Kurve darüber liegt, schafft die Wärmepumpe den Bedarf allein.',
   heizkurve: 'Heizkurve: nötige Vorlauftemperatur je Außentemperatur. Bei milderem Wetter reicht ein niedrigerer Vorlauf – das steigert Effizienz (COP) und Leistung der Wärmepumpe.',
-  scop: 'SCOP: Jahresarbeitszahl nach EN 14825 (mittleres Klima) – Wärme je kWh Strom über das Jahr; bei 35 °C (Fußbodenheizung) höher als bei 55 °C (Heizkörper).',
+  scop: 'SCOP: saisonale Leistungszahl nach EN 14825 (mittleres Klima) – Normwert für die Effizienz über das Jahr; bei 35 °C (Fußbodenheizung) höher als bei 55 °C (Heizkörper). Die Jahresarbeitszahl (JAZ) des Projekts hängt von Gebäude und Betrieb ab.',
   kaskade: 'Kaskade: mehrere Wärmepumpen über einen Kaskadenregler (HPC800i C, HPC 301 C) – mehr Leistung, feinere Modulation und Redundanz.',
   schall: 'Geräuschpegel: Schalldruckpegel der Außeneinheit im Abstand s, abgeschätzt nach TA Lärm A.2.4.3 aus dem Schallleistungspegel (ErP, Katalog): Lp = LWA + DΩ − 20·lg s − 11 dB. Vor einer Wand +3 dB, in einer Ecke +6 dB gegenüber freier Aufstellung; doppelter Abstand −6 dB, zwei Geräte +3 dB.',
-  kuehlung: 'Kühlen: reversible Luft/Wasser-Wärmepumpe. Kühlleistung und EER nach EN 14511 bei Außenluft 35 °C (A35) und Kühlwasser 18 °C (Flächenkühlung, oberhalb des Taupunkts) bzw. 7 °C (Gebläsekonvektoren, mit Kondensat). EER = Kühlleistung / elektrische Leistung. Kaskade: Leistung × Anzahl Geräte.',
+  kuehlung: 'Kühlen: reversible Luft/Wasser-Wärmepumpe. Kühlleistung und Leistungszahl EER nach EN 14511 bei Außenluft 35 °C (A35) und Kühlwasser 18 °C (Flächenkühlung, oberhalb des Taupunkts) bzw. 7 °C (Gebläsekonvektoren, mit Kondensat). EER = Kühlleistung / elektrische Leistung. Kaskade: Leistung × Anzahl Geräte.',
   kosten: 'Energiekosten: Strom von Wärmepumpe und Heizstab mal Strompreis, verglichen mit dem bisherigen Energieträger (Jahreswärme / Nutzungsgrad · Preis). Preise und Nutzungsgrad sind Vorgaben und frei änderbar.'
 };
 function klartext(e, r, katalog) {
@@ -1327,6 +1332,27 @@ function klartext(e, r, katalog) {
     out.push({text: `MFH-Musterlösung ${c.we} WE / ${c.kw} kW: **${c.komponenten.join(' · ')}**.`, status: ''});
   }
   return out;
+}
+
+function datumDe(s) {
+  s = String(s || '');
+  return s.length === 10 && s[4] === '-' && s[7] === '-' ? `${s.slice(8, 10)}.${s.slice(5, 7)}.${s.slice(0, 4)}` : s;
+}
+// Grundlage (Norm/Methode) und Datenquelle mit Stand je Kennzahl – wie texte.quellen() in Python
+function quellen(r, geraete, katalog, klima, mfh) {
+  const g = (r || {}).gewaehlt, standG = datumDe(geraete.stand);
+  const z = [['Norm-Außentemperatur θe', 'DIN/TS 12831-1', `Klimadaten Excel-Werkzeug, Stand ${datumDe(klima.stand)}`],
+    ['Heizlast QH', 'Vorgabe nach DIN EN 12831-1 oder Überschlag (Fläche, Verbrauch, Hülle)', 'Eingabe'],
+    ['Warmwasser QTW', 'Personen × Liter je Person bzw. Nachheizzeit', 'Excel-Werkzeug „WP-Auslegung_S“'],
+    ['Heizleistung, Bivalenzpunkt, Taktgrenze', 'Herstellerdaten nach EN 14511', `Excel-Werkzeug „WP-Auslegung_S“, Stand ${standG}; Sole: Gesamtkatalog`],
+    ['Deckungsanteil', 'DIN V 4701-10 / VDI 4650 (Tabelle)', 'aus dem Bivalenzpunkt'],
+    ['Heizkurve', 'DIN EN 442', 'Heizkörperexponent und Spreizung laut Eingabe'],
+    ['SCOP, Schallleistung, Abmessungen', 'EN 14825 / EN 12102', String(katalog.quelle || 'Gesamtkatalog')]];
+  if (r && r.schall && r.waermequelle !== 'sole') z.push(['Geräuschpegel am Immissionsort', 'TA Lärm (Abschätzung, Halbkugel)', 'Schallleistung LWA aus dem Gesamtkatalog']);
+  if (r && r.kuehlung && r.kuehlung.quelle) z.push(['Kühlleistung und EER', 'EN 14511', String(r.kuehlung.quelle)]);
+  if (r && r.mfh && mfh) z.push(['MFH-Musterlösung', 'geprüfte Bosch-Musterlösung', String(mfh.quelle || '')]);
+  if (g && g.geraet && r.kosten) z.push(['Energiekosten', 'Schätzung aus Jahreswärme, SCOP und Tarifen', 'Eingabe']);
+  return z;
 }
 </script>
 
@@ -1670,6 +1696,8 @@ function zeichne() {
   $('#tMarkeNat').onclick = () => markeSetzen(null);
   $('#heizkurve').innerHTML = heizkurveSvg(r, {breite: 900, hoehe: 250});
   $('#tabKandidaten').innerHTML = kandidatenTabelle(r, true);
+  $('#quellen').innerHTML = '<thead><tr><th>Kennzahl</th><th>Grundlage</th><th>Daten · Stand</th></tr></thead><tbody>'
+    + quellen(r, D, KAT, KLIMA, MFH_DATEN).map(([a, b, c]) => `<tr><td>${esc(a)}</td><td>${esc(b)}</td><td>${esc(c)}</td></tr>`).join('') + '</tbody>';
   $$('#tabKandidaten [data-kand-alle]').forEach(b => b.onclick = ev => { ev.stopPropagation(); KAND_ALLE = !KAND_ALLE; aktualisiere(); });
   $$('#tabKandidaten tr[data-g]').forEach(tr => tr.onclick = () => { E.auswahl.geraet = tr.dataset.g; E.auswahl.anzahl = +tr.dataset.n; E.auswahl.inneneinheit = ''; aktualisiere(); });
   $('#herleitung').innerHTML = herleitung(r);
@@ -1978,7 +2006,7 @@ function energieHtml(r) {
   let h = '<div class="blau kennz"><div class="kz-kopf">';
   h += `<div><div class="kz-t">Jahreswärme Heizung + Warmwasser</div><div class="kz-v">${f(q, 0)} <small>kWh/Jahr</small></div><div class="kz-s">${r.heizlast.methode === 'verbrauch' ? 'aus dem Verbrauch' : 'QH · ' + f(E.heizlast.vbh, 0) + ' h/a'} + Warmwasser ${f(en.ww_kwh, 0)} kWh</div></div>`;
   h += `<div><div class="kz-t">Deckungsanteil Wärmepumpe</div><div class="kz-v">${f(g.deckung * 100, 1)} <small>%</small></div><div class="kz-s">VDI 4650 · ${g.bivalenz === null || g.bivalenz === undefined ? 'ohne Heizstab' : 'Bivalenzpunkt ' + fT(g.bivalenz) + ' °C'}</div></div>`;
-  if (en.scop) h += `<div><div class="kz-t">Jahresarbeitszahl SCOP</div><div class="kz-v">${f(en.scop, 2)}</div><div class="kz-s">EN 14825, mittleres Klima · Vorlauf ${f(r.vl, 0)} °C</div></div>`;
+  if (en.scop) h += `<div><div class="kz-t">Saisonale Leistungszahl SCOP</div><div class="kz-v">${f(en.scop, 2)}</div><div class="kz-s">EN 14825, mittleres Klima · Vorlauf ${f(r.vl, 0)} °C</div></div>`;
   h += '</div>';
   if (en.scop) {
     const teile = [['WP-Strom', en.strom_wp_kwh, '#FFFFFF'], r.zweiter ? [KESSEL_NAME[r.zweiter], en.kessel_kwh, '#FFCF00'] : ['Heizstab', en.strom_heizstab_kwh, '#FFCF00'],
@@ -2105,7 +2133,7 @@ const RECHENWEG = [
   ['Empfehlung', 'kleinste Größe je Baureihe, die das Kriterium erfüllt; beim Mehrfamilienhaus die geprüfte Musterlösung.'],
   ['Heizkurve und Anbindung', 'Vorlauf über der Außentemperatur (DIN EN 442), Rohrdimension der Verbindungsleitung (v ≤ 1 m/s, R ≤ 200 Pa/m), Erdsonden-Richtwert bei Sole.']];
 const GLOSSAR_TITEL = {qges: 'QGES', mindest: 'Mindestleistung', biv: 'Bivalenzpunkt', qnat: 'Leistung bei θe', heizstab: 'Heizstab', deckung: 'Deckungsanteil',
-  takt: 'Taktgrenze', a7: 'A-7', nat: 'θe', heizgrenze: 'Heizgrenze', kennlinie: 'Gebäudekennlinie', heizkurve: 'Heizkurve', scop: 'SCOP', kaskade: 'Kaskade', schall: 'Geräuschpegel', kosten: 'Energiekosten', kuehlung: 'Kühlen'};
+  takt: 'Taktgrenze', a7: 'A-7', nat: 'θe', heizgrenze: 'Heizgrenztemperatur', kennlinie: 'Gebäudekennlinie', heizkurve: 'Heizkurve', scop: 'SCOP', kaskade: 'Kaskade', schall: 'Geräuschpegel', kosten: 'Energiekosten', kuehlung: 'Kühlen'};
 const info = k => GLOSSAR[k] ? `<span class="info" tabindex="0" data-tip="${esc(GLOSSAR[k])}">?</span>` : '';
 const fett = t => esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
 let TAB = (() => { try { return localStorage.getItem('wp_tab') || 'ueberblick'; } catch (e) { return 'ueberblick'; } })();
@@ -2193,7 +2221,8 @@ function diagramm(r, o) {
   const W = o.breite, L = 52, Rr = 130, B = 40, t0 = k.t[0], t1 = k.t[k.t.length - 1];
   const a = RK.ablesen(r, markeT(r));
   // Beschriftungen der senkrechten Marken stehen in einem Band über dem Diagramm – nie über Kurven oder übereinander
-  const marken = [[r.nat, `θe ${fT(r.nat)} °C`, 'var(--ink-soft)', 400]];
+  const marken = [[r.nat, `θe ${fT(r.nat)} °C · Auslegungsgrenze`, 'var(--ink-soft)', 400]];
+  if (RK.monovalent(g)) marken.push([r.nat, 'kein Bivalenzpunkt – WP deckt bis θe allein (monovalent)', '#1E8449', 700]);
   if (g.bivalenz_art === 'punkt') marken.push([g.bivalenz, `Bivalenzpunkt ${fT(g.bivalenz)} °C`, '#B35C00', 700]);
   if (g.taktgrenze != null && g.taktgrenze > r.nat && g.taktgrenze <= t1) marken.push([g.taktgrenze, `Taktgrenze ≈ ${fT(g.taktgrenze)} °C`, 'var(--bosch-blue)', 400]);
   if (a && Math.abs(a.t - r.nat) > 1e-9) marken.push([a.t, `Ablesen ${fT(a.t)} °C`, '#7a3e9d', 700]);
@@ -2294,7 +2323,7 @@ function baueDruck() {
     pg.forEach((gr, i) => { const mm = paketeHoehe(gr); if (rest + mm > 205 && i > von) { pSeiten.push([von, i]); von = i; rest = 0; } rest += mm; });
     pSeiten.push([von, pg.length]);
   } else pSeiten.push([0, Infinity]);
-  const haftungEigen = rest + 55 + (r.kuehlung && r.kuehlung.last_kw > 0 ? 80 : 0) > 205;
+  const haftungEigen = rest + 70 + (r.kuehlung && r.kuehlung.last_kw > 0 ? 80 : 0) > 205;
   const n = 5 + pSeiten.length + (haftungEigen ? 1 : 0);
   let h = `<div class="seite">
     <div class="dk-kopf"><h1>Wärmepumpen-Schnellauslegung</h1><span class="dk-logo">BOSCH</span></div>
@@ -2303,7 +2332,7 @@ function baueDruck() {
     <div class="dk-boxen">
       <div class="dk-box"><div class="kopf">Projekt und Gebäude</div><table>
         ${tr('Projekt', titel)}${p.kunde ? tr('Kunde', esc(p.kunde)) : ''}${tr('PLZ / Ort', esc([p.plz, p.ort].filter(Boolean).join(' ')) || '–')}
-        ${tr('Norm-Außentemperatur', fT(r.nat) + ' °C')}${tr('Heizgrenze / Innentemp.', fT(r.heizgrenze) + ' / ' + fT(r.innen) + ' °C')}
+        ${tr('Norm-Außentemperatur', fT(r.nat) + ' °C')}${tr('Heizgrenztemp. / Raumtemp. θi', fT(r.heizgrenze) + ' / ' + fT(r.innen) + ' °C')}
         ${tr('Gebäude', (E.gebaeude.typ === 'neubau' ? 'Neubau' : 'Sanierung / Bestand') + ' · ' + esc(E.heizlast.gebaeudeart))}
         ${tr('Heizkreise', heizkreisListe().map(h => HK_TYP[h.typ] + (h.gemischt ? ' (gem.)' : '')).join(' + ') + ' · max. ' + f(r.vl, 0) + ' °C')}
         ${tr('Warmwasser', r.tww.aktiv ? `${f(E.tww.personen, 0)} P · ${r.tww.system === 'friwa' ? 'Frischwasserstation' : 'Speichersystem'} · ${f(r.tww.t_zapf, 0)} °C` : 'nicht über WP')}
@@ -2341,7 +2370,8 @@ function baueDruck() {
     ${r.kosten ? `<div class="dk-h2">Energiekosten (Schätzung)</div><div class="dk-tab">${kostenHtml(r)}</div>` : ''}
     ${fuss(5, n)}</div>`;
   const kuehlBlock = r.kuehlung && r.kuehlung.last_kw > 0 ? `<div class="dk-h2">Kühlbetrieb (EN 14511)</div><div class="dk-tab">${kuehlHtml(r)}</div>` : '';
-  const haftung = kuehlBlock + `<div class="dk-h2">Haftungsausschluss</div>
+  const grundlagen = `<div class="dk-h2">Grundlagen und Datenstand</div><div class="dk-text" style="font-size:7pt">${quellen(r, D, KAT, KLIMA, MFH_DATEN).map(([a, b, c]) => `<b>${esc(a)}</b>: ${esc(b)} (${esc(c)})`).join(' · ')}</div>`;
+  const haftung = kuehlBlock + grundlagen + `<div class="dk-h2">Haftungsausschluss</div>
     <div class="dk-text">Die Schnellauslegung dient der Produktvor- und Systemauswahl und ersetzt nicht die fachtechnische Planung. Sie berücksichtigt nicht die individuellen Eigenschaften eines Bauvorhabens. Leistungsdaten nach Herstellerangaben (Excel-Werkzeug „WP-Auslegung_S“, Gesamtkatalog März 2026); Zwischenwerte linear interpoliert. Die Heizlast ist nach der im Land gültigen Norm (DIN EN 12831) zu berechnen; eine Auslegung über Vorjahresverbräuche oder Flächenkennwerte ist nur überschlägig und kann zu Unter- oder Überdimensionierung führen. Der Deckungsanteil nach VDI 4650 gilt für parallelen Betrieb. Energiewerte sind Näherungen ohne Gewähr; Schallimmissionen sind gesondert nachzuweisen (TA Lärm). Vor Ausführung sind Planung und Angaben durch den ausführenden Fachbetrieb oder ein Planungsbüro auf Plausibilität, Aktualität, Richtigkeit und Vollständigkeit zu prüfen. Aufstellbedingungen, Einsatzgrenzen, R290-Sicherheitsbereiche und die elektrischen Anschlussbedingungen des Netzbetreibers sind zu beachten.${preise ? ' Preise: unverbindliche Preisempfehlung ohne MwSt.' : ''}</div>
 `;
   const s0 = 6;

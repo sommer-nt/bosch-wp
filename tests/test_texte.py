@@ -47,6 +47,9 @@ def test_klartext_python_gleich_html(tmp_path):
     assert js["glossar"] == T.GLOSSAR
     for e, j in zip(ein, js["klartext"]):
         assert klartext(e) == j
+    for e, j in zip(ein, js["quellen"]):
+        r = M.rechne(e, D.geraete(), D.katalog(), D.mfh())
+        assert [list(z) for z in T.quellen(r, D.geraete(), D.katalog(), D.klima(), D.mfh())] == j
 
 
 

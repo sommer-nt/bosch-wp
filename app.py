@@ -91,6 +91,9 @@ def zahl(label, pfad, **kw):
     for t in teile[:-1]:
         ziel = ziel[t]
     k = "n_" + pfad
+    if "format" not in kw:
+        st_ = kw.get("step", 0.01)
+        kw["format"] = "%.0f" if st_ >= 1 else ("%.1f" if st_ >= 0.1 else "%.2f")
     # Feld mit Schlüssel im Session State: Wert kommt von dort (Browser hält ihn fest) – kein zweiter Vorgabewert
     if k in ss:
         ziel[teile[-1]] = st.number_input(label, key=k, **kw)
@@ -160,7 +163,7 @@ def kennzahlen_html(r: dict, e: dict) -> str:
             ("Deckungsanteil Wärmepumpe", f"{T.f(g['deckung'] * 100, 1)} <small style='font-size:13px;font-weight:400'>%</small>",
              f"VDI 4650 · {biv}")]
     if en.get("scop"):
-        kopf.append(("Jahresarbeitszahl SCOP", T.f(en["scop"], 2), f"EN 14825, mittleres Klima · Vorlauf {T.f(r['vl'], 0)} °C"))
+        kopf.append(("Saisonale Leistungszahl SCOP", T.f(en["scop"], 2), f"EN 14825, mittleres Klima · Vorlauf {T.f(r['vl'], 0)} °C"))
     h = ("<div style='background:#007BC0;color:#fff;padding:20px 24px;margin-bottom:8px'>"
          "<div style='display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px'>")
     h += "".join(f"<div><div style='{t_}'>{a}</div><div style='{v_}'>{b}</div><div style='{s_}'>{c}</div></div>" for a, b, c in kopf)
@@ -567,7 +570,7 @@ with links:
         with c1:
             zahl("Norm-Außentemp. θe [°C]", "klima.nat", step=0.5, help="Über die PLZ vorbelegt (DIN/TS 12831-1)")
         with c2:
-            zahl("Heizgrenze [°C]", "klima.heizgrenze", step=1.0, help="Neubau 12 °C, Bestand 15 °C")
+            zahl("Heizgrenztemperatur [°C]", "klima.heizgrenze", step=1.0, help="Neubau 12 °C, Bestand 15 °C")
 
     with st.expander("② Wärmebedarf", expanded=True, key="ex_2"):
         h = E["heizlast"]
@@ -849,7 +852,9 @@ with rechts:
             fig.add_scatter(x=kl["t"], y=kl["max"], name=(f"{g['n']} × " if g["n"] > 1 else "") + g["geraet"] + " (max.)", mode="lines",
                             line=dict(color=BLAU, width=3.5))
             t0_, t1_ = kl["t"][0], kl["t"][-1]
-            marken = [(r["nat"], f"θe {T.ft(r['nat'])} °C", "#4a5866")]
+            marken = [(r["nat"], f"θe {T.ft(r['nat'])} °C · Auslegungsgrenze", "#4a5866")]
+            if R.monovalent(g):
+                marken.append((r["nat"], "<b>kein Bivalenzpunkt – WP deckt bis θe allein (monovalent)</b>", "#1E8449"))
             if g["bivalenz_art"] == "punkt":
                 fig.add_vrect(x0=g["bivalenz"] - 0.8, x1=g["bivalenz"] + 0.8, fillcolor="#f28c28", opacity=0.22, line_width=0)
                 qb = R.last(g["bivalenz"], r["qh"] + r["qsperr"], r["qtw"], r["nat"], r["heizgrenze"])
@@ -1059,6 +1064,9 @@ with rechts:
     with t_rech:
         st.markdown("**So rechnet die Schnellauslegung**")
         st.markdown("\n".join(f"{i_ + 1}. **{a_}** – {b_}" for i_, (a_, b_) in enumerate(T.RECHENWEG)))
+        st.markdown("**Grundlagen und Datenstand**")
+        st.dataframe([{"Kennzahl": a, "Grundlage": b, "Daten · Stand": c} for a, b, c in T.quellen(r, DATEN, KAT, D.klima(), D.mfh())],
+                     hide_index=True, width="stretch")
         st.markdown("**Herleitung Heizlast**")
         if True:
             st.table([{"Größe": a, "Formel": b, "Wert": c} for a, b, c in T.herleitung(E, r)])

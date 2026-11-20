@@ -418,3 +418,11 @@ def test_kuehlung():
     assert not c["kurve"] and c["t"] == 35.0 and c["q_kw"] == 7.59 and c["eer"] == 2.30 and c["ok"] is True and c["nom_kw"] is None
     assert k("CS5800/6800iAW 12 OR-T", vl=18)["nom_kw"] == 6.16
     assert k("CS8800iAW 13 O-T") is None
+
+
+def test_monovalent_ohne_bivalenzpunkt():
+    """Kein Bivalenzpunkt nur dann, wenn die Wärmepumpe bei θe voll deckt (Diagramm: „monovalent“)."""
+    assert not R.monovalent(None)
+    assert R.monovalent({"moeglich": True, "bivalenz_art": "unter", "abdeckung": 1.02})
+    assert not R.monovalent({"moeglich": True, "bivalenz_art": "unter", "abdeckung": 0.9})
+    assert not R.monovalent({"moeglich": True, "bivalenz_art": "punkt", "abdeckung": 1.2})
