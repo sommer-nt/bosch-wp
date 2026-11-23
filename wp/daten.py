@@ -82,3 +82,15 @@ def mit_bv(loesung: str) -> str:
     """Musterlösung mit Bestellvorschlag-Nr. (wie mitBv() in index.html)."""
     nr = bv_nr(loesung)
     return f"{loesung} (Bestellvorschlag-Nr. {nr})" if nr else loesung
+
+
+@lru_cache(maxsize=None)
+def stuecklisten() -> dict:
+    """Stücklisten der Musterlösungen aus den Bestellvorschlägen (stuecklisten.json, tools/stueckliste_import.py)."""
+    datei = DATEN / "stuecklisten.json"
+    return json.loads(datei.read_text(encoding="utf-8")) if datei.exists() else {"loesungen": {}}
+
+
+def stueckliste(loesung: str | None) -> dict | None:
+    """Stückliste einer Musterlösung (bv_nr, summe, gruppen[titel, pos[]]) oder None."""
+    return stuecklisten()["loesungen"].get(loesung) if loesung else None

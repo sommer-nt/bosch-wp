@@ -218,7 +218,8 @@ def einbetten(daten: dict, klima: dict) -> None:
              ";\nconst PAKETE_DATEN = " + json.dumps(_pakete(), ensure_ascii=False, separators=(",", ":")) +
              ";\nconst MFH_DATEN = " + json.dumps(_mfh(), ensure_ascii=False, separators=(",", ":")) +
              ";\nconst HYDRAULIK_DATEN = " + json.dumps(_hydraulik(), ensure_ascii=False, separators=(",", ":")) +
-             ";\nconst HYDRAULIK_BILDER = " + json.dumps(_hydraulik_bilder(), separators=(",", ":")) + ";\n")
+             ";\nconst HYDRAULIK_BILDER = " + json.dumps(_hydraulik_bilder(), separators=(",", ":")) +
+             ";\nconst STUECKLISTEN_DATEN = " + json.dumps(_stuecklisten(), ensure_ascii=False, separators=(",", ":")) + ";\n")
     html.write_text(text[:i] + block + text[j:], encoding="utf-8")
 
 
@@ -241,6 +242,12 @@ def _hydraulik_bilder() -> dict:
     import base64
     return {b.stem: "data:image/png;base64," + base64.b64encode(b.read_bytes()).decode()
             for b in sorted((DATEN / "hydrauliken").glob("*.png"))}
+
+
+def _stuecklisten() -> dict:
+    """Stücklisten der Musterlösungen (daten/stuecklisten.json, tools/stueckliste_import.py)."""
+    datei = DATEN / "stuecklisten.json"
+    return json.loads(datei.read_text(encoding="utf-8")) if datei.exists() else {"loesungen": {}}
 
 
 def _katalog() -> dict:

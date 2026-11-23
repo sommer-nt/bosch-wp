@@ -374,6 +374,27 @@ def hyd_vorschau(sid: str, breite: int = 1000) -> bytes:
         return buf.getvalue()
 
 
+def stueckliste_bereich(lid: str | None, k: str) -> None:
+    """Stückliste des Bestellvorschlags zum Aufklappen, mit CSV für Excel (wie stuecklisteHtml() in index.html)."""
+    sl = D.stueckliste(lid)
+    if not sl:
+        return
+    n = sum(1 for g in sl["gruppen"] for p in g["pos"] if not T.stueckliste_art(p))
+    alt = any(T.stueckliste_art(p) for g in sl["gruppen"] for p in g["pos"])
+    with st.expander(f"Stückliste Bestellvorschlag {sl['bv_nr']} · {n} Positionen" + (" + Alternativen/Bedarfspositionen" if alt else "")):
+        st.download_button("Stückliste als CSV (Excel)", T.stueckliste_csv(sl, True).encode("utf-8"), f"Stueckliste_{sl['bv_nr']}.csv",
+                           "text/csv", key="stl_" + k, on_click="ignore")
+        st.dataframe([{"Gruppe": g["titel"] + (" · Bedarfs-Titel" if g.get("bedarf") else ""), "Pos.": p["pos"], "Menge": T.f(p["menge"], 2 if p["menge"] % 1 else 0) + (" m" if p["einheit"] == "m" else ""),
+                       "Bezeichnung": p["text"] + (" · " + T.stueckliste_art(p) if T.stueckliste_art(p) else ""), "Typ": p["typ"], "TTNR": p["ttnr"],
+                       "Einzelpreis [€]": p["ep"], "Summe [€]": p["summe"]} for g in sl["gruppen"] for p in g["pos"]],
+                     hide_index=True, width="stretch",
+                     column_config={"Einzelpreis [€]": st.column_config.NumberColumn(format="%.2f"),
+                                    "Summe [€]": st.column_config.NumberColumn(format="%.2f")})
+        if sl.get("summe") is not None:
+            st.caption(f"Nettowert Bestellvorschlag {T.euro2(sl['summe'])} (ohne Alternativen und Bedarfspositionen) · "
+                       "Quelle: Bestellvorschlag (PDF), Kurzübersicht")
+
+
 def mfh_bereich(r: dict, e: dict) -> None:
     v, MD = r["mfh"], D.mfh()
     a_ = MD["annahmen"][v["tabelle"]]
@@ -415,6 +436,7 @@ def mfh_bereich(r: dict, e: dict) -> None:
         elif st.button("Wärmepumpe übernehmen", key="mfh_ueb_" + z_["id"]):
             e["auswahl"].update(geraet=z_["geraet"], anzahl=z_["n"], inneneinheit="")
             st.rerun()
+        stueckliste_bereich(z_.get("loesung"), z_["id"])
     erkl("Die passende Hydraulik zur Musterlösung wählen Sie im Reiter „Hydraulik“. Musterlösungen ersetzen keine Fachplanung.")
 
 

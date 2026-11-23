@@ -158,6 +158,17 @@ Speicher über 4 WE (Leistungskennzahl NL 4).
 und `daten/hydrauliken/*.jpg`), danach `python tools/excel_import.py --nur-einbetten`. Logik in `wp/hydraulik.py` und
 `<script id="hydkern">` (Test vergleicht beide). Fernwärme-Ordner (ohne Wärmepumpe) werden nicht übernommen.
 
+### Stücklisten der Bestellvorschläge
+
+Zu jeder Musterlösung zeigt die Karte „Musterlösung“ die Stückliste des Bestellvorschlags zum Aufklappen: Position,
+Menge, Bezeichnung, Typ, TTNR, Einzelpreis und Summe. Alternativen und Bedarfspositionen (auch ganze Bedarfs-Titel wie
+Durchlauferhitzer oder Inbetriebnahme) sind gekennzeichnet und nicht im Nettowert enthalten. Download als CSV für Excel;
+die Projektmappe enthält die CSV mit. Die Vorführversion zeigt keine Stückliste und keine Preise.
+
+Übernahme: `python tools/stueckliste_import.py ORDNER…` (entpackte ZIP-Ordner mit den Bestellvorschlägen „4000…pdf“;
+erzeugt `daten/stuecklisten.json`, prüft die Summe gegen den Nettowert im PDF), danach
+`python tools/excel_import.py --nur-einbetten`. Die PDF-Dateien selbst werden nicht eingecheckt.
+
 ## Heizkurve
 
 Vorlauf-/Rücklauftemperatur über der Außentemperatur nach DIN EN 442 für den maßgebenden Heizkreis (Heizkörper n = 1,3,

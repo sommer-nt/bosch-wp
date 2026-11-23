@@ -147,3 +147,15 @@ def test_sole_keine_luft_musterloesung():
     r = M.rechne(e, D.geraete(), D.katalog(), D.mfh())
     assert r["mfh"]["zellen"] == [] and not r["mfh_wp"]
     assert D.serie(D.geraet(r["gewaehlt"]["geraet"])["serie"])["quelle"] == "sole"
+
+
+def test_stuecklisten_vollstaendig():
+    """Jede Musterlösung mit Wärmepumpe hat eine Stückliste mit TTNR; Summe der Positionen = Nettowert im Bestellvorschlag."""
+    lib = D.hydraulik()
+    for L in lib["loesungen"]:
+        sl = D.stueckliste(L["id"])
+        assert sl and sl["bv_nr"] == L["bv_nr"], L["id"]
+        pos = [p for g in sl["gruppen"] for p in g["pos"]]
+        assert pos and all(p["ttnr"] for p in pos), L["id"]
+        assert abs(sum(p["summe"] or 0 for p in pos if not p["alternative"]) - sl["summe"]) < 0.02, L["id"]
+        assert all(p["summe"] for p in pos if not p["alternative"] and not p["bedarf"]), L["id"]   # sonst Bedarfsposition

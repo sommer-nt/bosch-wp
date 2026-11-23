@@ -448,3 +448,29 @@ def quellen(r: dict, geraete: dict, katalog: dict, klima: dict, mfh: dict | None
     if g and g.get("geraet") and r.get("kosten"):
         z.append(("Energiekosten", "Schätzung aus Jahreswärme, SCOP und Tarifen", "Eingabe"))
     return z
+
+
+def _dez(x, d: int = 2) -> str:
+    return "" if x is None else f"{x:.{d}f}".replace(".", ",")
+
+
+def stueckliste_art(p: dict) -> str:
+    """Alternative bzw. Bedarfsposition (beide nicht in der Summe des Bestellvorschlags), sonst ''."""
+    return "Alternative" if p.get("alternative") else ("Bedarfsposition" if p.get("bedarf") else "")
+
+
+def stueckliste_csv(sl: dict, preise: bool) -> str:
+    """Stückliste eines Bestellvorschlags als CSV (Semikolon, Dezimalkomma – für Excel), wie stuecklisteCsv() in index.html."""
+    kopf = ["Gruppe", "Pos.", "Menge", "Einheit", "Bezeichnung", "Typ", "TTNR", "Art"] + (
+        ["Einzelpreis netto [€]", "Summe netto [€]"] if preise else [])
+    z = [";".join(kopf)]
+    for g in sl["gruppen"]:
+        for p in g["pos"]:
+            menge = str(int(p["menge"])) if p["menge"] == int(p["menge"]) else _dez(p["menge"])
+            w = [g["titel"], p["pos"], menge, p["einheit"], p["text"], p["typ"], p["ttnr"], stueckliste_art(p)]
+            if preise:
+                w += [_dez(p.get("ep")), _dez(p.get("summe"))]
+            z.append(";".join('"' + str(x).replace('"', '""') + '"' if any(c in str(x) for c in ';"') else str(x) for x in w))
+    if preise and sl.get("summe") is not None:
+        z.append(";".join(["", "", "", "", "Nettowert Bestellvorschlag", "", "", "", "", _dez(sl["summe"])]))
+    return "\ufeff" + "\r\n".join(z) + "\r\n"

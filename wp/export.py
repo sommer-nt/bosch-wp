@@ -43,6 +43,10 @@ def mappe_bytes(e: dict, r: dict, katalog: dict, pdf: bytes | None = None) -> by
         h = HY.gewaehlt(e, r, D.hydraulik()) if r.get("gewaehlt") else None
         if h and D.hydraulik_bild(h["id"]).exists():
             z.write(D.hydraulik_bild(h["id"]), f"Hydraulik_{h['id']}.png")
+        for a in ((r.get("mfh") or {}).get("auswahl") or []):   # Stücklisten der Musterlösungen (Bestellvorschläge)
+            sl = D.stueckliste(a["zelle"].get("loesung"))
+            if sl:
+                z.writestr(f"Stueckliste_{sl['bv_nr']}.csv", T.stueckliste_csv(sl, True))
         if pdf:
             z.writestr(f"WP-Auslegung_{n}.pdf", pdf)
     return puffer.getvalue()

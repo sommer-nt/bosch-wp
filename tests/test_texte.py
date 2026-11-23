@@ -50,6 +50,9 @@ def test_klartext_python_gleich_html(tmp_path):
     for e, j in zip(ein, js["quellen"]):
         r = M.rechne(e, D.geraete(), D.katalog(), D.mfh())
         assert [list(z) for z in T.quellen(r, D.geraete(), D.katalog(), D.klima(), D.mfh())] == j
+    for lid, (mit, ohne) in js["stl"].items():
+        sl = D.stueckliste(lid)
+        assert T.stueckliste_csv(sl, True) == mit and T.stueckliste_csv(sl, False) == ohne, lid
 
 
 
@@ -62,5 +65,8 @@ def test_projektmappe():
     r = M.rechne(e, D.geraete(), D.katalog(), D.mfh())
     z = zipfile.ZipFile(io.BytesIO(X.mappe_bytes(e, r, D.katalog(), b"%PDF-1.4")))
     h = HY.gewaehlt(e, r, D.hydraulik())
-    assert set(z.namelist()) == {"WP-Auslegung_Muster_MFH.json", "Kurzbericht.txt", "WP-Auslegung_Muster_MFH.pdf", f"Hydraulik_{h['id']}.png"}
+    stl = {f"Stueckliste_{D.stueckliste(a['zelle']['loesung'])['bv_nr']}.csv" for a in r["mfh"]["auswahl"]}
+    assert stl
+    assert set(z.namelist()) == {"WP-Auslegung_Muster_MFH.json", "Kurzbericht.txt", "WP-Auslegung_Muster_MFH.pdf",
+                                 f"Hydraulik_{h['id']}.png"} | stl
     assert "Hydraulik" in z.read("Kurzbericht.txt").decode("utf-8")
